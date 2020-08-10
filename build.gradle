@@ -1,0 +1,54 @@
+plugins {
+	id 'org.springframework.boot' version '2.3.2.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'java'
+}
+
+group = 'com.daedo'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.3'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'mysql:mysql-connector-java'
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	annotationProcessor 'org.projectlombok:lombok'
+	
+	//aop
+	compile 'org.springframework.boot:spring-boot-starter-aop'
+	
+	//google lang
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+	
+	//swagger
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.8.0'
+    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.8.0'
+
+    //log4jdbc
+    compile ('org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4:1.16')
+
+    
+	
+	
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+}
+
+test {
+	useJUnitPlatform()
+}
