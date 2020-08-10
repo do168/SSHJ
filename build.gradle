@@ -28,6 +28,10 @@ dependencies {
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
 	
+	//aop
+	compile 'org.springframework.boot:spring-boot-starter-aop'
+	
+	//google lang
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 	
 	//swagger
