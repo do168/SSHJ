@@ -45,7 +45,6 @@ out/
 .project
 
 # build
-gradle/
 .gradle
 build/
 target/
