@@ -50,7 +50,6 @@ gradle/
 build/
 target/
 out/
-gradlew*
 
 # os
 .DS_Store
@@ -60,5 +59,3 @@ src/main/resources/static/bower_components/
 src/main/resources/static/.tmp
 src/main/resources/static/node_modules/
 /bin/
-
-gradlew*
