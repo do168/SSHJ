@@ -51,6 +51,12 @@ dependencies {
 	//Spring Security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+
+	//jwt token
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+	//model mapper
+	compile group: 'org.modelmapper', name: 'modelmapper', version: '2.3.7'
 	
 	// tika-parsers
 	compile group: 'org.apache.tika', name: 'tika-parsers', version: '1.23'
