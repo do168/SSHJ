@@ -45,6 +45,9 @@ dependencies {
     //log4jdbc
     compile ('org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4:1.16')
 	
+	// tika-parsers
+	compile group: 'org.apache.tika', name: 'tika-parsers', version: '1.23'
+	
 	
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

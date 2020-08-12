@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sshj.sshj.mapper.UploadMapper">
+
+	<!-- 업로드 파일 정보 등록	-->
+	<insert id="uploadProfile" parameterType="sshj.sshj.dto.FileUploadDto">
+	<![CDATA[
+		/*	UploadMapper.uploadProfile	*/
+		insert into tb_file (
+			user_id, origin_file_name, file_base_url, file_name, mime_type, size
+		) values (
+			#{userId}, #{originFileName}, #{fileBaseUrl}, #{fileName}, #{mimeType}, #{size}
+		)
+	]]>
+	</insert>
+
+</mapper>

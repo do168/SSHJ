@@ -3,7 +3,6 @@ package sshj.sshj.component;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -16,51 +15,78 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import sshj.sshj.dto.enums.FileDirEnum;
 
+/**
+ * aws S3 ì»´í¬ë„ŒíŠ¸
+ * @author krims
+ *
+ */
 @Slf4j
 @RequiredArgsConstructor
 @PropertySource("classpath:aws.yml")
 @Component
-public class S3Uploader {
+public class S3Utils {
+	
 	private final AmazonS3Client amazonS3Client;
+	
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucket;
-
-	public String upload(MultipartFile multipartFile, String dirName) throws IOException {
-		File uploadFile = convert(multipartFile)
-				.orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File·Î ÀüÈ¯ÀÌ ½ÇÆĞÇß½À´Ï´Ù."));
-		return upload(uploadFile, dirName);
-	}
-
-	private String upload(File uploadFile, String dirName) {
-		String fileName = dirName + "/" + uploadFile.getName();
+	
+	/**
+	 * 
+	 * MultipartFile -> File
+	 * @param multipartFile
+	 * @param dirName
+	 * @return
+	 * @throws IOException
+	 */
+	public String upload(MultipartFile multipartFile, FileDirEnum dirName, String newFilename) throws IOException {
+		
+		File uploadFile = convert(multipartFile);
+		String fileName = dirName.name() + "/" + newFilename;
 		String uploadImageUrl = putS3(uploadFile, fileName);
 		removeNewFile(uploadFile);
 		return uploadImageUrl;
 	}
 
+	/**
+	 * S3ë¡œ ì—…ë¡œë“œ
+	 * @param uploadFile
+	 * @param fileName
+	 * @return
+	 */
 	private String putS3(File uploadFile, String fileName) {
 		amazonS3Client.putObject(
 				new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
 		return amazonS3Client.getUrl(bucket, fileName).toString();
 	}
 
+	/**
+	 * ì„œë²„ë‚´ íŒŒì¼ ì œê±°
+	 * @param targetFile
+	 */
 	private void removeNewFile(File targetFile) {
 		if (targetFile.delete()) {
-			log.info("ÆÄÀÏÀÌ »èÁ¦µÇ¾ú½À´Ï´Ù.");
+			log.info("ì„œë²„ë‚´ íŒŒì¼ ì‚­ì œ ì™„ë£Œ.");
 		} else {
-			log.info("ÆÄÀÏÀÌ »èÁ¦µÇÁö ¸øÇß½À´Ï´Ù.");
+			log.info("ì„œë²„ë‚´ íŒŒì¼ ì‚­ì œ ì‹¤íŒ¨.");
 		}
 	}
 
-	private Optional<File> convert(MultipartFile file) throws IOException {
+	/**
+	 * MultipartFile -> File ë³€í™˜
+	 * @param file
+	 * @return
+	 * @throws IOException
+	 */
+	private File convert(MultipartFile file) throws IOException {
 		File convertFile = new File(file.getOriginalFilename());
-		if (convertFile.createNewFile()) {
-			try (FileOutputStream fos = new FileOutputStream(convertFile)) {
-				fos.write(file.getBytes());
-			}
-			return Optional.of(convertFile);
-		}
-		return Optional.empty();
+
+		convertFile.createNewFile();
+		FileOutputStream fos = new FileOutputStream(convertFile);
+		fos.write(file.getBytes());
+		fos.close();
+		return convertFile;
 	}
 }

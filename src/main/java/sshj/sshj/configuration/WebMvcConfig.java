@@ -34,7 +34,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         log.info("addInterceptors {}", interceptorProps.toString());
 
-//        	·Î±×ÀÎ ´Ù¸¸µé°í Ãß°¡ÇÒ Auth check ·ÎÁ÷
+//        	TODO: ì¶”í›„ ë¡œê·¸ì¸ ì¸í„°ì…‰í„° ì¶”ê°€ ì˜ˆì©¡ Auth check do168
 //        
 //        {
 //            InterceptorMappingProps interceptorMappingProps = interceptorProps.getAuthCheck();
