@@ -46,7 +46,7 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
 
     @Profile("dev")
     @Bean
-    public Docket devApi() {    // ?õÑ?óê Î∞îÍøî?ïº?ï®
+    public Docket devApi() {
         String info = "-----------------------------\n"
                 + "-- swagger api for [dev] --\n"
                 + "-----------------------------\n";
@@ -56,7 +56,7 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
 
 
     private Docket getDefaultDocket(Set<String> protocols, String host){
-        ApiInfo apiInfo = new ApiInfoBuilder().title("sshj-api").description("SSHJ API ∏Ìºº").build();
+        ApiInfo apiInfo = new ApiInfoBuilder().title("sshj-api").description("SSHJ API").build();
         Docket docket = new Docket(DocumentationType.SWAGGER_2);
 
         if(protocols != null) {

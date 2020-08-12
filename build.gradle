@@ -45,6 +45,12 @@ dependencies {
 	//Spring Security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+
+	//jwt token
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+	//model mapper
+	compile group: 'org.modelmapper', name: 'modelmapper', version: '2.3.7'
 	
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

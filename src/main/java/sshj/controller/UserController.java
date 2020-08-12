@@ -1,61 +1,58 @@
 package sshj.controller;
 
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import jdk.internal.jline.internal.Log;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import sshj.domain.User;
+import sshj.dto.UserInfoModel;
+import sshj.repository.UserRepository;
+import sshj.service.UserService;
 
-@Controller
+@RestController
+@Api(value="Oauth-controller", description="Oauth controller")
 @AllArgsConstructor
+@Slf4j
+@RequestMapping("/user")
 public class UserController {
 
+
+    @Autowired
     private UserService userService;
 
-    //메인페이지
-    @GetMapping("/")
-    public String index() {
-        return "/index";
+    @Autowired
+    private UserRepository userRepository;
+
+    @ApiOperation(
+            value = "회원가입"
+            ,notes = "회원가입"
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="complete")
+    })
+    @RequestMapping(value="/signup", method = RequestMethod.POST)
+    public ResponseEntity<User> signUp(
+            @ModelAttribute final UserInfoModel userInfoModel){
+        if(userRepository.findById(userInfoModel.getId())==null) {
+            userService.insertUser(userInfoModel);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        else {
+            Log.info("중복된 아이디입니다"); //여기 처리 어케해야할까?
+            return new ResponseEntity<>(HttpStatus.); //여기도 리턴 어케해야하지?
+        }
+
     }
 
-    //회원가입 페이지
-    @GetMapping("/user/signup")
-    public String dispSignup(){
-        return "/signup";
-    }
-
-    //회원가입 처리
-    @PostMapping("/user/signup")
-    public String execSignup(UserDto userDto){
-        userService.joinUser(userDto);
-
-        return "redirect:/user/lgoin";
-    }
-
-    //로그인 페이지
-    @GetMapping("/user/login")
-    public String dispLogin() {
-        return "/login";
-    }
-
-    //로그인 결과 페이지
-    @GetMapping("/user/login/result")
-    public String dispLoginResult() {
-        return "/loginSuccess";
-    }
-
-    @GetMapping("/user/logout")
-    public String dispLogout(){
-        return "/logout";
-    }
-
-    @GetMapping("/user/denied")
-    public String dispDenied() {
-        return "/denied";
-    }
-
-    @GetMapping("/user/info")
-    public String dispInfo(){
-        return "/myinfo";
-    }
 }
