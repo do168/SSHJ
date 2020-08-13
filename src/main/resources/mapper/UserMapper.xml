@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sshj.sshj.mapper.UserMapper">
+
+    <!-- 회원가입 유저 정보 등록	-->
+    <insert id="insertUserInfo" parameterType="sshj.sshj.dto.User">
+        <![CDATA[
+		/*	UserMapper.insertUserInfo	*/
+		insert into tb_user (
+			user_id, id, password, email, nickname, certification_number, created_time
+		) values (
+			#{userId}, #{id}, #{password}, #{email}, #{nickname}, #{certification_number}, #{created_time}
+		)
+	]]>
+    </insert>
+
+    <!-- 회원가입 유저 검색	-->
+    <select id="selectUserInfo" parameterType="string" resultType="sshj.sshj.dto.User">
+        <![CDATA[
+		/*	UserMapper.selectUserInfo	*/
+		select user_id, id, password, email, nickname, certification_number, created_time
+		from tb_user
+		where id = #{id}
+	]]>
+    </select>
+
+</mapper>

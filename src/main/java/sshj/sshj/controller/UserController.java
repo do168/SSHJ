@@ -1,4 +1,4 @@
-package sshj.controller;
+package sshj.sshj.controller;
 
 
 import io.swagger.annotations.Api;
@@ -15,10 +15,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import sshj.domain.User;
-import sshj.dto.UserInfoModel;
-import sshj.repository.UserRepository;
-import sshj.service.UserService;
+import sshj.sshj.dto.UserInfoModel;
+import sshj.sshj.service.UserService;
 
 @RestController
 @Api(value="Oauth-controller", description="Oauth controller")
@@ -27,12 +25,8 @@ import sshj.service.UserService;
 @RequestMapping("/user")
 public class UserController {
 
-
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @ApiOperation(
             value = "회원가입"
@@ -42,15 +36,15 @@ public class UserController {
             @ApiResponse(code=200, message="complete")
     })
     @RequestMapping(value="/signup", method = RequestMethod.POST)
-    public ResponseEntity<User> signUp(
-            @ModelAttribute final UserInfoModel userInfoModel){
-        if(userRepository.findById(userInfoModel.getId())==null) {
+    public ResponseEntity<Void> signUp(
+            @ModelAttribute final UserInfoModel userInfoModel) throws Exception {
+        if(userService.selectUserInfo(userInfoModel.getId())==null) {
             userService.insertUser(userInfoModel);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<Void>(HttpStatus.OK);
         }
         else {
             Log.info("중복된 아이디입니다"); //여기 처리 어케해야할까?
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); //여기도 리턴 어케해야하지?
+            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST); //여기도 리턴 어케해야하지?
         }
 
     }
