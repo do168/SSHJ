@@ -1,17 +1,15 @@
-package sshj.service;
+package sshj.sshj.service;
 
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import sshj.domain.User;
-import sshj.dto.UserInfoModel;
-import sshj.repository.UserRepository;
+import sshj.sshj.dto.User;
+import sshj.sshj.dto.UserInfoModel;
+import sshj.sshj.mapper.UserMapper;
 
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -24,12 +22,15 @@ public class UserService implements UserDetailsService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserMapper userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findById(username)
-                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+        return userMapper.selectUserInfo(username);
+    }
+
+    public User selectUserInfo(String id) throws Exception {
+        return userMapper.selectUserInfo(id);
     }
 
 
@@ -41,12 +42,12 @@ public class UserService implements UserDetailsService {
 //        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 //
 //        User user = modelMapper.map(userInfoModel, User.class);
-        this.userRepository.save(User.builder()
+        this.userMapper.insertUserInfo(User.builder()
             .id(userInfoModel.getId())
             .password(passwordEncoder.encode(userInfoModel.getPassword()))
             .roles(Collections.singletonList("ROLE_USER"))
             .nickname(userInfoModel.getNickname())
             .created_time(dtime)
-            .build()).getId();
+            .build()); //getId() 없앴는데 뭐가 달라지나?
     }
 }

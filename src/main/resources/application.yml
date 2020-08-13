@@ -7,3 +7,6 @@ spring:
     jdbc-url: jdbc:mysql://sshj.chmntjt5idfk.ap-northeast-2.rds.amazonaws.com:3306/sshj?autoReconnect=true&autoReconnectForPools=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC
     username: daedo
     password: eo!eh2zm3fn4
+
+server:
+  port: 7070

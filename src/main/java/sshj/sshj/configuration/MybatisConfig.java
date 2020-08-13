@@ -61,9 +61,9 @@ public class MybatisConfig {
 
 	@Bean(name = "sqlSessionFactory")
 	public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource,
-			ApplicationContext applicationContext) throws Exception {
+											   ApplicationContext applicationContext) throws Exception {
 		/**
-		 * Í≥µÌÜµ Íµ¨Î∂Ñ?ûêÎ°? ?Ç¨?ö©?ïò?äî Î≥??àò
+
 		 */
 		Properties sqlSessionFactoryProperties = new Properties();
 
