@@ -50,7 +50,7 @@ public class UserController {
         }
         else {
             Log.info("중복된 아이디입니다"); //여기 처리 어케해야할까?
-            return new ResponseEntity<>(HttpStatus.); //여기도 리턴 어케해야하지?
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); //여기도 리턴 어케해야하지?
         }
 
     }

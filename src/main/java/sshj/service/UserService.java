@@ -13,7 +13,9 @@ import sshj.domain.User;
 import sshj.dto.UserInfoModel;
 import sshj.repository.UserRepository;
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +34,9 @@ public class UserService implements UserDetailsService {
 
 
     public void insertUser(UserInfoModel userInfoModel) {
+        long systemTime = System.currentTimeMillis();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA);
+        String dtime = formatter.format(systemTime);
 //        ModelMapper modelMapper = new ModelMapper();
 //        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 //
@@ -40,6 +45,8 @@ public class UserService implements UserDetailsService {
             .id(userInfoModel.getId())
             .password(passwordEncoder.encode(userInfoModel.getPassword()))
             .roles(Collections.singletonList("ROLE_USER"))
+            .nickname(userInfoModel.getNickname())
+            .created_time(dtime)
             .build()).getId();
     }
 }
