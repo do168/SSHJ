@@ -46,7 +46,7 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
 
     @Profile("dev")
     @Bean
-    public Docket devApi() {    // ?›„?— ë°”ê¿”?•¼?•¨
+    public Docket devApi() {    // ?ï¿½ï¿½?ï¿½ï¿½ ë°”ê¿”?ï¿½ï¿½?ï¿½ï¿½
         String info = "-----------------------------\n"
                 + "-- swagger api for [dev] --\n"
                 + "-----------------------------\n";
@@ -56,7 +56,7 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
 
 
     private Docket getDefaultDocket(Set<String> protocols, String host){
-        ApiInfo apiInfo = new ApiInfoBuilder().title("sshj-api").description("SSHJ API ¸í¼¼").build();
+        ApiInfo apiInfo = new ApiInfoBuilder().title("sshj-api").description("SSHJ API ëª…ì„¸").build();
         Docket docket = new Docket(DocumentationType.SWAGGER_2);
 
         if(protocols != null) {
@@ -68,9 +68,10 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
         }
 
         List global = new ArrayList();
-        global.add(new ParameterBuilder().name("Authorization").
-                description("Access Token").parameterType("header").
-                required(false).modelRef(new ModelRef("string")).build());
+//		TODO: ë„ìš°ì°¬ì´ ë¡œê·¸ì¸ ì™„ë£Œì‹œ ì¶”ê°€í•  ì‘ì—…
+//      global.add(new ParameterBuilder().name("Authorization").
+//              description("Access Token").parameterType("header").
+//              required(false).modelRef(new ModelRef("string")).build());
 
         return docket
                 .globalOperationParameters(global)
