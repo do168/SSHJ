@@ -12,14 +12,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 @EnableWebMvc
 public class CorsConfig extends WebMvcConfigurationSupport {
 
-//    @Override
-//    public void addCorsMappings(CorsRegistry cr) {
-//        cr.addMapping("/**")
-//                .allowedOrigins("*")  // 모든 경로 허용
-//                .allowCredentials(true)
-//                .allowedHeaders("*");
-//                // allowed method  default  GET, POST, DELETE
-//    }
 
     @Bean
     public CorsFilter corsFilter() {

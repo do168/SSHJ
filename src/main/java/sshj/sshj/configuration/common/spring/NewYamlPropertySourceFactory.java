@@ -1,8 +1,6 @@
 package sshj.sshj.configuration.common.spring;
 
-import java.io.IOException;
-import java.util.Set;
-
+import com.google.common.collect.Sets;
 import org.springframework.core.env.PropertySource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.EncodedResource;
@@ -10,7 +8,8 @@ import org.springframework.core.io.support.PropertySourceFactory;
 import org.springframework.core.io.support.ResourcePropertySource;
 import org.springframework.util.StringUtils;
 
-import com.google.common.collect.Sets;
+import java.io.IOException;
+import java.util.Set;
 
 public class NewYamlPropertySourceFactory implements PropertySourceFactory {
     private static final Set<String> YML_FILE_EXTENSIONS = Sets.newHashSet("yaml", "yml");

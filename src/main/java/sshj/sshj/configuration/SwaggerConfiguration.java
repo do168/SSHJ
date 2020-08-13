@@ -1,27 +1,23 @@
 package sshj.sshj.configuration;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
+import com.google.common.base.Predicates;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import com.google.common.base.Predicates;
-
 import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Profile({"local", "dev"})
 @Configuration
@@ -46,7 +42,7 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
 
     @Profile("dev")
     @Bean
-    public Docket devApi() {    // ?��?�� 바꿔?��?��
+    public Docket devApi() {
         String info = "-----------------------------\n"
                 + "-- swagger api for [dev] --\n"
                 + "-----------------------------\n";
@@ -56,7 +52,7 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
 
 
     private Docket getDefaultDocket(Set<String> protocols, String host){
-        ApiInfo apiInfo = new ApiInfoBuilder().title("sshj-api").description("SSHJ API 명세").build();
+        ApiInfo apiInfo = new ApiInfoBuilder().title("sshj-api").description("SSHJ API ��").build();
         Docket docket = new Docket(DocumentationType.SWAGGER_2);
 
         if(protocols != null) {
@@ -68,10 +64,9 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
         }
 
         List global = new ArrayList();
-//		TODO: 도우찬이 로그인 완료시 추가할 작업
-//      global.add(new ParameterBuilder().name("Authorization").
-//              description("Access Token").parameterType("header").
-//              required(false).modelRef(new ModelRef("string")).build());
+//        global.add(new ParameterBuilder().name("Authorization").
+//                description("Access Token").parameterType("header").
+//                required(false).modelRef(new ModelRef("string")).build());
 
         return docket
                 .globalOperationParameters(global)
