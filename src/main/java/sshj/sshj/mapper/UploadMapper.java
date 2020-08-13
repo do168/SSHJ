@@ -1,6 +1,7 @@
 package sshj.sshj.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import sshj.sshj.dto.FileUploadDto;
 
@@ -12,5 +13,8 @@ import sshj.sshj.dto.FileUploadDto;
 @Mapper
 public interface UploadMapper {
 	
-	public int uploadProfile(FileUploadDto fileUploadDto);
+	public int uploadProfile(@Param("userId") long userId, @Param("profileUrl") String profileUrl);
+	
+	public int uploadContent(FileUploadDto fileUploadDto);
+	
 }

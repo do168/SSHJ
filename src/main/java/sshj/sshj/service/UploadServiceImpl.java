@@ -36,7 +36,8 @@ public class UploadServiceImpl implements UploadService{
 		String newFilename = Long.toString(System.nanoTime());
 		String imgUrl = "";
 		try {
-			
+			log.error("[{}]", multipartFile);
+			log.error("[{}]", multipartFile.getInputStream());
 			String mimeType = new Tika().detect(multipartFile.getInputStream());
 			
 			/*
@@ -50,10 +51,15 @@ public class UploadServiceImpl implements UploadService{
 			imgUrl = s3Utils.upload(multipartFile, FileDirEnum.profile, newFilename);
 
 			/*
-			 * 유저 테이블에서 프로필 이미지 링크 update		
-			 * TODO: do168 User 관련 로직 작성 후 추가 예정			
+			 * 유저 테이블에서 프로필 이미지 링크 update			
 			 */
+			int cnt = uploadMapper.uploadProfile(userId, imgUrl);
 
+			if (cnt != 1) {
+				log.error("Save profile upload info failed!!");
+				throw new RuntimeException();
+			}
+			
 		} catch (IOException e) {
 			log.error("", e);
 		} catch (Exception e) {
@@ -89,10 +95,10 @@ public class UploadServiceImpl implements UploadService{
 					fileUploadDto.setSize(file.getSize());
 					
 					// 업로드할 파일 정보 DB에 저장
-					int cnt = uploadMapper.uploadProfile(fileUploadDto);
+					int cnt = uploadMapper.uploadContent(fileUploadDto);
 
-					if (cnt != 1) {
-						log.error("Save upload info failed!!");
+					if (cnt < 1) {
+						log.error("Save content upload info failed!!");
 						throw new RuntimeException();
 					}
 					

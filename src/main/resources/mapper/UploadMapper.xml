@@ -4,9 +4,21 @@
 <mapper namespace="sshj.sshj.mapper.UploadMapper">
 
 	<!-- 업로드 파일 정보 등록	-->
-	<insert id="uploadProfile" parameterType="sshj.sshj.dto.FileUploadDto">
+	<update id="uploadProfile">
 	<![CDATA[
 		/*	UploadMapper.uploadProfile	*/
+		update tb_user
+		set
+			profile_url = #{profileUrl}
+		where
+			user_id = #{userId}
+	]]>
+	</update>
+
+	<!-- 업로드 파일 정보 등록	-->
+	<insert id="uploadContent" parameterType="sshj.sshj.dto.FileUploadDto">
+	<![CDATA[
+		/*	UploadMapper.uploadContent	*/
 		insert into tb_file (
 			user_id, origin_file_name, file_url, mime_type, size, meeting_id
 		) values (
