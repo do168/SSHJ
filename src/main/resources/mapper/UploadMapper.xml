@@ -8,9 +8,9 @@
 	<![CDATA[
 		/*	UploadMapper.uploadProfile	*/
 		insert into tb_file (
-			user_id, origin_file_name, file_base_url, file_name, mime_type, size
+			user_id, origin_file_name, file_url, mime_type, size, meeting_id
 		) values (
-			#{userId}, #{originFileName}, #{fileBaseUrl}, #{fileName}, #{mimeType}, #{size}
+			#{userId}, #{originFileName}, #{fileUrl}, #{mimeType}, #{size}, #{meetingId}
 		)
 	]]>
 	</insert>

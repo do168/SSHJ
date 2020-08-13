@@ -31,22 +31,43 @@ public class UploadServiceImpl implements UploadService{
 	 * 프로필 파일 업로드
 	 */
 	@Override
-	public List<String> executeUploadProfile(MultipartHttpServletRequest multipartHttpServletRequest, long userId) {
-		return uploadFile(multipartHttpServletRequest, userId, FileDirEnum.profile);
+	public String executeUploadProfile(MultipartFile multipartFile, long userId) {
+
+		String newFilename = Long.toString(System.nanoTime());
+		String imgUrl = "";
+		try {
+			
+			String mimeType = new Tika().detect(multipartFile.getInputStream());
+			
+			/*
+			 * image 파일인지 체크
+			 */
+			if(!"image".equals(mimeType.split("/")[0])) {
+				log.error("File is not Image [{}]", multipartFile);
+				return imgUrl;
+			}
+			
+			imgUrl = s3Utils.upload(multipartFile, FileDirEnum.profile, newFilename);
+
+			/*
+			 * 유저 테이블에서 프로필 이미지 링크 update		
+			 * TODO: do168 User 관련 로직 작성 후 추가 예정			
+			 */
+
+		} catch (IOException e) {
+			log.error("", e);
+		} catch (Exception e) {
+			log.error("", e);
+		}
+		return imgUrl;
 	}
 	
 	/**
 	 * 동아리 컨텐츠 업로드
 	 */
 	@Override
-	public List<String> executeUploadClubContents(MultipartHttpServletRequest multipartHttpServletRequest, long userId){
-		return uploadFile(multipartHttpServletRequest, userId, FileDirEnum.club);
-	}
-	
-	/**
-	 * 파일 업로드 로직
-	 */
-	private List<String> uploadFile(MultipartHttpServletRequest multipartHttpServletRequest, long userId, FileDirEnum fileDirEnum){
+	public List<String> executeUploadClubContents(MultipartHttpServletRequest multipartHttpServletRequest, long userId,
+			long meetingId) {
 
 		Iterator<String> fileList = multipartHttpServletRequest.getFileNames();
 		List<String> imgUrls = new ArrayList<String>();
@@ -62,11 +83,12 @@ public class UploadServiceImpl implements UploadService{
 					FileUploadDto fileUploadDto = new FileUploadDto();
 					fileUploadDto.setUserId(userId);
 					fileUploadDto.setOriginFileName(file.getOriginalFilename());
-					fileUploadDto.setFileBaseUrl("/" + fileDirEnum.name());
-					fileUploadDto.setFileName(newFilename);
+					fileUploadDto.setFileBaseUrl("/" + FileDirEnum.club +"/" + newFilename);
 					fileUploadDto.setMimeType(mimeType);
+					fileUploadDto.setMeetingId(meetingId);
 					fileUploadDto.setSize(file.getSize());
 					
+					// 업로드할 파일 정보 DB에 저장
 					int cnt = uploadMapper.uploadProfile(fileUploadDto);
 
 					if (cnt != 1) {
@@ -74,7 +96,8 @@ public class UploadServiceImpl implements UploadService{
 						throw new RuntimeException();
 					}
 					
-					imgUrl = s3Utils.upload(file, fileDirEnum, newFilename);
+					// 파일 S3로 업로드
+					imgUrl = s3Utils.upload(file, FileDirEnum.club, newFilename);
 
 					imgUrls.add(imgUrl);
 

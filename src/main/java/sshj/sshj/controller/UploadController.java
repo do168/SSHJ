@@ -10,10 +10,12 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
@@ -42,15 +44,14 @@ public class UploadController {
 		@ApiResponse(code=200, message="")
 	})
 	@RequestMapping(value = "/profile", method=RequestMethod.POST)
-	public ResponseEntity<List<String>> profileUpload(
+	public ResponseEntity<String> profileUpload(
 //		@ApiIgnore @RequestAttribute("userInfoModel") UserInfoModel userInfoModel,
-		MultipartHttpServletRequest multipartHttpServletRequest) throws IOException {
-		if(ObjectUtils.isEmpty(multipartHttpServletRequest))
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		List<String> imgUrls = uploadService.executeUploadProfile(multipartHttpServletRequest, 0);	// userid �ӽ÷� ä�� ����
-		log.info("profile files uploaded[{}]", imgUrls);		
+		MultipartFile multipartFile) throws IOException {
+		String imgUrl = uploadService.executeUploadProfile(multipartFile, 1);	
+		// TODO: 1=admin userInfoModel 생성시 교체
+		log.info("profile files uploaded[{}]", imgUrl);		
 		
-		return new ResponseEntity<List<String>>(imgUrls, HttpStatus.OK);
+		return new ResponseEntity<String>(imgUrl, HttpStatus.OK);
 	}
 	
 	@ApiOperation(
@@ -59,10 +60,12 @@ public class UploadController {
 	@RequestMapping(value = "/club", method = RequestMethod.POST)
 	public ResponseEntity<List<String>> contentUpload(
 //			@ApiIgnore @RequestAttribute("userInfoModel") UserInfoModel userInfoModel,
-			MultipartHttpServletRequest multipartHttpServletRequest) throws IOException {
+			MultipartHttpServletRequest multipartHttpServletRequest,
+			@ApiParam("meetingId") long meetingId) throws IOException {
 		if (ObjectUtils.isEmpty(multipartHttpServletRequest))
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		List<String> imgUrls = uploadService.executeUploadClubContents(multipartHttpServletRequest, 0); // userid �ӽ÷� ä�� ����
+		List<String> imgUrls = uploadService.executeUploadClubContents(multipartHttpServletRequest, 1, meetingId); 
+		// TODO: 1=admin userInfoModel 생성시 교체
 		log.info("club contents uploaded [{}]", imgUrls);
 
 		return new ResponseEntity<List<String>>(imgUrls, HttpStatus.OK);

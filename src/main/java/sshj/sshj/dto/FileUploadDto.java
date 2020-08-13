@@ -46,6 +46,11 @@ public class FileUploadDto {
 	private long size;
 	
 	/**
+	 * 모임 번호
+	 */
+	private long meetingId;
+	
+	/**
 	 * 업로드 시간
 	 */
 	private String uploadDatetime;

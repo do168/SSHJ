@@ -2,6 +2,7 @@ package sshj.sshj.service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 /**
@@ -17,7 +18,7 @@ public interface UploadService {
 	 * @param userId
 	 * @return
 	 */
-	public List<String> executeUploadProfile(MultipartHttpServletRequest multipartHttpServletRequest, long userId);
+	public String executeUploadProfile(MultipartFile multipartFile, long userId);
 
 	/**
 	 * 동아리 컨텐츠 파일 업로드
@@ -25,6 +26,6 @@ public interface UploadService {
 	 * @param userId
 	 * @return
 	 */
-	public List<String> executeUploadClubContents(MultipartHttpServletRequest multipartHttpServletRequest, long userId);
+	public List<String> executeUploadClubContents(MultipartHttpServletRequest multipartHttpServletRequest, long userId, long meetingId);
 
 }
