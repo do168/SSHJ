@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import sshj.sshj.dto.MeetingDto;
+import sshj.sshj.dto.UserByMeetingDto;
 import sshj.sshj.service.MeetingService;
 
 import java.util.List;
@@ -74,6 +75,7 @@ public class MeetingController {
         meetingService.deleteMeeting(meetingId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
+
     @ApiOperation(
             value = "전체 모임 읽기 Api"
             , notes = "전체 모임 읽기 Api"
@@ -84,6 +86,32 @@ public class MeetingController {
     @RequestMapping(value = "/readAll", method= RequestMethod.POST)
     public ResponseEntity<List> readAllMeeting() throws Exception{
         List<MeetingDto> list=meetingService.selectMeetingList();
+        return new ResponseEntity<List>(list,HttpStatus.OK);
+    }
+
+    @ApiOperation(
+            value = "동아리별 모임 읽기 Api"
+            , notes = "동아리별 모임 읽기 Api"
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/readClubByMeeting", method= RequestMethod.POST)
+    public ResponseEntity<List> readClubByMeeting(int clubId) throws Exception{
+        List<MeetingDto> list=meetingService.selectClubByMeetingList(clubId);
+        return new ResponseEntity<List>(list,HttpStatus.OK);
+    }
+
+    @ApiOperation(
+            value = "유저별 모임 읽기 Api"
+            , notes = "유저별 모임 읽기 Api"
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/readUserByMeeting", method= RequestMethod.POST)
+    public ResponseEntity<List> readUserByMeeting(int userId) throws Exception{
+        List<UserByMeetingDto> list=meetingService.selectUserByMeetingList(userId);
         return new ResponseEntity<List>(list,HttpStatus.OK);
     }
 }

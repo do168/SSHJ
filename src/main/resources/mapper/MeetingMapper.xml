@@ -70,6 +70,27 @@
 		]]>
     </select>
 
+    <select id="selectClubByMeetingList" parameterType="int" resultType="sshj.sshj.dto.MeetingDto">
+        <![CDATA[
+			SELECT
+				meeting_id as meetingId,
+				meeting_name as meetingName,
+				deadline as deadline,
+				start_date as startDate,
+				end_date as endDate,
+				category as category,
+				explanation_title as explanationTitle,
+				explanation_content as explanationContent,
+				created_time as createdTime,
+				max_participant as maxParticipant,
+				club_id as clubId
+			FROM
+				meeting
+			WHERE
+			    club_id=#{clubId}
+		]]>
+    </select>
+
     <update id="updateMeeting" parameterType="sshj.sshj.dto.MeetingDto">
         <![CDATA[
 			UPDATE meeting
@@ -93,4 +114,16 @@
         ]]>
     </delete>
 
+    <select id="selectUserByMeetingList" resultType="sshj.sshj.dto.UserByMeetingDto">
+        <![CDATA[
+			SELECT
+			    user_id as userId,
+				meeting_id as meetingId,
+				created_time as createdTime
+			FROM
+				tb_user_by_meeting
+			WHERE
+			    user_id=#{userId}
+		]]>
+    </select>
 </mapper>
