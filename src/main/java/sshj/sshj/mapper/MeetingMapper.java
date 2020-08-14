@@ -1,10 +1,10 @@
 package sshj.sshj.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
-import sshj.sshj.dto.MeetingDto;
-import sshj.sshj.dto.UserByMeetingDto;
-
 import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import sshj.sshj.dto.MeetingDto;
 
 @Mapper
 public interface MeetingMapper {
@@ -14,5 +14,5 @@ public interface MeetingMapper {
     public void deleteMeeting(int meetingId) throws Exception;
     public List<MeetingDto> selectMeetingList() throws Exception;
     public List<MeetingDto> selectClubByMeetingList(int clubId) throws Exception;
-    public List<UserByMeetingDto> selectUserByMeetingList(int userId) throws Exception;
+    public List<MeetingDto> selectUserByMeetingList(int userId) throws Exception;
 }

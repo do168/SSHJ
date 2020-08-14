@@ -1,9 +1,8 @@
 package sshj.sshj.service;
 
-import sshj.sshj.dto.MeetingDto;
-import sshj.sshj.dto.UserByMeetingDto;
-
 import java.util.List;
+
+import sshj.sshj.dto.MeetingDto;
 
 public interface MeetingService {
     void insertMeeting(MeetingDto dto) throws Exception;
@@ -12,5 +11,5 @@ public interface MeetingService {
     void deleteMeeting(int meetingId) throws Exception;
     List<MeetingDto> selectMeetingList() throws Exception;
     List<MeetingDto> selectClubByMeetingList(int clubId) throws Exception;
-    List<UserByMeetingDto> selectUserByMeetingList(int userId) throws Exception;
+    List<MeetingDto> selectUserByMeetingList(int userId) throws Exception;
 }

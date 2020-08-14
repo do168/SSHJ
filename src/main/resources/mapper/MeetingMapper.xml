@@ -5,7 +5,7 @@
 <mapper namespace="sshj.sshj.mapper.MeetingMapper">
     <insert id="insertMeeting" parameterType="sshj.sshj.dto.MeetingDto">
         <![CDATA[
-			INSERT INTO meeting(
+			INSERT INTO tb_meeting(
 				meeting_name,
 				deadline,
 				start_date,
@@ -45,7 +45,7 @@
 				max_participant as maxParticipant,
 				club_id as clubId
 			FROM
-				meeting
+				tb_meeting
 			WHERE
 			    meeting_id=#{meetingId}
 		]]>
@@ -66,7 +66,7 @@
 				max_participant as maxParticipant,
 				club_id as clubId
 			FROM
-				meeting
+				tb_meeting
 		]]>
     </select>
 
@@ -85,7 +85,7 @@
 				max_participant as maxParticipant,
 				club_id as clubId
 			FROM
-				meeting
+				tb_meeting
 			WHERE
 			    club_id=#{clubId}
 		]]>
@@ -93,7 +93,7 @@
 
     <update id="updateMeeting" parameterType="sshj.sshj.dto.MeetingDto">
         <![CDATA[
-			UPDATE meeting
+			UPDATE tb_meeting
 			SET meeting_name=#{meetingName},
 				deadline=#{deadline},
 				start_date=#{startDate},
@@ -109,21 +109,29 @@
 
     <delete id="deleteMeeting" parameterType="int">
         <![CDATA[
-            DELETE FROM meeting
+            DELETE FROM tb_meeting
             WHERE meeting_id=#{meetingId}
         ]]>
     </delete>
 
-    <select id="selectUserByMeetingList" resultType="sshj.sshj.dto.UserByMeetingDto">
+    <select id="selectUserByMeetingList" resultType="sshj.sshj.dto.MeetingDto">
         <![CDATA[
 			SELECT
-			    user_id as userId,
 				meeting_id as meetingId,
-				created_time as createdTime
+				meeting_name as meetingName,
+				deadline as deadline,
+				start_date as startDate,
+				end_date as endDate,
+				category as category,
+				explanation_title as explanationTitle,
+				explanation_content as explanationContent,
+				created_time as createdTime,
+				max_participant as maxParticipant,
+				club_id as clubId
 			FROM
-				tb_user_by_meeting
+				tb_meeting
 			WHERE
-			    user_id=#{userId}
+			    meeting_id IN (SELECT meeting_id FROM tb_user_by_meeting WHERE user_id = #{userId})
 		]]>
     </select>
 </mapper>

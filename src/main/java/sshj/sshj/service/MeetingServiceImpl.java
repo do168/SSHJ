@@ -1,12 +1,12 @@
 package sshj.sshj.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sshj.sshj.dto.MeetingDto;
-import sshj.sshj.dto.UserByMeetingDto;
-import sshj.sshj.mapper.MeetingMapper;
 
-import java.util.List;
+import sshj.sshj.dto.MeetingDto;
+import sshj.sshj.mapper.MeetingMapper;
 
 @Service
 public class MeetingServiceImpl implements MeetingService {
@@ -45,7 +45,7 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public List<UserByMeetingDto> selectUserByMeetingList(int userId) throws Exception {
+    public List<MeetingDto> selectUserByMeetingList(int userId) throws Exception {
         return meetingMapper.selectUserByMeetingList(userId);
     }
 }
