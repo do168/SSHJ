@@ -3,7 +3,6 @@ package sshj.sshj.configuration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
-
 import sshj.sshj.configuration.common.spring.NewYamlPropertySourceFactory;
 
 @Configuration

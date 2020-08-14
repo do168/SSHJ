@@ -1,9 +1,7 @@
 package sshj.sshj.configuration;
 
-import java.util.Properties;
-
-import javax.sql.DataSource;
-
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -19,8 +17,8 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+import javax.sql.DataSource;
+import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
@@ -62,9 +60,6 @@ public class MybatisConfig {
 	@Bean(name = "sqlSessionFactory")
 	public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource,
 			ApplicationContext applicationContext) throws Exception {
-		/**
-		 * Í≥µÌÜµ Íµ¨Î∂Ñ?ûêÎ°? ?Ç¨?ö©?ïò?äî Î≥??àò
-		 */
 		Properties sqlSessionFactoryProperties = new Properties();
 
 		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();

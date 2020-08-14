@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sshj.sshj.mapper.MeetingMapper">
+    <insert id="insertMeeting" parameterType="sshj.sshj.dto.MeetingDto">
+        <![CDATA[
+			INSERT INTO meeting(
+				meeting_name,
+				deadline,
+				start_date,
+				end_date,
+				category,
+				explanation_title,
+				explanation_content,
+				created_time,
+				max_participant,
+				club_id)
+			VALUES(
+				#{meetingName},
+				#{deadline},
+				#{startDate},
+				#{endDate},
+				#{category},
+				#{explanationTitle},
+				#{explanationContent},
+				now(),
+				#{maxParticipant},
+				#{clubId})
+		]]>
+    </insert>
+
+    <select id="selectMeeting" parameterType="int" resultType="sshj.sshj.dto.MeetingDto">
+        <![CDATA[
+			SELECT
+				meeting_id as meetingId,
+				meeting_name as meetingName,
+				deadline as deadline,
+				start_date as startDate,
+				end_date as endDate,
+				category as category,
+				explanation_title as explanationTitle,
+				explanation_content as explanationContent,
+				created_time as createdTime,
+				max_participant as maxParticipant,
+				club_id as clubId
+			FROM
+				meeting
+			WHERE
+			    meeting_id=#{meetingId}
+		]]>
+    </select>
+
+    <select id="selectMeetingList" resultType="sshj.sshj.dto.MeetingDto">
+        <![CDATA[
+			SELECT
+				meeting_id as meetingId,
+				meeting_name as meetingName,
+				deadline as deadline,
+				start_date as startDate,
+				end_date as endDate,
+				category as category,
+				explanation_title as explanationTitle,
+				explanation_content as explanationContent,
+				created_time as createdTime,
+				max_participant as maxParticipant,
+				club_id as clubId
+			FROM
+				meeting
+		]]>
+    </select>
+
+    <select id="selectClubByMeetingList" parameterType="int" resultType="sshj.sshj.dto.MeetingDto">
+        <![CDATA[
+			SELECT
+				meeting_id as meetingId,
+				meeting_name as meetingName,
+				deadline as deadline,
+				start_date as startDate,
+				end_date as endDate,
+				category as category,
+				explanation_title as explanationTitle,
+				explanation_content as explanationContent,
+				created_time as createdTime,
+				max_participant as maxParticipant,
+				club_id as clubId
+			FROM
+				meeting
+			WHERE
+			    club_id=#{clubId}
+		]]>
+    </select>
+
+    <update id="updateMeeting" parameterType="sshj.sshj.dto.MeetingDto">
+        <![CDATA[
+			UPDATE meeting
+			SET meeting_name=#{meetingName},
+				deadline=#{deadline},
+				start_date=#{startDate},
+				end_date=#{endDate},
+				category=#{category},
+				explanation_title=#{explanationTitle},
+				explanation_content=#{explanationContent},
+				created_time=#{createdTime},
+				max_participant=#{maxParticipant}
+			WHERE meeting_id=#{meetingId}
+		]]>
+    </update>
+
+    <delete id="deleteMeeting" parameterType="int">
+        <![CDATA[
+            DELETE FROM meeting
+            WHERE meeting_id=#{meetingId}
+        ]]>
+    </delete>
+
+    <select id="selectUserByMeetingList" resultType="sshj.sshj.dto.UserByMeetingDto">
+        <![CDATA[
+			SELECT
+			    user_id as userId,
+				meeting_id as meetingId,
+				created_time as createdTime
+			FROM
+				tb_user_by_meeting
+			WHERE
+			    user_id=#{userId}
+		]]>
+    </select>
+</mapper>

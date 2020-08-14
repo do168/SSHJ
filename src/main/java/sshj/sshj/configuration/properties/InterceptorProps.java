@@ -1,10 +1,9 @@
 package sshj.sshj.configuration.properties;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Repository;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Repository;
 
 @Repository
 @ConfigurationProperties("interceptor")
