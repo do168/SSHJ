@@ -24,7 +24,8 @@ import sshj.sshj.service.UserService;
 @Slf4j
 @RequestMapping("/user")
 public class UserController {
-
+    private String code;
+    private boolean isChecked;
     @Autowired
     private UserService userService;
 
@@ -38,7 +39,8 @@ public class UserController {
     @RequestMapping(value="/signup", method = RequestMethod.POST)
     public ResponseEntity<Void> signUp(
             @ModelAttribute final UserInfoModel userInfoModel) throws Exception {
-        if(userService.selectUserInfo(userInfoModel.getId())==null) {
+        code = userService.sendEmail(userInfoModel.getEmail());
+        if(userService.selectUserInfo(userInfoModel.getId())==null && isChecked) {
             userService.insertUser(userInfoModel);
             return new ResponseEntity<Void>(HttpStatus.OK);
         }
@@ -48,5 +50,25 @@ public class UserController {
         }
 
     }
+
+    @ApiOperation(
+            value = "이메일 인증"
+            ,notes = "이메일 인증"
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="complete")
+    })
+    @RequestMapping(value="/signup/certificate", method = RequestMethod.POST)
+    public ResponseEntity<Void> certificate(
+            @ModelAttribute final String insert_code) throws Exception {
+        isChecked = false;
+        if(insert_code.equals(code)) {
+            isChecked = true;
+        }
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+
+
 
 }
