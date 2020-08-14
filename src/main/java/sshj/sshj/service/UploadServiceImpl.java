@@ -15,14 +15,14 @@ import lombok.extern.slf4j.Slf4j;
 import sshj.sshj.component.S3Utils;
 import sshj.sshj.dto.FileUploadDto;
 import sshj.sshj.dto.enums.FileDirEnum;
-import sshj.sshj.mapper.UploadMapper;
+import sshj.sshj.mapper.S3FileMapper;
 
 @Slf4j
 @Service
 public class UploadServiceImpl implements UploadService{
 	
 	@Autowired
-	private UploadMapper uploadMapper;
+	private S3FileMapper fileMapper;
 	
 	@Autowired
 	private S3Utils s3Utils;
@@ -53,7 +53,7 @@ public class UploadServiceImpl implements UploadService{
 			/*
 			 * 유저 테이블에서 프로필 이미지 링크 update			
 			 */
-			int cnt = uploadMapper.uploadProfile(userId, imgUrl);
+			int cnt = fileMapper.uploadProfile(userId, imgUrl);
 
 			if (cnt != 1) {
 				log.error("Save profile upload info failed!!");
@@ -95,7 +95,7 @@ public class UploadServiceImpl implements UploadService{
 					fileUploadDto.setSize(file.getSize());
 					
 					// 업로드할 파일 정보 DB에 저장
-					int cnt = uploadMapper.uploadContent(fileUploadDto);
+					int cnt = fileMapper.uploadContent(fileUploadDto);
 
 					if (cnt < 1) {
 						log.error("Save content upload info failed!!");

@@ -11,7 +11,7 @@ import sshj.sshj.dto.FileUploadDto;
  *
  */
 @Mapper
-public interface UploadMapper {
+public interface S3FileMapper {
 	
 	public int uploadProfile(@Param("userId") long userId, @Param("profileUrl") String profileUrl);
 	
