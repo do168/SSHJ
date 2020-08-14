@@ -42,7 +42,7 @@ public class MeetingController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/read", method= RequestMethod.POST)
+    @RequestMapping(value = "/read", method= RequestMethod.GET)
     public ResponseEntity<MeetingDto> readMeeting(int meetingId) throws Exception{
         MeetingDto meetingDto=meetingService.selectMeeting(meetingId);
         return new ResponseEntity<MeetingDto>(meetingDto,HttpStatus.OK);
@@ -81,7 +81,7 @@ public class MeetingController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/readAll", method= RequestMethod.POST)
+    @RequestMapping(value = "/readAll", method= RequestMethod.GET)
     public ResponseEntity<List> readAllMeeting() throws Exception{
         List<MeetingDto> list=meetingService.selectMeetingList();
         return new ResponseEntity<List>(list,HttpStatus.OK);
@@ -94,7 +94,7 @@ public class MeetingController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/readClubByMeeting", method= RequestMethod.POST)
+    @RequestMapping(value = "/readClubByMeeting", method= RequestMethod.GET)
     public ResponseEntity<List> readClubByMeeting(int clubId) throws Exception{
         List<MeetingDto> list=meetingService.selectClubByMeetingList(clubId);
         return new ResponseEntity<List>(list,HttpStatus.OK);
@@ -107,7 +107,7 @@ public class MeetingController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/readUserByMeeting", method= RequestMethod.POST)
+    @RequestMapping(value = "/readUserByMeeting", method= RequestMethod.GET)
     public ResponseEntity<List> readUserByMeeting(int userId) throws Exception{
         List<MeetingDto> list=meetingService.selectUserByMeetingList(userId);
         return new ResponseEntity<List>(list, HttpStatus.OK);
