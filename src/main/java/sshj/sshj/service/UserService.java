@@ -2,6 +2,8 @@ package sshj.sshj.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,8 +22,10 @@ import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
+@PropertySource("classpath:aws.yml")
 public class UserService implements UserDetailsService {
-    private String sender = "daedocrew@gmail.com";
+    @Value("${cloud.aws.sender")
+    private String sender;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -41,6 +45,9 @@ public class UserService implements UserDetailsService {
 
     public int selectUserId(String id) throws Exception {
         return userMapper.selectUserId(id);
+    }
+    public User selectUserInfo(String id) throws Exception {
+        return userMapper.selectUserInfo(id);
     }
 
     public String sendEmail(String email) {
@@ -66,10 +73,6 @@ public class UserService implements UserDetailsService {
 
     public void insertUser(UserInfoModel userInfoModel) {
         String time = time_now();
-//        ModelMapper modelMapper = new ModelMapper();
-//        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-//
-//        User user = modelMapper.map(userInfoModel, User.class);
         this.userMapper.insertUserInfo(User.builder()
             .id(userInfoModel.getId())
             .password(passwordEncoder.encode(userInfoModel.getPassword()))
