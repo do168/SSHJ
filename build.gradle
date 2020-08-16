@@ -30,7 +30,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 
 	compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'
-	
+
 	//aws
 	compile('org.springframework.cloud:spring-cloud-starter-aws')
 	

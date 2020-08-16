@@ -3,10 +3,8 @@ package sshj.sshj.dto;
 import com.amazonaws.services.simpleemail.model.*;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.stereotype.Repository;
 
 @Data
-@Repository //안하니깐 bean 인식이 안된다. 해결법점
 public class SenderDto {
 
     private String from;
@@ -21,6 +19,7 @@ public class SenderDto {
         this.subject = subject;
         this.content = content;
     }
+
 
     public SendEmailRequest toSendRequestDto(){
         Destination destination = new Destination()

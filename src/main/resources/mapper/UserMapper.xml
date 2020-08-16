@@ -25,4 +25,33 @@
 	]]>
     </select>
 
+    <select id="selectUserId" parameterType="string" resultType="int">
+        <![CDATA[
+		/*	UserMapper.selectUserId	*/
+		select count(id)
+		from tb_user
+		where id = #{id}
+	]]>
+    </select>
+
+    <select id="selectCode" parameterType="string" resultType="string">
+        <![CDATA[
+		/*	UserMapper.selectCode	*/
+		select email
+		from tb_codeemail
+		where code = #{code}
+	]]>
+    </select>
+
+    <insert id="insertCodeEmail" parameterType="string">
+        <![CDATA[
+		/*	UserMapper.insertCodeEmail	*/
+		insert into tb_codeemail (
+			code, email, created_time
+		) values (
+			#{code}, #{email}, #{time}
+		)
+	]]>
+    </insert>
+
 </mapper>

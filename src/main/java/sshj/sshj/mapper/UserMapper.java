@@ -9,5 +9,8 @@ import sshj.sshj.dto.User;
 public interface UserMapper {
 
     User selectUserInfo(String id);
+    int selectUserId(String id);
     void insertUserInfo(User user);
+    String selectCode(String code);
+    void insertCodeEmail(String code, String email, String time);
 }

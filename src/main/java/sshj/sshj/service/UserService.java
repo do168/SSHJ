@@ -2,8 +2,6 @@ package sshj.sshj.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,10 +20,8 @@ import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
-@PropertySource("classpath:aws.yml")
 public class UserService implements UserDetailsService {
-    @Value("${cloud.aws.sender")
-    private String sender;
+    private String sender = "daedocrew@gmail.com";
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -36,9 +32,6 @@ public class UserService implements UserDetailsService {
     private SenderCompo senderCompo;
 
     @Autowired
-    private SenderDto senderDto;
-
-    @Autowired
     private CodeCompo codeCompo;
 
     @Override
@@ -46,13 +39,15 @@ public class UserService implements UserDetailsService {
         return userMapper.selectUserInfo(username);
     }
 
-    public User selectUserInfo(String id) throws Exception {
-        return userMapper.selectUserInfo(id);
+    public int selectUserId(String id) throws Exception {
+        return userMapper.selectUserId(id);
     }
 
     public String sendEmail(String email) {
         String code = codeCompo.excuteGenerate();
-        this.senderDto = SenderDto.builder()
+        String time = time_now();
+
+        SenderDto senderDto = SenderDto.builder()
                 .from(sender)
                 .to(email)
                 .subject("sshj 인증 이메일입니다.")
@@ -60,14 +55,17 @@ public class UserService implements UserDetailsService {
                 .build();
 
         senderCompo.send(senderDto);
+        insertCodeEmail(code, email, time);
 
         return code;
     }
 
+    public void insertCodeEmail(String code, String email, String time) {
+        userMapper.insertCodeEmail(code, email, time);
+    }
+
     public void insertUser(UserInfoModel userInfoModel) {
-        long systemTime = System.currentTimeMillis();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA);
-        String dtime = formatter.format(systemTime);
+        String time = time_now();
 //        ModelMapper modelMapper = new ModelMapper();
 //        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 //
@@ -77,11 +75,20 @@ public class UserService implements UserDetailsService {
             .password(passwordEncoder.encode(userInfoModel.getPassword()))
             .roles(Collections.singletonList("ROLE_USER"))
             .nickname(userInfoModel.getNickname())
-            .created_time(dtime)
+            .created_time(time)
             .build()); //getId() 없앴는데 뭐가 달라지나?
         return;
     }
 
+    public String selectCode(String code) {
+        return userMapper.selectCode(code);
+    }
 
+    public String time_now() {
+        long systemTime = System.currentTimeMillis();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA);
+        String dtime = formatter.format(systemTime);
+        return dtime;
+    }
 }
 
