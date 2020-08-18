@@ -45,9 +45,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 페이지 권한 설정
                 .authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/user/myinfo").hasRole("MEMBER")
+                .antMatchers("/user/myinfo").hasRole("USER")
                 .antMatchers("/club/myinfo").hasRole("CLUB") //yml로 해보자
-                .antMatchers("/meeting/**").hasRole("ADMIN"+"CLUB"+"MEMBER" ) // 비로그인 멤버 빼고싶다...
+                .antMatchers("/meeting/**").hasAnyRole("ADMIN","CLUB","USER" ) // 비로그인 멤버 제외
                 .antMatchers("/**").permitAll()
                 .and() // 로그인 설정
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),

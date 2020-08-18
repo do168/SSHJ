@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Builder
 @ToString
 public class User implements UserDetails {
-    private long user_id;
+//    private long user_id;
 
     private String id;
 
@@ -26,15 +26,16 @@ public class User implements UserDetails {
 
     private String email;
 
-    private Integer certification_number;
-
     private String created_time;
+
+    private String role;
 
     @Builder.Default
     private List<String> roles = new ArrayList<>();  // 여기서 오류날 수 있으니 유의하자
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        this.roles.add(this.getRole());
         return this.roles.stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());

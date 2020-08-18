@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import sshj.sshj.component.CodeCompo;
 import sshj.sshj.component.SenderCompo;
+import sshj.sshj.dto.CodeInfoModel;
 import sshj.sshj.dto.SenderDto;
 import sshj.sshj.dto.User;
 import sshj.sshj.dto.UserInfoModel;
@@ -46,7 +47,16 @@ public class UserService implements UserDetailsService {
     public int selectUserId(String id) throws Exception {
         return userMapper.selectUserId(id);
     }
-    public User selectUserInfo(String id) throws Exception {
+
+    public int selectUserEmail(String email) throws Exception {
+        return userMapper.selectUserEmail(email);
+    }
+
+    public int selectUserNickname(String nickname) throws Exception {
+        return userMapper.selectUserNickname(nickname);
+    }
+
+    public User selectUser(String id) throws Exception {
         return userMapper.selectUserInfo(id);
     }
 
@@ -55,7 +65,7 @@ public class UserService implements UserDetailsService {
         String time = time_now();
 
         SenderDto senderDto = SenderDto.builder()
-                .from(sender)
+                .from("daedocrew@gmail.com")
                 .to(email)
                 .subject("sshj 인증 이메일입니다.")
                 .content(code)
@@ -73,9 +83,11 @@ public class UserService implements UserDetailsService {
 
     public void insertUser(UserInfoModel userInfoModel) {
         String time = time_now();
-        this.userMapper.insertUserInfo(User.builder()
+        this.userMapper.insertUser(User.builder()
             .id(userInfoModel.getId())
             .password(passwordEncoder.encode(userInfoModel.getPassword()))
+            .email(userInfoModel.getEmail())
+            .role("ROLE_USER")
             .roles(Collections.singletonList("ROLE_USER"))
             .nickname(userInfoModel.getNickname())
             .created_time(time)
@@ -83,7 +95,7 @@ public class UserService implements UserDetailsService {
         return;
     }
 
-    public String selectCode(String code) {
+    public CodeInfoModel selectCode(String code) {
         return userMapper.selectCode(code);
     }
 

@@ -4,13 +4,13 @@
 <mapper namespace="sshj.sshj.mapper.UserMapper">
 
     <!-- 회원가입 유저 정보 등록	-->
-    <insert id="insertUserInfo" parameterType="sshj.sshj.dto.User">
+    <insert id="insertUser" parameterType="sshj.sshj.dto.User">
         <![CDATA[
-		/*	UserMapper.insertUserInfo	*/
+		/*	UserMapper.insertUser	*/
 		insert into tb_user (
-			user_id, id, password, email, nickname, certification_number, created_time
+			id, password, email, nickname, created_time, role
 		) values (
-			#{userId}, #{id}, #{password}, #{email}, #{nickname}, #{certification_number}, #{created_time}
+			#{id}, #{password}, #{email}, #{nickname}, #{created_time}, #{role}
 		)
 	]]>
     </insert>
@@ -19,7 +19,7 @@
     <select id="selectUserInfo" parameterType="string" resultType="sshj.sshj.dto.User">
         <![CDATA[
 		/*	UserMapper.selectUserInfo	*/
-		select user_id, id, password, email, nickname, certification_number, created_time
+		select user_id, id, password, email, nickname, created_time, role
 		from tb_user
 		where id = #{id}
 	]]>
@@ -34,10 +34,28 @@
 	]]>
     </select>
 
-    <select id="selectCode" parameterType="string" resultType="string">
+    <select id="selectUserEmail" parameterType="string" resultType="int">
+        <![CDATA[
+		/*	UserMapper.selectUserId	*/
+		select count(email)
+		from tb_user
+		where email = #{email}
+	]]>
+    </select>
+
+    <select id="selectUserNickname" parameterType="string" resultType="int">
+        <![CDATA[
+		/*	UserMapper.selectUserNickname	*/
+		select count(nickname)
+		from tb_user
+		where nickname = #{nickname}
+	]]>
+    </select>
+
+    <select id="selectCode" parameterType="string" resultType="sshj.sshj.dto.CodeInfoModel">
         <![CDATA[
 		/*	UserMapper.selectCode	*/
-		select email
+		select email, created_time
 		from tb_codeemail
 		where code = #{code}
 	]]>
