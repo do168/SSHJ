@@ -27,7 +27,7 @@ import sshj.sshj.service.UserService;
 @Api(value = "Oauth-controller", description = "Oauth controller")
 @AllArgsConstructor
 @Slf4j
-@RequestMapping("/user")
+@RequestMapping("/member")
 public class UserController {
     @Autowired
     private UserService userService;
