@@ -21,9 +21,12 @@ public class ReviewDto {
 	private long meeingId;
 
 	@ApiModelProperty(value = "후기 내용")
-	private long content;
+	private String content;
 
+	@ApiModelProperty(value = "마지막 수정 일자")
+	private String lastUpdatedTime;
+	
 	@ApiModelProperty(value = "작성 일자")
-	private long created_time;
+	private String createdTime;
 
 }

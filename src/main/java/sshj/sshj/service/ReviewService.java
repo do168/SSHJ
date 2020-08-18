@@ -22,4 +22,15 @@ public interface ReviewService {
 	 * @param reviewDto
 	 */
 	public List<ReviewDto> getReviewList(long meetingId, int page, int size);
+
+	/**
+	 * 후기 수정
+	 */
+	public void updateReview(long userId, long reviewId, String content);
+
+	/**
+	 * 후기 삭제
+	 */
+	public void deleteReview(long userId, long reviewId);
+	
 }

@@ -8,9 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import springfox.documentation.annotations.ApiIgnore;
 import sshj.sshj.dto.MeetingDto;
 import sshj.sshj.service.MeetingService;
 
@@ -137,5 +146,20 @@ public class MeetingController {
     public ResponseEntity<Void> deleteMeetingLike(int userId,int meetingId) throws Exception{
         meetingService.deleteMeetingLike(userId,meetingId);
         return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+    
+    @ApiOperation(
+            value = "유저 모임 참여 Api"
+            , notes = "유저 모임 참여 Api"
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/register", method= RequestMethod.POST)
+    public ResponseEntity<Void> registerUserMeeting(@ApiParam(value = "모임 번호") @RequestParam("meetingId")long meetingId) throws Exception{
+    	
+    	meetingService.registerUserMeeting(userId);
+        
+    	return new ResponseEntity<>(HttpStatus.OK);
     }
 }

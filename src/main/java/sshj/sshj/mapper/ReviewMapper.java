@@ -24,4 +24,15 @@ public interface ReviewMapper {
 	 * 후기 리스트
 	 */
 	public List<ReviewDto> getReviewList(@Param("meetingId")long meetingId, @Param("page")int page, @Param("size")int size);
+
+	/**
+	 * 후기 수정
+	 */
+	public int updateReview(long userId, long reviewId, String content);
+
+	/**
+	 * 후기 삭제
+	 */
+	public int deleteReview(long userId, long reviewId);
+	
 }
