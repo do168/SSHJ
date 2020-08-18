@@ -101,7 +101,7 @@
 				category=#{category},
 				explanation_title=#{explanationTitle},
 				explanation_content=#{explanationContent},
-				created_time=#{createdTime},
+				created_time=now(),
 				max_participant=#{maxParticipant}
 			WHERE meeting_id=#{meetingId}
 		]]>

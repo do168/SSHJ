@@ -22,7 +22,6 @@ import java.util.List;
 public class MeetingController {
     @Autowired
     private MeetingService meetingService;
-
     @ApiOperation(
             value = "모임 생성 Api"
             , notes = "모임 생성 Api"

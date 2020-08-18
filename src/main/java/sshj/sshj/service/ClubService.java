@@ -1,0 +1,13 @@
+package sshj.sshj.service;
+
+import sshj.sshj.dto.ClubNoticeDto;
+
+import java.util.List;
+
+public interface ClubService {
+    void insertClubNotice(ClubNoticeDto dto) throws Exception;
+    ClubNoticeDto selectClubNotice(int noticeId) throws Exception;
+    List<ClubNoticeDto> selectClubNoticeList(int clubId) throws Exception;
+    void updateClubNotice(ClubNoticeDto dto) throws Exception;
+    void deleteClubNotice(int noticeId) throws Exception;
+}
