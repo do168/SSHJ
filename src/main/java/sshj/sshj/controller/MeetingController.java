@@ -1,7 +1,9 @@
 package sshj.sshj.controller;
 
-import java.util.List;
-
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,13 +11,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import sshj.sshj.dto.MeetingDto;
 import sshj.sshj.service.MeetingService;
+
+import java.util.List;
 
 @Api(value="MeetingController", description="MeetingController")
 @RequestMapping("/meeting")
@@ -23,7 +22,6 @@ import sshj.sshj.service.MeetingService;
 public class MeetingController {
     @Autowired
     private MeetingService meetingService;
-
     @ApiOperation(
             value = "모임 생성 Api"
             , notes = "모임 생성 Api"
@@ -113,5 +111,31 @@ public class MeetingController {
     public ResponseEntity<List> readUserByMeeting(int userId) throws Exception{
         List<MeetingDto> list=meetingService.selectUserByMeetingList(userId);
         return new ResponseEntity<List>(list, HttpStatus.OK);
+    }
+
+    @ApiOperation(
+            value = "모임별 좋아요 삽입 Api"
+            , notes = "모임별 좋아요 삽입 Api"
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/insertMeetingLike", method= RequestMethod.POST)
+    public ResponseEntity<Void> insertMeetingLike(int userId,int meetingId) throws Exception{
+        meetingService.insertMeetingLike(userId,meetingId);
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @ApiOperation(
+            value = "모임별 좋아요 삭제 Api"
+            , notes = "모임별 좋아요 삭제 Api"
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/deleteMeetingLike", method= RequestMethod.POST)
+    public ResponseEntity<Void> deleteMeetingLike(int userId,int meetingId) throws Exception{
+        meetingService.deleteMeetingLike(userId,meetingId);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 }
