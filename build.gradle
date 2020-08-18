@@ -30,7 +30,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 
 	compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'
-	
+
 	//aws
 	compile('org.springframework.cloud:spring-cloud-starter-aws')
 	
@@ -46,6 +46,17 @@ dependencies {
 
     //log4jdbc
     compile ('org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4:1.16')
+
+    
+	//Spring Security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+
+	//jwt token
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+	//model mapper
+	compile group: 'org.modelmapper', name: 'modelmapper', version: '2.3.7'
 	
 	// tika-parsers
 	compile group: 'org.apache.tika', name: 'tika-parsers', version: '1.23'
@@ -54,6 +65,18 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+
+	// https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
+	compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'
+
+	//aws ses
+	dependencies {
+		compile('com.amazonaws:aws-java-sdk-ses:1.11.227')
+	}
+	// https://mvnrepository.com/artifact/software.amazon.awssdk/ses
+	compile group: 'software.amazon.awssdk', name: 'ses', version: '2.13.18'
+
+
 }
 
 dependencyManagement {

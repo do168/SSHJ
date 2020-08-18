@@ -52,7 +52,7 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
 
 
     private Docket getDefaultDocket(Set<String> protocols, String host){
-        ApiInfo apiInfo = new ApiInfoBuilder().title("sshj-api").description("SSHJ API ��").build();
+        ApiInfo apiInfo = new ApiInfoBuilder().title("sshj-api").description("SSHJ API").build();
         Docket docket = new Docket(DocumentationType.SWAGGER_2);
 
         if(protocols != null) {

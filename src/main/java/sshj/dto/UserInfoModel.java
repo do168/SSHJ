@@ -1,4 +1,4 @@
-package sshj.sshj.dto;
+package sshj.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

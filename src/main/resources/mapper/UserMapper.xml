@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sshj.sshj.mapper.UserMapper">
+
+    <!-- 회원가입 유저 정보 등록	-->
+    <insert id="insertUser" parameterType="sshj.sshj.dto.User">
+        <![CDATA[
+		/*	UserMapper.insertUser	*/
+		insert into tb_user (
+			id, password, email, nickname, created_time, role
+		) values (
+			#{id}, #{password}, #{email}, #{nickname}, #{created_time}, #{role}
+		)
+	]]>
+    </insert>
+
+    <!-- 회원가입 유저 검색	-->
+    <select id="selectUserInfo" parameterType="string" resultType="sshj.sshj.dto.User">
+        <![CDATA[
+		/*	UserMapper.selectUserInfo	*/
+		select user_id, id, password, email, nickname, created_time, role
+		from tb_user
+		where id = #{id}
+	]]>
+    </select>
+
+    <select id="selectUserId" parameterType="string" resultType="int">
+        <![CDATA[
+		/*	UserMapper.selectUserId	*/
+		select count(id)
+		from tb_user
+		where id = #{id}
+	]]>
+    </select>
+
+    <select id="selectUserEmail" parameterType="string" resultType="int">
+        <![CDATA[
+		/*	UserMapper.selectUserId	*/
+		select count(email)
+		from tb_user
+		where email = #{email}
+	]]>
+    </select>
+
+    <select id="selectUserNickname" parameterType="string" resultType="int">
+        <![CDATA[
+		/*	UserMapper.selectUserNickname	*/
+		select count(nickname)
+		from tb_user
+		where nickname = #{nickname}
+	]]>
+    </select>
+
+    <select id="selectCode" parameterType="string" resultType="sshj.sshj.dto.CodeInfoModel">
+        <![CDATA[
+		/*	UserMapper.selectCode	*/
+		select email, created_time
+		from tb_codeemail
+		where code = #{code}
+	]]>
+    </select>
+
+    <insert id="insertCodeEmail" parameterType="string">
+        <![CDATA[
+		/*	UserMapper.insertCodeEmail	*/
+		insert into tb_codeemail (
+			code, email, created_time
+		) values (
+			#{code}, #{email}, #{time}
+		)
+	]]>
+    </insert>
+
+</mapper>
