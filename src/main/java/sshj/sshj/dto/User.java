@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Builder
 @ToString
 public class User implements UserDetails {
-//    private long user_id;
+    private int userId;
 
     private String id;
 
