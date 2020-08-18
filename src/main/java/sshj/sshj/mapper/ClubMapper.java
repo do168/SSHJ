@@ -12,4 +12,7 @@ public interface ClubMapper {
     List<ClubNoticeDto> selectClubNoticeList(int clubId) throws Exception;
     void updateClubNotice(ClubNoticeDto dto) throws Exception;
     void deleteClubNotice(int noticeId) throws Exception;
+    void insertClubNoticeLike(int userId,int noticeId) throws Exception;
+    void deleteClubNoticeLike(int userId,int noticeId) throws Exception;
+    int selectClubNoticeCnt(int noticeId) throws Exception;
 }

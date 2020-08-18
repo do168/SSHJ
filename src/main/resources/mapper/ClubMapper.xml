@@ -66,4 +66,30 @@
             WHERE notice_id=#{noticeId}
         ]]>
     </delete>
+
+    <insert id="insertClubNoticeLike">
+        <![CDATA[
+        INSERT INTO tb_club_notice_like(
+            user_id,
+            notice_id)
+        VALUES(
+        #{userId},
+        #{noticeId})
+        ]]>
+    </insert>
+
+    <delete id="deleteClubNoticeLike" parameterType="int">
+        <![CDATA[
+            DELETE FROM tb_club_notice_like
+            WHERE user_id=#{userId} AND notice_id=#{noticeId}
+        ]]>
+    </delete>
+
+    <select id="selectClubNoticeCnt" parameterType="int" resultType="int">
+        <![CDATA[
+            SELECT COUNT(*)
+            FROM tb_club_notice_like
+            WHERE notice_id=#{noticeId}
+        ]]>
+    </select>
 </mapper>

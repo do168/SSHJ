@@ -87,4 +87,43 @@ public class ClubController {
         clubService.deleteClubNotice(noticeId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
+
+    @ApiOperation(
+            value = "동아리 공지 좋아요 생성 Api"
+            , notes = "동아리 공지 좋아요 생성 Api"
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/createLike", method= RequestMethod.POST)
+    public ResponseEntity<Void> createClubNoticeLike(int userId,int noticeId) throws Exception{
+        clubService.insertClubNoticeLike(userId,noticeId);
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @ApiOperation(
+            value = "동아리 공지 좋아요 삭제 Api"
+            , notes = "동아리 공지 좋아요 삭제 Api"
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/deleteLike", method= RequestMethod.POST)
+    public ResponseEntity<Void> deleteClubNoticeLike(int userId,int noticeId) throws Exception{
+        clubService.deleteClubNoticeLike(userId,noticeId);
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @ApiOperation(
+            value = "동아리 공지 좋아요 갯수 Api"
+            , notes = "동아리 공지 좋아요 갯수 Api"
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/countLike", method= RequestMethod.POST)
+    public ResponseEntity<Integer> countClubNoticeLike(int noticeId) throws Exception{
+        int cnt=clubService.selectClubNoticeCnt(noticeId);
+        return new ResponseEntity<Integer>(cnt,HttpStatus.OK);
+    }
 }
