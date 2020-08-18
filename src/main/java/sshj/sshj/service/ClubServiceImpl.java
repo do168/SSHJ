@@ -51,4 +51,14 @@ public class ClubServiceImpl implements ClubService{
     public int selectClubNoticeCnt(int noticeId) throws Exception {
         return clubMapper.selectClubNoticeCnt(noticeId);
     }
+
+    @Override
+    public void insertClubSubs(int userId, int clubId) throws Exception {
+        clubMapper.insertClubSubs(userId,clubId);
+    }
+
+    @Override
+    public void deleteClubSubs(int userId, int clubId) throws Exception {
+        clubMapper.deleteClubSubs(userId,clubId);
+    }
 }

@@ -67,7 +67,7 @@
         ]]>
     </delete>
 
-    <insert id="insertClubNoticeLike">
+    <insert id="insertClubNoticeLike" parameterType="int">
         <![CDATA[
         INSERT INTO tb_club_notice_like(
             user_id,
@@ -92,4 +92,22 @@
             WHERE notice_id=#{noticeId}
         ]]>
     </select>
+
+    <insert id="insertClubSubs" parameterType="int">
+        <![CDATA[
+        INSERT INTO tb_club_subscription(
+            user_id,
+            club_id)
+        VALUES(
+        #{userId},
+        #{clubId})
+        ]]>
+    </insert>
+
+    <delete id="deleteClubSubs" parameterType="int">
+        <![CDATA[
+            DELETE FROM tb_club_subscription
+            WHERE user_id=#{userId} AND club_id=#{clubId}
+        ]]>
+    </delete>
 </mapper>
