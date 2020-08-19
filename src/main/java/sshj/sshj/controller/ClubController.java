@@ -30,7 +30,7 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/create", method= RequestMethod.POST)
+    @RequestMapping(value = "/createNotice", method= RequestMethod.POST)
     public ResponseEntity<Void> createClubNotice(@ModelAttribute ClubNoticeDto clubNoticeDto) throws Exception{
         clubService.insertClubNotice(clubNoticeDto);
         return new ResponseEntity<Void>(HttpStatus.OK);
@@ -43,7 +43,7 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/read", method= RequestMethod.POST)
+    @RequestMapping(value = "/readNotice", method= RequestMethod.POST)
     public ResponseEntity<ClubNoticeDto> readClubNotice(int noticeId) throws Exception{
         ClubNoticeDto clubNoticeDto=clubService.selectClubNotice(noticeId);
         return new ResponseEntity<ClubNoticeDto>(clubNoticeDto,HttpStatus.OK);
@@ -56,7 +56,7 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/readWhole", method= RequestMethod.POST)
+    @RequestMapping(value = "/readWholeNotice", method= RequestMethod.POST)
     public ResponseEntity<List> readClubNoticeList(int clubId) throws Exception{
         List<ClubNoticeDto> list=clubService.selectClubNoticeList(clubId);
         return new ResponseEntity<List>(list,HttpStatus.OK);
@@ -69,7 +69,7 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/update", method= RequestMethod.POST)
+    @RequestMapping(value = "/updateNotice", method= RequestMethod.POST)
     public ResponseEntity<Void> updateClubNotice(@ModelAttribute ClubNoticeDto dto) throws Exception{
         clubService.updateClubNotice(dto);
         return new ResponseEntity<Void>(HttpStatus.OK);
@@ -82,9 +82,74 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/delete", method= RequestMethod.POST)
+    @RequestMapping(value = "/deleteNotice", method= RequestMethod.POST)
     public ResponseEntity<Void> deleteClubNotice(int noticeId) throws Exception{
         clubService.deleteClubNotice(noticeId);
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @ApiOperation(
+            value = "동아리 공지 좋아요 생성 Api"
+            , notes = "동아리 공지 좋아요 생성 Api"
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/createNoticeLike", method= RequestMethod.POST)
+    public ResponseEntity<Void> createClubNoticeLike(int userId,int noticeId) throws Exception{
+        clubService.insertClubNoticeLike(userId,noticeId);
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @ApiOperation(
+            value = "동아리 공지 좋아요 삭제 Api"
+            , notes = "동아리 공지 좋아요 삭제 Api"
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/deleteNoticeLike", method= RequestMethod.POST)
+    public ResponseEntity<Void> deleteClubNoticeLike(int userId,int noticeId) throws Exception{
+        clubService.deleteClubNoticeLike(userId,noticeId);
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @ApiOperation(
+            value = "동아리 공지 좋아요 갯수 Api"
+            , notes = "동아리 공지 좋아요 갯수 Api"
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/countNoticeLike", method= RequestMethod.POST)
+    public ResponseEntity<Integer> countClubNoticeLike(int noticeId) throws Exception{
+        int cnt=clubService.selectClubNoticeCnt(noticeId);
+        return new ResponseEntity<Integer>(cnt,HttpStatus.OK);
+    }
+
+    @ApiOperation(
+            value = "동아리 구독 생성 Api"
+            , notes = "동아리 구독 생성 Api"
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/createSubs", method= RequestMethod.POST)
+    public ResponseEntity<Void> createClubSubs(int userId,int clubId) throws Exception{
+        clubService.insertClubSubs(userId,clubId);
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @ApiOperation(
+            value = "동아리 구독 삭제 Api"
+            , notes = "동아리 구독 삭제 Api"
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/deleteSubs", method= RequestMethod.POST)
+    public ResponseEntity<Void> deleteClubSubs(int userId,int clubId) throws Exception{
+        clubService.deleteClubSubs(userId,clubId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 }

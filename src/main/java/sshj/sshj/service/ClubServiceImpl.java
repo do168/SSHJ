@@ -36,4 +36,29 @@ public class ClubServiceImpl implements ClubService{
     public void deleteClubNotice(int noticeId) throws Exception {
         clubMapper.deleteClubNotice(noticeId);
     }
+
+    @Override
+    public void insertClubNoticeLike(int userId, int noticeId) throws Exception {
+        clubMapper.insertClubNoticeLike(userId,noticeId);
+    }
+
+    @Override
+    public void deleteClubNoticeLike(int userId, int noticeId) throws Exception {
+        clubMapper.deleteClubNoticeLike(userId,noticeId);
+    }
+
+    @Override
+    public int selectClubNoticeCnt(int noticeId) throws Exception {
+        return clubMapper.selectClubNoticeCnt(noticeId);
+    }
+
+    @Override
+    public void insertClubSubs(int userId, int clubId) throws Exception {
+        clubMapper.insertClubSubs(userId,clubId);
+    }
+
+    @Override
+    public void deleteClubSubs(int userId, int clubId) throws Exception {
+        clubMapper.deleteClubSubs(userId,clubId);
+    }
 }
