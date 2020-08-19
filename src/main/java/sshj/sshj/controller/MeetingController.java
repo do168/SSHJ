@@ -1,14 +1,13 @@
 package sshj.sshj.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,11 +18,9 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import springfox.documentation.annotations.ApiIgnore;
 import sshj.sshj.dto.MeetingDto;
+import sshj.sshj.dto.User;
 import sshj.sshj.service.MeetingService;
-
-import java.util.List;
 
 @Api(value="MeetingController", description="MeetingController")
 @RequestMapping("/meeting")
@@ -38,7 +35,7 @@ public class MeetingController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/create", method= RequestMethod.POST)
+    @RequestMapping(value = "/club/create", method= RequestMethod.POST)
     public ResponseEntity<Void> createMeeting(@ModelAttribute MeetingDto meetingDto) throws Exception{
         meetingService.insertMeeting(meetingDto);
         return new ResponseEntity<Void>(HttpStatus.OK);
@@ -64,7 +61,7 @@ public class MeetingController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/update", method= RequestMethod.POST)
+    @RequestMapping(value = "/club/update", method= RequestMethod.POST)
     public ResponseEntity<Void> updateMeeting(@ModelAttribute MeetingDto meetingDto) throws Exception{
         meetingService.updateMeeting(meetingDto);
         return new ResponseEntity<Void>(HttpStatus.OK);
@@ -77,7 +74,7 @@ public class MeetingController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/delete", method= RequestMethod.POST)
+    @RequestMapping(value = "/club/delete", method= RequestMethod.POST)
     public ResponseEntity<Void> deleteMeeting(int meetingId) throws Exception{
         meetingService.deleteMeeting(meetingId);
         return new ResponseEntity<Void>(HttpStatus.OK);
@@ -103,7 +100,7 @@ public class MeetingController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/readClubByMeeting", method= RequestMethod.GET)
+    @RequestMapping(value = "/club/list", method= RequestMethod.GET)
     public ResponseEntity<List> readClubByMeeting(int clubId) throws Exception{
         List<MeetingDto> list=meetingService.selectClubByMeetingList(clubId);
         return new ResponseEntity<List>(list,HttpStatus.OK);
@@ -116,7 +113,7 @@ public class MeetingController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/readUserByMeeting", method= RequestMethod.GET)
+    @RequestMapping(value = "/user/list", method= RequestMethod.GET)
     public ResponseEntity<List> readUserByMeeting(int userId) throws Exception{
         List<MeetingDto> list=meetingService.selectUserByMeetingList(userId);
         return new ResponseEntity<List>(list, HttpStatus.OK);
@@ -129,7 +126,7 @@ public class MeetingController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/insertMeetingLike", method= RequestMethod.POST)
+    @RequestMapping(value = "/like/insert", method= RequestMethod.POST)
     public ResponseEntity<Void> insertMeetingLike(int userId,int meetingId) throws Exception{
         meetingService.insertMeetingLike(userId,meetingId);
         return new ResponseEntity<Void>(HttpStatus.OK);
@@ -142,9 +139,9 @@ public class MeetingController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/deleteMeetingLike", method= RequestMethod.POST)
+    @RequestMapping(value = "/like/delete", method= RequestMethod.POST)
     public ResponseEntity<Void> deleteMeetingLike(int userId,int meetingId) throws Exception{
-        meetingService.deleteMeetingLike(userId,meetingId);
+        meetingService.deleteMeetingLike(userId, meetingId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
     
@@ -155,11 +152,13 @@ public class MeetingController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/register", method= RequestMethod.POST)
+    @RequestMapping(value = "/user/register", method= RequestMethod.POST)
     public ResponseEntity<Void> registerUserMeeting(@ApiParam(value = "모임 번호") @RequestParam("meetingId")long meetingId) throws Exception{
     	
-    	meetingService.registerUserMeeting(userId);
-        
+    	Object authentication = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    
+    	User user = (User) authentication; 
+    	
     	return new ResponseEntity<>(HttpStatus.OK);
     }
 }
