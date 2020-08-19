@@ -3,6 +3,7 @@ package sshj.sshj.configuration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -47,15 +48,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/user/**").hasRole("USER")
                 .antMatchers("/club/**").hasRole("CLUB") //yml로 해보자
-                .antMatchers("/meeting/**").hasAnyRole("ADMIN","CLUB","USER" ) // 비로그인 멤버 제외
+//                .antMatchers("/meeting/**").hasAnyRole("ADMIN", "CLUB", "USER") // 비로그인 멤버 제외
+                .antMatchers("/meeting/**").hasAnyRole("ADMIN", "CLUB", "USER")
+//                .antMatchers("/meeting/**").permitAll()
                 .antMatchers("/**").permitAll()
-//                .antMatchers("/swagger-resources").permitAll()
-//                .antMatchers("/swagger-resources/configuration/*").permitAll()
-//                .antMatchers("/swagger-ui.html").permitAll()
-//                .antMatchers("/webjars/springfox-swagger-ui/*").permitAll()
                 .and() // 로그인 설정
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                         UsernamePasswordAuthenticationFilter.class);
         // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception{
+        web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui",
+                "/swagger-resources", "/configuration/security",
+                "/swagger-ui.html", "/webjars/**", "/swagger/**");
     }
 }

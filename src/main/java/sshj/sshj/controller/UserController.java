@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import sshj.sshj.configuration.JwtTokenProvider;
 import sshj.sshj.dto.CodeInfoModel;
-import sshj.sshj.dto.User;
+import sshj.sshj.dto.UserDto;
 import sshj.sshj.dto.UserInfoModel;
 import sshj.sshj.service.UserService;
 
@@ -154,11 +154,11 @@ public class UserController {
         @ApiParam(value = "패스워드", required = true) @RequestParam(name="password", required = true) String password) throws Exception {
 
 
-        User user = userService.selectUser(id);
-        if (!passwordEncoder.matches(password, user.getPassword())) {
+        UserDto userDto = userService.selectUser(id);
+        if (!passwordEncoder.matches(password, userDto.getPassword())) {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
-        return new ResponseEntity<>(jwtTokenProvider.createToken(user.getUsername(), user.getRole()), HttpStatus.OK);
+        return new ResponseEntity<>(jwtTokenProvider.createToken(userDto.getUsername(), userDto.getRole()), HttpStatus.OK);
     }
 
 }

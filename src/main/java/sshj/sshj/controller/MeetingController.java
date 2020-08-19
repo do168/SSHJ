@@ -1,7 +1,11 @@
 package sshj.sshj.controller;
 
+<<<<<<< Updated upstream
 import java.util.List;
 
+=======
+import io.swagger.annotations.*;
+>>>>>>> Stashed changes
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -76,6 +80,12 @@ public class MeetingController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
+
+//    @ApiImplicitParams({
+//
+//            @ApiImplicitParam(name = "Authorization", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
+//
+//    })
     @ApiOperation(
             value = "전체 모임 읽기 Api"
             , notes = "전체 모임 읽기 Api"
@@ -85,6 +95,7 @@ public class MeetingController {
     })
     @RequestMapping(value = "/readAll", method= RequestMethod.POST)
     public ResponseEntity<List> readAllMeeting() throws Exception{
+
         List<MeetingDto> list=meetingService.selectMeetingList();
         return new ResponseEntity<List>(list,HttpStatus.OK);
     }

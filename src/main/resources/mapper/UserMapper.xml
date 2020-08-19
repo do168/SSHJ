@@ -4,7 +4,7 @@
 <mapper namespace="sshj.sshj.mapper.UserMapper">
 
     <!-- 회원가입 유저 정보 등록	-->
-    <insert id="insertUser" parameterType="sshj.sshj.dto.User">
+    <insert id="insertUser" parameterType="sshj.sshj.dto.UserDto">
         <![CDATA[
 		/*	UserMapper.insertUser	*/
 		insert into tb_user (
@@ -16,7 +16,7 @@
     </insert>
 
     <!-- 회원가입 유저 검색	-->
-    <select id="selectUserInfo" parameterType="string" resultType="sshj.sshj.dto.User">
+    <select id="selectUserInfo" parameterType="string" resultType="sshj.sshj.dto.UserDto">
         <![CDATA[
 		/*	UserMapper.selectUserInfo	*/
 		select user_id, id, password, email, nickname, created_time, role
