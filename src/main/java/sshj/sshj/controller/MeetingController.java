@@ -167,9 +167,6 @@ public class MeetingController {
     @RequestMapping(value = "/user/register", method= RequestMethod.POST)
     public ResponseEntity<Void> registerUserMeeting(@ApiParam(value = "모임 번호") @RequestParam("meetingId")long meetingId) throws Exception{
     	
-    	Object authentication = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    
-    	User user = (User) authentication; 
     	
     	return new ResponseEntity<>(HttpStatus.OK);
     }
