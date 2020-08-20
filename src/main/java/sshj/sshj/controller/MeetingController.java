@@ -2,11 +2,12 @@ package sshj.sshj.controller;
 
 import java.util.List;
 
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,16 +19,20 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import springfox.documentation.annotations.ApiIgnore;
 import sshj.sshj.dto.MeetingDto;
-import sshj.sshj.dto.User;
+import sshj.sshj.dto.UserDto;
 import sshj.sshj.service.MeetingService;
 
 @Api(value="MeetingController", description="MeetingController")
 @RequestMapping("/meeting")
 @RestController
+
 public class MeetingController {
     @Autowired
     private MeetingService meetingService;
+
+    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "모임 생성 Api"
             , notes = "모임 생성 Api"
@@ -35,8 +40,10 @@ public class MeetingController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/club/create", method= RequestMethod.POST)
-    public ResponseEntity<Void> createMeeting(@ModelAttribute MeetingDto meetingDto) throws Exception{
+    @RequestMapping(value = "/create", method= RequestMethod.POST)
+    public ResponseEntity<Void> createMeeting(
+            @ApiIgnore @RequestAttribute("UserInfo") UserDto userDto,
+            @ModelAttribute MeetingDto meetingDto) throws Exception{
         meetingService.insertMeeting(meetingDto);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
@@ -54,6 +61,7 @@ public class MeetingController {
         return new ResponseEntity<MeetingDto>(meetingDto,HttpStatus.OK);
     }
 
+    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "모임 업데이트 Api"
             , notes = "모임 업데이트 Api"
@@ -67,6 +75,7 @@ public class MeetingController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
+    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "모임 삭제 Api"
             , notes = "모임 삭제 Api"
@@ -80,6 +89,8 @@ public class MeetingController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
+
+
     @ApiOperation(
             value = "전체 모임 읽기 Api"
             , notes = "전체 모임 읽기 Api"
@@ -89,6 +100,7 @@ public class MeetingController {
     })
     @RequestMapping(value = "/readAll", method= RequestMethod.GET)
     public ResponseEntity<List> readAllMeeting() throws Exception{
+
         List<MeetingDto> list=meetingService.selectMeetingList();
         return new ResponseEntity<List>(list,HttpStatus.OK);
     }

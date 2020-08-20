@@ -13,12 +13,11 @@ import sshj.sshj.component.CodeCompo;
 import sshj.sshj.component.SenderCompo;
 import sshj.sshj.dto.CodeInfoModel;
 import sshj.sshj.dto.SenderDto;
-import sshj.sshj.dto.User;
+import sshj.sshj.dto.UserDto;
 import sshj.sshj.dto.UserInfoModel;
 import sshj.sshj.mapper.UserMapper;
 
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Locale;
 
 @Service
@@ -56,7 +55,7 @@ public class UserService implements UserDetailsService {
         return userMapper.selectUserNickname(nickname);
     }
 
-    public User selectUser(String id) throws Exception {
+    public UserDto selectUser(String id) throws Exception {
         return userMapper.selectUserInfo(id);
     }
 
@@ -83,12 +82,11 @@ public class UserService implements UserDetailsService {
 
     public void insertUser(UserInfoModel userInfoModel) {
         String time = time_now();
-        this.userMapper.insertUser(User.builder()
+        this.userMapper.insertUser(UserDto.builder()
             .id(userInfoModel.getId())
             .password(passwordEncoder.encode(userInfoModel.getPassword()))
             .email(userInfoModel.getEmail())
             .role("ROLE_USER")
-            .roles(Collections.singletonList("ROLE_USER"))
             .nickname(userInfoModel.getNickname())
             .created_time(time)
             .build()); //getId() 없앴는데 뭐가 달라지나?
