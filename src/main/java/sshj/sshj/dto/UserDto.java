@@ -33,7 +33,7 @@ public class UserDto implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<String> roles = Collections.singletonList("ROLE_USER");
+        List<String> roles = Collections.singletonList(this.getRole());
         return roles.stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());

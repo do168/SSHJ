@@ -80,9 +80,9 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
         }
 
         List global = new ArrayList();
-//        global.add(new ParameterBuilder().name("Authorization").
-//                description("Access Token").parameterType("header").
-//                required(false).modelRef(new ModelRef("string")).build());
+        global.add(new ParameterBuilder().name("Authorization").
+                description("Access Token").parameterType("header").
+                required(false).modelRef(new ModelRef("string")).build());
 
         return docket
                 .globalOperationParameters(global)
