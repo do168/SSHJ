@@ -77,6 +77,10 @@ dependencies {
 	// https://mvnrepository.com/artifact/software.amazon.awssdk/ses
 	compile group: 'software.amazon.awssdk', name: 'ses', version: '2.13.18'
 
+	// spring-data-redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	compile group: 'redis.clients', name: 'jedis', version: '2.9.0'
+
 
 }
 
