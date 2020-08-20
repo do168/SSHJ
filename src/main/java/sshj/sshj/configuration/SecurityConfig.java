@@ -51,7 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/user/**").hasRole("USER")
-                .antMatchers("/club/**").hasRole("CLUB") //yml로 해보자
+                .antMatchers("/club/**").hasAnyRole("CLUB", "ADMIN") //yml로 해보자
 //                .antMatchers("/meeting/**").hasAnyRole("ADMIN", "CLUB", "USER") // 비로그인 멤버 제외
                 .antMatchers("/meeting/**").hasAnyRole("ADMIN", "CLUB", "USER")
 //                .antMatchers("/meeting/**").permitAll()
