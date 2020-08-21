@@ -8,16 +8,4 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class SshjApplicationTests {
 
-	@Autowired
-	private SqlSessionTemplate sqlSession;
-	
-	@Test
-	void contextLoads() {
-	}
-	
-	@Test
-	public void testSqlSession() throws Exception {
-		System.out.println(sqlSession.toString());
-	}
-
 }
