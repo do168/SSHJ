@@ -55,6 +55,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/meeting/**").hasAnyRole("ADMIN", "CLUB", "USER") // 비로그인 멤버 제외
                 .antMatchers("/meeting/**").hasAnyRole("ADMIN", "CLUB", "USER")
 //                .antMatchers("/meeting/**").permitAll()
+                .antMatchers("/swagger-ui.html**", "/swagger-resources/**",
+                        "/v2/api-docs**", "/webjars/**").permitAll()
                 .antMatchers("/**").permitAll()
                 .and() // 로그인 설정
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),

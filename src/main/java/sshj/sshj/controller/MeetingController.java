@@ -27,7 +27,6 @@ import sshj.sshj.service.MeetingService;
 @Api(value="MeetingController", description="MeetingController")
 @RequestMapping("/meeting")
 @RestController
-
 public class MeetingController {
     @Autowired
     private MeetingService meetingService;
@@ -36,6 +35,7 @@ public class MeetingController {
     @ApiOperation(
             value = "모임 생성 Api"
             , notes = "모임 생성 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -51,6 +51,7 @@ public class MeetingController {
     @ApiOperation(
             value = "모임 읽기 Api"
             , notes = "모임 읽기 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -65,6 +66,7 @@ public class MeetingController {
     @ApiOperation(
             value = "모임 업데이트 Api"
             , notes = "모임 업데이트 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -79,6 +81,7 @@ public class MeetingController {
     @ApiOperation(
             value = "모임 삭제 Api"
             , notes = "모임 삭제 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -90,10 +93,10 @@ public class MeetingController {
     }
 
 
-
     @ApiOperation(
             value = "전체 모임 읽기 Api"
             , notes = "전체 모임 읽기 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -108,6 +111,7 @@ public class MeetingController {
     @ApiOperation(
             value = "동아리별 모임 읽기 Api"
             , notes = "동아리별 모임 읽기 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -121,6 +125,7 @@ public class MeetingController {
     @ApiOperation(
             value = "유저별 모임 읽기 Api"
             , notes = "유저별 모임 읽기 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -134,6 +139,7 @@ public class MeetingController {
     @ApiOperation(
             value = "모임별 좋아요 삽입 Api"
             , notes = "모임별 좋아요 삽입 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -147,6 +153,7 @@ public class MeetingController {
     @ApiOperation(
             value = "모임별 좋아요 삭제 Api"
             , notes = "모임별 좋아요 삭제 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -160,6 +167,7 @@ public class MeetingController {
     @ApiOperation(
             value = "유저 모임 참여 Api"
             , notes = "유저 모임 참여 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")

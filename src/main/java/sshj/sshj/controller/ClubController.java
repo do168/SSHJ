@@ -1,9 +1,6 @@
 package sshj.sshj.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +23,7 @@ public class ClubController {
     @ApiOperation(
             value = "동아리 공지 생성 Api"
             , notes = "동아리 공지 생성 Api"
+            ,authorizations = {@Authorization(value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -39,6 +37,7 @@ public class ClubController {
     @ApiOperation(
             value = "동아리 공지 읽기 Api"
             , notes = "동아리 공지 읽기 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -52,6 +51,7 @@ public class ClubController {
     @ApiOperation(
             value = "전체 동아리 공지 읽기 Api"
             , notes = "전체 동아리 공지 읽기 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -65,6 +65,7 @@ public class ClubController {
     @ApiOperation(
             value = "동아리 공지 업데이트 Api"
             , notes = "동아리 공지 업데이트 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -78,6 +79,7 @@ public class ClubController {
     @ApiOperation(
             value = "동아리 공지 삭제 Api"
             , notes = "동아리 공지 삭제 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -91,6 +93,7 @@ public class ClubController {
     @ApiOperation(
             value = "동아리 공지 좋아요 생성 Api"
             , notes = "동아리 공지 좋아요 생성 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -104,6 +107,7 @@ public class ClubController {
     @ApiOperation(
             value = "동아리 공지 좋아요 삭제 Api"
             , notes = "동아리 공지 좋아요 삭제 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -117,6 +121,7 @@ public class ClubController {
     @ApiOperation(
             value = "동아리 공지 좋아요 갯수 Api"
             , notes = "동아리 공지 좋아요 갯수 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -130,6 +135,7 @@ public class ClubController {
     @ApiOperation(
             value = "동아리 구독 생성 Api"
             , notes = "동아리 구독 생성 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -143,6 +149,7 @@ public class ClubController {
     @ApiOperation(
             value = "동아리 구독 삭제 Api"
             , notes = "동아리 구독 삭제 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")

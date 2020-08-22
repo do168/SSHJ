@@ -2,6 +2,7 @@ package sshj.sshj.controller;
 
 import java.util.List;
 
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import springfox.documentation.annotations.ApiIgnore;
 import sshj.sshj.dto.ReviewDto;
 import sshj.sshj.service.ReviewService;
@@ -32,6 +28,7 @@ public class ReviewController {
     @ApiOperation(
             value = "후기 생성"
             , notes = "후기 생성"
+            ,authorizations = {@Authorization(value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -47,6 +44,7 @@ public class ReviewController {
     @ApiOperation(
             value = "후기 리스트 조회"
             , notes = "후기 리스트 조회"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -64,6 +62,7 @@ public class ReviewController {
     @ApiOperation(
             value = "유저 후기 수정"
             , notes = "유저 후기 수정"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -82,6 +81,7 @@ public class ReviewController {
     @ApiOperation(
             value = "유저 후기 삭제"
             , notes = "유저 후기 삭제"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
