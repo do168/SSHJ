@@ -7,7 +7,7 @@ import lombok.Data;
 public class UserInfoModel {
 
     @ApiModelProperty(value = "아이디", required = true)
-    private String id;
+    private String loginId;
 
     @ApiModelProperty(value = "패스워드", required = true)
     private String password;

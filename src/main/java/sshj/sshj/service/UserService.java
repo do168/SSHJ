@@ -83,7 +83,7 @@ public class UserService implements UserDetailsService {
     public void insertUser(UserInfoModel userInfoModel) {
         String time = time_now();
         this.userMapper.insertUser(UserDto.builder()
-            .loginId(userInfoModel.getId())
+            .loginId(userInfoModel.getLoginId())
             .password(passwordEncoder.encode(userInfoModel.getPassword()))
             .email(userInfoModel.getEmail())
             .role("ROLE_USER")

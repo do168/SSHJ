@@ -9,7 +9,7 @@ import sshj.sshj.dto.UserDto;
 @Mapper
 public interface UserMapper {
 
-    UserDto selectUserInfo(String id);
+    UserDto selectUserInfo(String loginId);
     int selectUserLoginId(String loginId);
     int selectUserEmail(String email);
     void insertUser(UserDto userDto);

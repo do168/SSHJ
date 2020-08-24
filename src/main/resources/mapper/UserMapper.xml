@@ -19,10 +19,19 @@
     <select id="selectUserInfo" parameterType="string" resultType="sshj.sshj.dto.UserDto">
         <![CDATA[
 		/*	UserMapper.selectUserInfo	*/
-		select user_id, login_id, password, email, nickname, created_time, role
-		from tb_user
-		where login_id = #{loginId}
-	]]>
+		    SELECT
+		        user_id as userId,
+		        login_id as loginID,
+		        password as password,
+		        email as email,
+		        nickname as nickname,
+		        created_time as createdTime,
+		        role as role
+		    FROM
+		        tb_user
+		    WHERE
+		        login_id = #{loginId}
+	    ]]>
     </select>
 
     <select id="selectUserLoginId" parameterType="string" resultType="int">
@@ -55,7 +64,7 @@
     <select id="selectCode" parameterType="string" resultType="sshj.sshj.dto.CodeInfoModel">
         <![CDATA[
 		/*	UserMapper.selectCode	*/
-		select email, created_time
+		select email as email, created_time as createdTime
 		from tb_codeemail
 		where code = #{code}
 	]]>

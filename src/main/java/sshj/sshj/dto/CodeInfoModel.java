@@ -10,5 +10,5 @@ public class CodeInfoModel {
     private String email;
 
     @ApiModelProperty(value = "생성시간", required = true)
-    private String created_time;
+    private String createdTime;
 }

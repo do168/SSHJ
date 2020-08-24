@@ -124,7 +124,7 @@ public class UserController {
             @ApiParam(value = "입력 이메일", required = true) @RequestParam(name = "insert_email", required = true) String insert_email) throws Exception {
         long now_time = Long.parseLong(userService.time_now());
         CodeInfoModel codeInfoModel = userService.selectCode(insert_code);
-        long created_time = Long.parseLong(codeInfoModel.getCreated_time());
+        long created_time = Long.parseLong(codeInfoModel.getCreatedTime());
 
         if (codeInfoModel.getEmail().equals(insert_email) && now_time - created_time <= 3000) {
             log.info("인증 성공");
@@ -170,6 +170,7 @@ public class UserController {
         String refresh_token = jwtTokenProvider.createRefreshToken();
         token.put("accessToken", access_token);
         token.put("refreshToken", refresh_token);
+        log.info(userDto.getUsername());
         redisTemplate.opsForValue().set(userDto.getUsername(), refresh_token); // refresh_token은 따로 redis에 저장
 
         return new ResponseEntity<>(token, HttpStatus.OK);
