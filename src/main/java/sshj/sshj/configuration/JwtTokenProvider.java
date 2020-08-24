@@ -74,7 +74,7 @@ public class JwtTokenProvider {
 //        UserDetails userDetails = userService.loadUserByUsername(this.getUserPk(token)); // 계속 DB 검사 -> 토큰 쓰는 이유가 없다 -> 고쳐야 한다.
         UserDto userDto = new UserDto();
         Claims parseInfo = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
-        userDto.setId(parseInfo.getSubject());
+        userDto.setLoginId(parseInfo.getSubject());
         userDto.setRole(parseInfo.get("roles", List.class).toString().substring(1,parseInfo.get("roles", List.class).toString().length()-1));
 
         return new UsernamePasswordAuthenticationToken(userDto, "", userDto.getAuthorities());
@@ -87,7 +87,7 @@ public class JwtTokenProvider {
     public UserDto getUserDto(String token) {
         Claims parseInfo = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
         UserDto userDto = new UserDto();
-        userDto.setId(parseInfo.getSubject());
+        userDto.setLoginId(parseInfo.getSubject());
         userDto.setUserId(parseInfo.get("userId", Integer.class));
         userDto.setRole(parseInfo.get("roles", List.class).toString().substring(1,parseInfo.get("roles", List.class).toString().length()-1));
         return userDto;

@@ -11,8 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -57,9 +55,9 @@ public class UserController {
     })
     @RequestMapping(value = "/signup/idcheck", method = RequestMethod.GET)
     public ResponseEntity<Boolean> idCheck(
-            @ApiParam(value = "입력 아이디", required = true) @RequestParam(name = "id", required = true) String id) throws Exception {
+            @ApiParam(value = "입력 아이디", required = true) @RequestParam(name = "loginId", required = true) String loginId) throws Exception {
 
-        if (userService.selectUserId(id) == 0) {
+        if (userService.selectUserLoginId(loginId) == 0) {
             log.info("사용 가능한 아이디입니다.");
             return new ResponseEntity<>(true, HttpStatus.OK);
         } else {
@@ -160,10 +158,10 @@ public class UserController {
     })
     @RequestMapping(value = "/signin", method = RequestMethod.GET)
     public ResponseEntity<Map<String, String>> singIn(
-            @ApiParam(value = "아이디", required = true) @RequestParam(name = "id", required = true) String id,
+            @ApiParam(value = "아이디", required = true) @RequestParam(name = "loginId", required = true) String loginId,
             @ApiParam(value = "패스워드", required = true) @RequestParam(name = "password", required = true) String password) throws Exception {
 
-        UserDto userDto = userService.selectUser(id);
+        UserDto userDto = userService.selectUser(loginId);
         if (!passwordEncoder.matches(password, userDto.getPassword())) {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
@@ -199,7 +197,7 @@ public class UserController {
         String accessToken = null;
         String refreshToken = null;
         String refreshTokenFromDb = null;
-        String id = null;
+        String loginId = null;
 
         Map<String, Object> map = new HashMap<>();
         try {
@@ -207,18 +205,18 @@ public class UserController {
             refreshToken = refresh_token;
             log.info("access token in param: " + accessToken);
             try {
-                id = jwtTokenProvider.getUserPk(accessToken);
+                loginId = jwtTokenProvider.getUserPk(accessToken);
             } catch (IllegalArgumentException e) {
 
             } catch (ExpiredJwtException e) { //expire됐을 때
-                id = e.getClaims().getSubject();
-                log.info("id from expired access token: " + id);
+                loginId = e.getClaims().getSubject();
+                log.info("loginId from expired access token: " + loginId);
             }
 
             if (refreshToken != null) { //refresh를 같이 보냈으면.
                 try {
 
-                    refreshTokenFromDb = (String) redisTemplate.opsForValue().get(id);
+                    refreshTokenFromDb = (String) redisTemplate.opsForValue().get(loginId);
                     log.info("rtfrom db: " + refreshTokenFromDb);
                 } catch (IllegalArgumentException e) {
                     log.warn("illegal argument!!");
@@ -264,20 +262,20 @@ public class UserController {
             @ApiParam(value = "access_token", required = true) @RequestParam(name = "access_token", required = true) String access_token
     ) throws Exception {
 
-        String id = null;
+        String loginId = null;
         String accessToken = access_token;
         try {
-            id = jwtTokenProvider.getUserPk(accessToken);
+            loginId = jwtTokenProvider.getUserPk(accessToken);
         } catch (IllegalArgumentException e) {
         } catch (ExpiredJwtException e) { //expire됐을 때
-            id = e.getClaims().getSubject();
-            log.info("id from expired access token: " + id);
+            loginId = e.getClaims().getSubject();
+            log.info("loginId from expired access token: " + loginId);
         }
 
         try {
-            if (redisTemplate.opsForValue().get(id) != null) {
+            if (redisTemplate.opsForValue().get(loginId) != null) {
                 //delete refresh token
-                redisTemplate.delete(id);
+                redisTemplate.delete(loginId);
             }
         } catch (IllegalArgumentException e) {
             log.warn("user does not exist");

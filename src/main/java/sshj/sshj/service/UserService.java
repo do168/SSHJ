@@ -43,8 +43,8 @@ public class UserService implements UserDetailsService {
         return userMapper.selectUserInfo(username);
     }
 
-    public int selectUserId(String id) throws Exception {
-        return userMapper.selectUserId(id);
+    public int selectUserLoginId(String loginId) throws Exception {
+        return userMapper.selectUserLoginId(loginId);
     }
 
     public int selectUserEmail(String email) throws Exception {
@@ -55,8 +55,8 @@ public class UserService implements UserDetailsService {
         return userMapper.selectUserNickname(nickname);
     }
 
-    public UserDto selectUser(String id) throws Exception {
-        return userMapper.selectUserInfo(id);
+    public UserDto selectUser(String loginId) throws Exception {
+        return userMapper.selectUserInfo(loginId);
     }
 
     public String sendEmail(String email) {
@@ -83,12 +83,12 @@ public class UserService implements UserDetailsService {
     public void insertUser(UserInfoModel userInfoModel) {
         String time = time_now();
         this.userMapper.insertUser(UserDto.builder()
-            .id(userInfoModel.getId())
+            .loginId(userInfoModel.getId())
             .password(passwordEncoder.encode(userInfoModel.getPassword()))
             .email(userInfoModel.getEmail())
             .role("ROLE_USER")
             .nickname(userInfoModel.getNickname())
-            .created_time(time)
+            .createdTime(time)
             .build()); //getId() 없앴는데 뭐가 달라지나?
         return;
     }
