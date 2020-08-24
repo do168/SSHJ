@@ -3,6 +3,7 @@ package sshj.sshj.configuration;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpHeaders;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -80,9 +81,9 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
         }
 
         List global = new ArrayList();
-        global.add(new ParameterBuilder().name("Authorization").
-                description("Access Token").parameterType("header").
-                required(false).modelRef(new ModelRef("string")).build());
+//        global.add(new ParameterBuilder().name("Authorization").
+//                description("Access Token").parameterType("header").
+//                required(false).modelRef(new ModelRef("string")).build());
 
         return docket
                 .globalOperationParameters(global)
@@ -98,7 +99,7 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
 
 
     private ApiKey apiKey() {
-        return new ApiKey("JWT", AUTHORIZATION_HEADER, "header");
+        return new ApiKey("JWT", "Authorization", "header");
     }
 
     private SecurityContext securityContext() {

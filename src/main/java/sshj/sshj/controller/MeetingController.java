@@ -3,6 +3,7 @@ package sshj.sshj.controller;
 import java.util.List;
 
 import io.swagger.annotations.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +22,13 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import springfox.documentation.annotations.ApiIgnore;
 import sshj.sshj.dto.MeetingDto;
-import sshj.sshj.dto.UserDto;
+import sshj.sshj.dto.UserHeaderModel;
 import sshj.sshj.service.MeetingService;
 
 @Api(value="MeetingController", description="MeetingController")
 @RequestMapping("/meeting")
 @RestController
-
+@Slf4j
 public class MeetingController {
     @Autowired
     private MeetingService meetingService;
@@ -36,13 +37,14 @@ public class MeetingController {
     @ApiOperation(
             value = "모임 생성 Api"
             , notes = "모임 생성 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/create", method= RequestMethod.POST)
     public ResponseEntity<Void> createMeeting(
-            @ApiIgnore @RequestAttribute("UserInfo") UserDto userDto,
+            @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
             @ModelAttribute MeetingDto meetingDto) throws Exception{
         meetingService.insertMeeting(meetingDto);
         return new ResponseEntity<Void>(HttpStatus.OK);
@@ -51,6 +53,7 @@ public class MeetingController {
     @ApiOperation(
             value = "모임 읽기 Api"
             , notes = "모임 읽기 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -65,6 +68,7 @@ public class MeetingController {
     @ApiOperation(
             value = "모임 업데이트 Api"
             , notes = "모임 업데이트 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -79,6 +83,7 @@ public class MeetingController {
     @ApiOperation(
             value = "모임 삭제 Api"
             , notes = "모임 삭제 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -90,17 +95,24 @@ public class MeetingController {
     }
 
 
+    /**
+     *
+     * @param userHeaderModel requestParam 전용 모델 -> 토큰에 담겨있는 정보
+     * @return
+     */
 
     @ApiOperation(
             value = "전체 모임 읽기 Api"
             , notes = "전체 모임 읽기 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/readAll", method= RequestMethod.GET)
-    public ResponseEntity<List> readAllMeeting() throws Exception{
-
+    public ResponseEntity<List> readAllMeeting(
+            @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel
+    ) throws Exception{
         List<MeetingDto> list=meetingService.selectMeetingList();
         return new ResponseEntity<List>(list,HttpStatus.OK);
     }
@@ -108,6 +120,7 @@ public class MeetingController {
     @ApiOperation(
             value = "동아리별 모임 읽기 Api"
             , notes = "동아리별 모임 읽기 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -121,6 +134,7 @@ public class MeetingController {
     @ApiOperation(
             value = "유저별 모임 읽기 Api"
             , notes = "유저별 모임 읽기 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -134,6 +148,7 @@ public class MeetingController {
     @ApiOperation(
             value = "모임별 좋아요 삽입 Api"
             , notes = "모임별 좋아요 삽입 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -147,6 +162,7 @@ public class MeetingController {
     @ApiOperation(
             value = "모임별 좋아요 삭제 Api"
             , notes = "모임별 좋아요 삭제 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -160,6 +176,7 @@ public class MeetingController {
     @ApiOperation(
             value = "유저 모임 참여 Api"
             , notes = "유저 모임 참여 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")

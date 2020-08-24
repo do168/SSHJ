@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class UserDto implements UserDetails {
     private int userId;
 
-    private String id;
+    private String loginId;
 
     private String password;
 
@@ -27,7 +27,7 @@ public class UserDto implements UserDetails {
 
     private String email;
 
-    private String created_time;
+    private String createdTime;
 
     private String role;
 
@@ -41,7 +41,7 @@ public class UserDto implements UserDetails {
 
     @Override
     public String getUsername() {
-        return id;
+        return loginId;
     }
 
     @Override

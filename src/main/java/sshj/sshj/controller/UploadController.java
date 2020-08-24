@@ -3,6 +3,7 @@ package sshj.sshj.controller;
 import java.io.IOException;
 import java.util.List;
 
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import sshj.sshj.service.UploadService;
 
@@ -39,7 +35,8 @@ public class UploadController {
 	
 	@ApiOperation(
 		value = "프로필 파일 업로드"
-		, notes = "프로필 파일 업로드" 	
+		, notes = "프로필 파일 업로드"
+			,authorizations = {@Authorization(value = "JWT")}
 	)
 	@ApiResponses(value={
 		@ApiResponse(code=200, message="")
@@ -56,7 +53,8 @@ public class UploadController {
 	}
 	
 	@ApiOperation(
-		value = "동아리 컨텐츠 파일 업로드", notes = "동아리 컨텐츠 파일 업로드")
+		value = "동아리 컨텐츠 파일 업로드", notes = "동아리 컨텐츠 파일 업로드"
+			,authorizations = {@Authorization (value = "JWT")})
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "") })
 	@RequestMapping(value = "/club", method = RequestMethod.POST)
 	public ResponseEntity<List<String>> contentUpload(

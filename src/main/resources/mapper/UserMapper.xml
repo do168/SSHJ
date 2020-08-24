@@ -8,9 +8,9 @@
         <![CDATA[
 		/*	UserMapper.insertUser	*/
 		insert into tb_user (
-			id, password, email, nickname, created_time, role
+			login_id, password, email, nickname, created_time, role
 		) values (
-			#{id}, #{password}, #{email}, #{nickname}, #{created_time}, #{role}
+			#{loginId}, #{password}, #{email}, #{nickname}, #{createdTime}, #{role}
 		)
 	]]>
     </insert>
@@ -19,24 +19,24 @@
     <select id="selectUserInfo" parameterType="string" resultType="sshj.sshj.dto.UserDto">
         <![CDATA[
 		/*	UserMapper.selectUserInfo	*/
-		select user_id, id, password, email, nickname, created_time, role
+		select user_id, login_id, password, email, nickname, created_time, role
 		from tb_user
-		where id = #{id}
+		where login_id = #{loginId}
 	]]>
     </select>
 
-    <select id="selectUserId" parameterType="string" resultType="int">
+    <select id="selectUserLoginId" parameterType="string" resultType="int">
         <![CDATA[
-		/*	UserMapper.selectUserId	*/
-		select count(id)
+		/*	UserMapper.selectUserLoginId	*/
+		select count(login_id)
 		from tb_user
-		where id = #{id}
+		where login_id = #{loginId}
 	]]>
     </select>
 
     <select id="selectUserEmail" parameterType="string" resultType="int">
         <![CDATA[
-		/*	UserMapper.selectUserId	*/
+		/*	UserMapper.selectUserEmail	*/
 		select count(email)
 		from tb_user
 		where email = #{email}

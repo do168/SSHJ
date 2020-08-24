@@ -10,7 +10,7 @@ import sshj.sshj.dto.UserDto;
 public interface UserMapper {
 
     UserDto selectUserInfo(String id);
-    int selectUserId(String id);
+    int selectUserLoginId(String loginId);
     int selectUserEmail(String email);
     void insertUser(UserDto userDto);
     CodeInfoModel selectCode(String code);
