@@ -97,11 +97,17 @@ public class UserService implements UserDetailsService {
         return userMapper.selectCode(code);
     }
 
+    public void updateUserNickname(String loginId, String nickname) {
+        userMapper.updateUserNickname(loginId, nickname);
+    }
+
     public String time_now() {
         long systemTime = System.currentTimeMillis();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA);
         String dtime = formatter.format(systemTime);
         return dtime;
     }
+
+
 }
 

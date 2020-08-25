@@ -9,4 +9,6 @@ public class UserHeaderModel {
     private String loginId;
 
     private String role;
+
+    private String nickname;
 }

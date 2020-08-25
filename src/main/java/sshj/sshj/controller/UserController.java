@@ -166,7 +166,7 @@ public class UserController {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
         Map<String, String> token = new HashMap<>();
-        String access_token = jwtTokenProvider.createAccessToken(userDto.getUsername(), userDto.getUserId(), userDto.getRole());
+        String access_token = jwtTokenProvider.createAccessToken(userDto.getUsername(), userDto.getUserId(), userDto.getNickname(), userDto.getRole());
         String refresh_token = jwtTokenProvider.createRefreshToken();
         token.put("accessToken", access_token);
         token.put("refreshToken", refresh_token);
@@ -226,7 +226,7 @@ public class UserController {
                 if (refreshToken.equals(refreshTokenFromDb) && jwtTokenProvider.validateToken(refreshToken)) {
                     UserDto userDto = jwtTokenProvider.getUserDto(accessToken);
 
-                    String newtok = jwtTokenProvider.createAccessToken(userDto.getUsername(), userDto.getUserId(), userDto.getRole());
+                    String newtok = jwtTokenProvider.createAccessToken(userDto.getUsername(), userDto.getUserId(), userDto.getNickname(), userDto.getRole());
                     map.put("success", true);
                     map.put("accessToken", newtok);
                 } else {

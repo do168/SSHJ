@@ -81,4 +81,12 @@
 	]]>
     </insert>
 
+    <update id="updateUserNickname" parameterType="string">
+        <![CDATA[
+			UPDATE tb_user
+			SET nickname=#{nickname},
+			WHERE login_id=#{loginId}
+		]]>
+    </update>
+
 </mapper>

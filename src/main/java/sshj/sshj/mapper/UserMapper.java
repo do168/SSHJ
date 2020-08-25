@@ -16,4 +16,5 @@ public interface UserMapper {
     CodeInfoModel selectCode(String code);
     void insertCodeEmail(String code, String email, String time);
     int selectUserNickname(String nickname);
+    void updateUserNickname(String loginId, String nickname);
 }
