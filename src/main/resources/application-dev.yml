@@ -1,7 +1,4 @@
 spring:
-  profiles:
-    active: dev
-
   redis:
     host: elc-sshj-0001-001.bxl8mx.0001.apn2.cache.amazonaws.com
     port: 6379
