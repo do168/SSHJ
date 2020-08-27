@@ -97,16 +97,16 @@ public class UserController {
     public ResponseEntity<Boolean> sendEmail(
             @ApiParam(value = "입력 이메일", required = true) @RequestParam(name = "email", required = true) String email) throws Exception {
 
-        if (userService.selectUserEmail(email) == 1) {
-            log.info("이미 인증된 이메일입니다. 다른 이메일을 입력해주세요");
+        if (userService.selectUserEmail(email) != null) {
+            log.info("it is used email, please use other email");
             return new ResponseEntity<>(false, HttpStatus.OK);
         }
         try {
             userService.sendEmail(email);
-            log.info("이메일 발신 성공");
+            log.info("success");
             return new ResponseEntity<>(true, HttpStatus.OK);
         } catch (Exception e) {
-            log.info("이메일 발신 실패");
+            log.info("fail");
             return new ResponseEntity<>(false, HttpStatus.OK);
         }
     }
@@ -162,9 +162,10 @@ public class UserController {
             @ApiParam(value = "패스워드", required = true) @RequestParam(name = "password", required = true) String password) throws Exception {
 
         UserDto userDto = userService.selectUser(loginId);
-        if (!passwordEncoder.matches(password, userDto.getPassword())) {
-            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+        if (userDto == null || !passwordEncoder.matches(password, userDto.getPassword())) {
+            throw new IllegalArgumentException("id or password is not valid");
         }
+        log.info("in controller : "+userDto.getUserId());
         Map<String, String> token = new HashMap<>();
         String access_token = jwtTokenProvider.createAccessToken(userDto.getUsername(), userDto.getUserId(), userDto.getNickname(), userDto.getRole());
         String refresh_token = jwtTokenProvider.createRefreshToken();
@@ -177,8 +178,7 @@ public class UserController {
     }
 
     /**
-     * 회원가입 시 생성하려는 아이디 중복 체크
-     * @param access_token 만료된 accessToken
+     * @param access_token  만료된 accessToken
      * @param refresh_token 안전한저장소에 저장된 refreshToken
      * @return 정상적 -> 새로 발급한 access_token
      */
@@ -247,7 +247,6 @@ public class UserController {
     }
 
     /**
-     * 회원가입 시 생성하려는 아이디 중복 체크
      * @param access_token 만료된 accessToken
      * @return
      */
@@ -288,6 +287,59 @@ public class UserController {
 
         return new ResponseEntity(HttpStatus.OK);
     }
-}
 
+    @ApiOperation(
+            value = "아이디 찾기"
+            , notes = "아이디 찾기"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "complete")
+    })
+    @RequestMapping(value = "/searchId", method = RequestMethod.GET)
+    public ResponseEntity<String> searchId(
+            @ApiParam(value = "email", required = true) @RequestParam(name = "email", required = true) String email
+    ) throws Exception {
+
+        UserDto userDto = userService.selectUserEmail(email);
+        if (userDto == null) {
+            return new ResponseEntity("user does not exist", HttpStatus.BAD_REQUEST);
+        } else {
+            log.info(userDto.getLoginId());
+            return new ResponseEntity(userDto.getLoginId(), HttpStatus.OK);
+        }
+    }
+
+    @ApiOperation(
+            value = "비밀번호 변경"
+            , notes = "비밀번호 변경"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "complete")
+    })
+    @RequestMapping(value = "/searchPw", method = RequestMethod.GET)
+    public ResponseEntity<String> searchPw(
+            @ApiParam(value = "email", required = true) @RequestParam(name = "email", required = true) String email,
+            @ApiParam(value = "loginId", required = true) @RequestParam(name = "loginId", required = true) String loginId,
+            @ApiParam(value = "newpw", required = true) @RequestParam(name = "newqw", required = true) String newpw
+    ) throws Exception {
+
+        UserDto userDto = userService.selectUser(loginId);
+        if (userDto == null) {
+            return new ResponseEntity("user does not exist", HttpStatus.BAD_REQUEST);
+        } else {
+
+            if (userDto.getEmail().equals(email)) {
+                try {
+                    userService.updateUserPassword(loginId, passwordEncoder.encode(newpw));
+                }
+                catch (Exception e){
+                    log.error(e.getMessage());
+                }
+                return new ResponseEntity("password changed", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("id and email is not matched", HttpStatus.BAD_REQUEST);
+            }
+        }
+    }
+}
 

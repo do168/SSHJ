@@ -77,7 +77,8 @@ public class JwtTokenProvider {
         Claims parseInfo = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
         userDto.setLoginId(parseInfo.getSubject());
         userDto.setRole(parseInfo.get("roles", List.class).toString().substring(1,parseInfo.get("roles", List.class).toString().length()-1));
-
+        userDto.setUserId(parseInfo.get("userId", Integer.class));
+        userDto.setNickname(parseInfo.get("nickname", String.class));
         return new UsernamePasswordAuthenticationToken(userDto, "", userDto.getAuthorities());
     }
 

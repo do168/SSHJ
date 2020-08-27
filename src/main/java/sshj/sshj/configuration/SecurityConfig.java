@@ -7,7 +7,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import sshj.sshj.service.UserService;
@@ -51,13 +50,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/user/**").hasRole("USER")
-                .antMatchers("/club/**").hasAnyRole("CLUB", "ADMIN") //yml로 해보자
-//                .antMatchers("/meeting/**").hasAnyRole("ADMIN", "CLUB", "USER") // 비로그인 멤버 제외
-                .antMatchers("/meeting/**").hasAnyRole("ADMIN", "CLUB", "USER")
-//                .antMatchers("/meeting/**").permitAll()
+                .antMatchers("/meeting/club/**").hasAnyRole("ADMIN", "CLUB")
+                .antMatchers("/club/**").hasAnyRole("CLUB", "ADMIN")
+                .antMatchers("/meeting/**").authenticated()
+                .antMatchers("/**").permitAll()
                 .antMatchers("/swagger-ui.html**", "/swagger-resources/**",
                         "/v2/api-docs**", "/webjars/**").permitAll()
-                .antMatchers("/**").permitAll()
                 .and() // 로그인 설정
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                         UsernamePasswordAuthenticationFilter.class);
