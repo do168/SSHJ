@@ -110,4 +110,42 @@
             WHERE user_id=#{userId} AND club_id=#{clubId}
         ]]>
     </delete>
+
+    <insert id="insertClubDescription" parameterType="sshj.sshj.dto.ClubDescriptionDto">
+        <![CDATA[
+            INSERT into tb_club_description(
+                club_id,
+                description)
+            VALUES(
+                #{clubId},
+                #{description})
+            ]]>
+        )
+    </insert>
+
+    <select id="selectClubDescription" parameterType="int" resultType="string">
+        <![CDATA[
+            SELECT description
+            from tb_club_description
+            where club_id = #{clubId}
+            ]]>
+        )
+    </select>
+
+    <update id="updateClubDescription" parameterType="sshj.sshj.dto.ClubDescriptionDto">
+        <![CDATA[
+            update tb_club_description
+            set description = #{description}
+            where club_id = #{clubId}
+            ]]>
+        )
+    </update>
+
+    <delete id="deleteClubDescription" parameterType="int">
+        <![CDATA[
+            delete from tb_club_description
+            where club_id = #{clubId}
+            ]]>
+        )
+    </delete>
 </mapper>

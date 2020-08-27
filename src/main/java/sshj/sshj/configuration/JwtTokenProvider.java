@@ -42,12 +42,13 @@ public class JwtTokenProvider {
     }
 
     // JWT 토큰 생성
-    public String createAccessToken(String userPk, int userId, String role) {
+    public String createAccessToken(String userPk, int userId, String nickname, String role) {
         List<String> roles = new ArrayList<>();
         roles.add(role);
         Claims claims = Jwts.claims().setSubject(userPk); // JWT payload 에 저장되는 정보단위
         claims.put("roles", roles); // 정보는 key / value 쌍으로 저장된다.
         claims.put("userId", userId);
+        claims.put("nickname", nickname);
         Date now = new Date();
         return Jwts.builder()
                 .setClaims(claims) // 정보 저장
@@ -76,7 +77,8 @@ public class JwtTokenProvider {
         Claims parseInfo = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
         userDto.setLoginId(parseInfo.getSubject());
         userDto.setRole(parseInfo.get("roles", List.class).toString().substring(1,parseInfo.get("roles", List.class).toString().length()-1));
-
+        userDto.setUserId(parseInfo.get("userId", Integer.class));
+        userDto.setNickname(parseInfo.get("nickname", String.class));
         return new UsernamePasswordAuthenticationToken(userDto, "", userDto.getAuthorities());
     }
 

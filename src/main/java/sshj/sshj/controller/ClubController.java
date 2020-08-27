@@ -4,11 +4,11 @@ import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
+import sshj.sshj.dto.ClubDescriptionDto;
 import sshj.sshj.dto.ClubNoticeDto;
+import sshj.sshj.dto.UserHeaderModel;
 import sshj.sshj.service.ClubService;
 
 import java.util.List;
@@ -19,6 +19,70 @@ import java.util.List;
 public class ClubController {
     @Autowired
     private ClubService clubService;
+
+    @ApiOperation(
+            value = "동아리 설명 생성 Api"
+            , notes = "동아리 설명 생성 Api"
+            ,authorizations = {@Authorization(value = "JWT")}
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/createDescription", method= RequestMethod.POST)
+    public ResponseEntity<Void> createClubDescription
+            (@ApiParam(value = "클럽 description", required = true) @RequestParam(name = "description", required = true) String description,
+             @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
+        ClubDescriptionDto clubDescriptionDto = new ClubDescriptionDto(userHeaderModel.getUserId(), description);
+        clubService.insertClubDescription(clubDescriptionDto);
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @ApiOperation(
+            value = "동아리 설명 읽기 Api"
+            , notes = "동아리 설명 읽기 Api"
+            ,authorizations = {@Authorization(value = "JWT")}
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/readDescription", method= RequestMethod.POST)
+    public ResponseEntity<String> selectClubDescription(
+            @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel
+    ) throws Exception{
+        return new ResponseEntity<String>(clubService.selectClubDescription(userHeaderModel.getUserId()), HttpStatus.OK);
+    }
+
+    @ApiOperation(
+            value = "동아리 설명 수정 Api"
+            , notes = "동아리 설명 수정 Api"
+            ,authorizations = {@Authorization(value = "JWT")}
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/updateDescription", method= RequestMethod.POST)
+    public ResponseEntity<Void> updateClubDescription(@ApiParam(value = "클럽 description", required = true) @RequestParam(name = "description", required = true) String description,
+                             @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
+        ClubDescriptionDto clubDescriptionDto = new ClubDescriptionDto(userHeaderModel.getUserId(), description);
+        clubService.updateClubDescription(clubDescriptionDto);
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @ApiOperation(
+            value = "동아리 설명 삭제 Api"
+            , notes = "동아리 설명 삭제 Api"
+            ,authorizations = {@Authorization(value = "JWT")}
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/deleteDescription", method= RequestMethod.POST)
+    public ResponseEntity<Void> deleteClubDescription(
+            @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel
+    ) throws Exception{
+        clubService.deleteClubDescription(userHeaderModel.getUserId());
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
 
     @ApiOperation(
             value = "동아리 공지 생성 Api"

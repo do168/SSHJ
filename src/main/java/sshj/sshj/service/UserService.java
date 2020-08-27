@@ -47,7 +47,7 @@ public class UserService implements UserDetailsService {
         return userMapper.selectUserLoginId(loginId);
     }
 
-    public int selectUserEmail(String email) throws Exception {
+    public UserDto selectUserEmail(String email) throws Exception {
         return userMapper.selectUserEmail(email);
     }
 
@@ -97,11 +97,21 @@ public class UserService implements UserDetailsService {
         return userMapper.selectCode(code);
     }
 
+    public void updateUserNickname(String loginId, String nickname) {
+        userMapper.updateUserNickname(loginId, nickname);
+    }
+
+    public void updateUserPassword(String loginId, String password) {
+        userMapper.updateUserPassword(loginId, password);
+    }
+
     public String time_now() {
         long systemTime = System.currentTimeMillis();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA);
         String dtime = formatter.format(systemTime);
         return dtime;
     }
+
+
 }
 

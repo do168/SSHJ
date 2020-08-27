@@ -36,11 +36,16 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             UserDto userDto = (UserDto) authentication.getPrincipal();
+            log.info("in filter, userDto userId : "+userDto.getUserId());
             UserHeaderModel userHeaderModel = new UserHeaderModel();
             userHeaderModel.setLoginId(userDto.getLoginId());
             userHeaderModel.setRole(userDto.getRole());
             userHeaderModel.setUserId(userDto.getUserId());
+            log.info("in filter, userheadermodel userId : "+userHeaderModel.getUserId());
             request.setAttribute("UserHeaderInfo", userHeaderModel);
+        }
+        else {
+
         }
 
         chain.doFilter(request, response);
