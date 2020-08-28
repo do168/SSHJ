@@ -28,7 +28,7 @@ public class FileUploadDto {
 	/**
 	 * 파일 저장 경로
 	 */
-	private String fileBaseUrl;
+	private String fileUrl;
 	
 	/**
 	 * 저장 파일명

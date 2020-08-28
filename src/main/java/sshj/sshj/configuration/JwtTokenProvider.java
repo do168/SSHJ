@@ -1,37 +1,42 @@
 package sshj.sshj.configuration;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Component;
-import sshj.sshj.dto.UserDto;
-import sshj.sshj.service.UserService;
-
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import sshj.sshj.dto.UserDto;
+
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class JwtTokenProvider {
+	
+	@Value("${spring.profiles.active}")
+	private String activeProfile;
+	
     private String secretKey = "DaeDoCrew";
 
     // 토큰 유효시간 30분
     private long access_tokenValidTime = 30 * 60 * 1000L;
 
     private long refresh_tokenValidTime =14 * 24 * 60 * 60 * 1000L;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -108,7 +113,13 @@ public class JwtTokenProvider {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
             // 블랙리스트에 access_token이나 refresh_token이 존재하는지 체크, 존재한다면 로그아웃한 토큰이므로 통과 X
-            boolean inblacklist = redisTemplate.opsForValue().get(jwtToken) != null;
+            boolean inblacklist = true;
+            if("dev".equals(activeProfile))
+            	inblacklist = redisTemplate.opsForValue().get(jwtToken) != null;
+            else if("local".equals(activeProfile)) {
+            	log.info("Profile [local] token");
+            	inblacklist = false;
+            }
             return !claims.getBody().getExpiration().before(new Date()) && !inblacklist;
         } catch (Exception e) {
             return false;

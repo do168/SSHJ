@@ -1,11 +1,13 @@
 package sshj.sshj.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import sshj.sshj.dto.MeetingDto;
 import sshj.sshj.mapper.MeetingMapper;
-
-import java.util.List;
+import sshj.sshj.mapper.S3FileMapper;
 
 @Service
 public class MeetingServiceImpl implements MeetingService {
@@ -13,6 +15,9 @@ public class MeetingServiceImpl implements MeetingService {
     @Autowired
     private MeetingMapper meetingMapper;
 
+    @Autowired
+    private S3FileMapper s3FileMapper;
+    
     @Override
     public void insertMeeting(MeetingDto dto) throws Exception {
         meetingMapper.insertMeeting(dto);
@@ -35,7 +40,16 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public List<MeetingDto> selectMeetingList() throws Exception {
-        return meetingMapper.selectMeetingList();
+    	
+    	List<MeetingDto> meetingList = meetingMapper.selectMeetingList();
+    	
+    	for(MeetingDto it : meetingList) {
+    		
+    		List<String> imgUrlList = s3FileMapper.getMeetingFiles(it.getMeetingId());
+    		it.setImgUrlList(imgUrlList);
+    	}
+    	
+    	return meetingList;
     }
 
     @Override

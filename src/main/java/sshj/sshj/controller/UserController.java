@@ -1,50 +1,55 @@
 package sshj.sshj.controller;
 
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.swagger.annotations.*;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.jsonwebtoken.ExpiredJwtException;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
 import sshj.sshj.configuration.JwtTokenProvider;
 import sshj.sshj.dto.CodeInfoModel;
 import sshj.sshj.dto.UserDto;
 import sshj.sshj.dto.UserInfoModel;
 import sshj.sshj.service.UserService;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
 @RestController
 @Api(value = "Oauth-controller", description = "Oauth controller")
-@AllArgsConstructor
 @Slf4j
 @RequestMapping("/member")
 public class UserController {
 
     @Autowired
     private RedisTemplate redisTemplate;
+    
     @Autowired
     private UserService userService;
+    
     @Autowired
     private PasswordEncoder passwordEncoder;
+    
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
-
+    
+    @Value("${spring.profiles.active}")
+	private String activeProfile;
 
     @ApiOperation(
             value = "아이디 중복 확인"
@@ -172,8 +177,9 @@ public class UserController {
         token.put("accessToken", access_token);
         token.put("refreshToken", refresh_token);
         log.info(userDto.getUsername());
-        redisTemplate.opsForValue().set(userDto.getUsername(), refresh_token); // refresh_token은 따로 redis에 저장
-
+        if("dev".equals(activeProfile))
+        	redisTemplate.opsForValue().set(userDto.getUsername(), refresh_token); // refresh_token은 따로 redis에 저장
+        
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
 

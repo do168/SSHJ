@@ -89,7 +89,7 @@ public class UploadServiceImpl implements UploadService{
 					FileUploadDto fileUploadDto = new FileUploadDto();
 					fileUploadDto.setUserId(userId);
 					fileUploadDto.setOriginFileName(file.getOriginalFilename());
-					fileUploadDto.setFileBaseUrl("/" + FileDirEnum.club +"/" + newFilename);
+					fileUploadDto.setFileUrl("/" + FileDirEnum.club +"/" + newFilename);
 					fileUploadDto.setMimeType(mimeType);
 					fileUploadDto.setMeetingId(meetingId);
 					fileUploadDto.setSize(file.getSize());
