@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.filter.GenericFilterBean;
 import sshj.sshj.configuration.JwtTokenProvider;
 import sshj.sshj.dto.UserDto;
@@ -44,10 +45,6 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             log.info("in filter, userheadermodel userId : "+userHeaderModel.getUserId());
             request.setAttribute("UserHeaderInfo", userHeaderModel);
         }
-        else {
-
-        }
-
         chain.doFilter(request, response);
     }
 }

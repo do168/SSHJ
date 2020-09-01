@@ -62,10 +62,18 @@ public class UserController {
     public ResponseEntity<Boolean> idCheck(
             @ApiParam(value = "입력 아이디", required = true) @RequestParam(name = "loginId", required = true) String loginId) throws Exception {
 
+        if(!loginId.matches("^[a-zA-Z0-9]*$")) {
+            log.info("아이디는 영문 혹은 숫자로만 가능합니다.");
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+        }
+
         if (userService.selectUserLoginId(loginId) == 0) {
             log.info("사용 가능한 아이디입니다.");
             return new ResponseEntity<>(true, HttpStatus.OK);
-        } else {
+        }
+
+
+        else {
             log.info("중복된 아이디입니다");
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
@@ -168,7 +176,9 @@ public class UserController {
 
         UserDto userDto = userService.selectUser(loginId);
         if (userDto == null || !passwordEncoder.matches(password, userDto.getPassword())) {
-            throw new IllegalArgumentException("id or password is not valid");
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "id or password is not valid");
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
         log.info("in controller : "+userDto.getUserId());
         Map<String, String> token = new HashMap<>();
