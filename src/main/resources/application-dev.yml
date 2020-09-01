@@ -1,6 +1,6 @@
 spring:
   redis:
-    host: elc-sshj-0001-001.bxl8mx.0001.apn2.cache.amazonaws.com
+    host: elc-sshj.bxl8mx.clustercfg.apn2.cache.amazonaws.com
     port: 6379
 
 server:
