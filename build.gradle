@@ -80,7 +80,8 @@ dependencies {
 	// spring-data-redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	compile group: 'redis.clients', name: 'jedis', version: '2.9.0'
-
+	//embedded-redis
+	compile group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
 
 }
 

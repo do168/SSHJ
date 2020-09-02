@@ -114,12 +114,12 @@ public class JwtTokenProvider {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
             // 블랙리스트에 access_token이나 refresh_token이 존재하는지 체크, 존재한다면 로그아웃한 토큰이므로 통과 X
             boolean inblacklist = true;
-            if("dev".equals(activeProfile))
+//            if("dev".equals(activeProfile))
             	inblacklist = redisTemplate.opsForValue().get(jwtToken) != null;
-            else if("local".equals(activeProfile)) {
-            	log.info("Profile [local] token");
-            	inblacklist = false;
-            }
+//            else if("local".equals(activeProfile)) {
+//            	log.info("Profile [local] token");
+//            	inblacklist = false;
+//            }
             return !claims.getBody().getExpiration().before(new Date()) && !inblacklist;
         } catch (Exception e) {
             return false;

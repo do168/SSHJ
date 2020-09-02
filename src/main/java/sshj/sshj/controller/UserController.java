@@ -187,7 +187,7 @@ public class UserController {
         token.put("accessToken", access_token);
         token.put("refreshToken", refresh_token);
         log.info(userDto.getUsername());
-        if("dev".equals(activeProfile))
+//        if("dev".equals(activeProfile))
         	redisTemplate.opsForValue().set(userDto.getUsername(), refresh_token); // refresh_token은 따로 redis에 저장
         
         return new ResponseEntity<>(token, HttpStatus.OK);

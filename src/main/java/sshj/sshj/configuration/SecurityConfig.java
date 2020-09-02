@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import lombok.RequiredArgsConstructor;
+import sshj.sshj.component.JwtAuthenticationEntryPoint;
 import sshj.sshj.configuration.common.spring.JwtAuthenticationFilter;
 import sshj.sshj.service.UserService;
 
@@ -26,6 +27,9 @@ import sshj.sshj.service.UserService;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
@@ -57,6 +61,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/**").permitAll()
                 .antMatchers("/swagger-ui.html**", "/swagger-resources/**",
                         "/v2/api-docs**", "/webjars/**").permitAll()
+                .and()
+                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and() // 로그인 설정
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                         UsernamePasswordAuthenticationFilter.class);
