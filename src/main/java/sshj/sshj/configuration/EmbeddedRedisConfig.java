@@ -13,29 +13,22 @@ import lombok.extern.slf4j.Slf4j;
 import redis.embedded.RedisServer;
 
 @Slf4j //lombok
-@Profile("local | dev") // profile이 local일때만 활성화
 @Configuration
 public class EmbeddedRedisConfig {
 
     @Value("${spring.redis.port}")
     private int redisPort;
 
-    private RedisServer redisServer;	
+    private RedisServer redisServer;
 
     @PostConstruct
-    public void redisServer() throws IOException {
-        redisServer = RedisServer.builder()
-                .port(redisPort)
-                //.redisExecProvider(customRedisExec) //com.github.kstyrc (not com.orange.redis-embedded)
-                .setting("maxmemory 128M") //maxheap 128M
-                .build();
-        redisServer.start();
+    public void startRedis() throws IOException {
+       redisServer = new RedisServer(redisPort);
+       redisServer.start(); //Redis 시작
     }
 
     @PreDestroy
     public void stopRedis() {
-        if (redisServer != null) {
-            redisServer.stop();
-        }
+       redisServer.stop(); //Redis 종료
     }
 }
