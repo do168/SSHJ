@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
 @EnableRedisRepositories
-//@Profile("dev")
+@Profile("prod")
 public class RedisConfig {
     @Value("${spring.redis.host}")
     private String redisHost;

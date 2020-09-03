@@ -28,10 +28,15 @@ server:
 ---
 spring:
   profiles: dev
-    
+
   redis:
-    host: elc-sshj.bxl8mx.clustercfg.apn2.cache.amazonaws.com
-    port: 6379
+      host: localhost
+      port: 6379
+
+#  추후 aws Redis 클러스터 사용할때 적용    
+#  redis:
+#    host: elc-sshj.bxl8mx.clustercfg.apn2.cache.amazonaws.com
+#    port: 6379
 
 server:
   port: 8080
