@@ -76,8 +76,29 @@ public class UserService implements UserDetailsService {
         return code;
     }
 
+    public String sendEmail_findId(String email) {
+        String code = codeCompo.excuteGenerate();
+        String time = time_now();
+
+        SenderDto senderDto = SenderDto.builder()
+                .from("daedocrew@gmail.com")
+                .to(email)
+                .subject("sshj 아이디 찾기 인증 이메일입니다.")
+                .content(code)
+                .build();
+
+        senderCompo.send(senderDto);
+        updateCodeEmail(code, email, time);
+
+        return code;
+    }
+
     public void insertCodeEmail(String code, String email, String time) {
         userMapper.insertCodeEmail(code, email, time);
+    }
+
+    public void updateCodeEmail(String code, String email, String time) {
+        userMapper.updateCodeEmail(code, email, time);
     }
 
     public void insertUser(UserInfoModel userInfoModel) {

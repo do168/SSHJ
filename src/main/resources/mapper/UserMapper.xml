@@ -87,6 +87,14 @@
 	]]>
     </insert>
 
+    <update id="updateCodeEmail" parameterType="string">
+        <![CDATA[
+			UPDATE tb_user
+			SET code=#{code}
+			WHERE email=#{email}
+		]]>
+    </update>
+
     <update id="updateUserNickname" parameterType="string">
         <![CDATA[
 			UPDATE tb_user
