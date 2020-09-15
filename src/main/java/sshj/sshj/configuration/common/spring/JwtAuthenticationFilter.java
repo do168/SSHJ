@@ -42,7 +42,6 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             userHeaderModel.setLoginId(userDto.getLoginId());
             userHeaderModel.setRole(userDto.getRole());
             userHeaderModel.setUserId(userDto.getUserId());
-            log.info("in filter, userheadermodel userId : "+userHeaderModel.getUserId());
             request.setAttribute("UserHeaderInfo", userHeaderModel);
         }
         chain.doFilter(request, response);
