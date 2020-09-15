@@ -51,6 +51,13 @@ public class UserController {
     @Value("${spring.profiles.active}")
 	private String activeProfile;
 
+    /**
+     * 생성할 아이디 정규식 체크 & 중복 체크
+     * @param loginId
+     * @return HttpStatus.Ok if 사용 가능
+     *         else HttpStatus.BAD_REQUEST
+     * @throws Exception
+     */
     @ApiOperation(
             value = "아이디 중복 확인"
             , notes = "아이디 중복 확인"
@@ -79,6 +86,13 @@ public class UserController {
         }
     }
 
+    /**
+     * 생성할 닉네임 중복 체크
+     * @param nickname
+     * @return HttpStatus.Ok if 사용 가능
+     *         else HttpStatus.BAD_REQUEST
+     * @throws Exception
+     */
     @ApiOperation(
             value = "닉네임 중복 확인"
             , notes = "닉네임 중복 확인"
@@ -99,6 +113,13 @@ public class UserController {
         }
     }
 
+    /**
+     * 입력한 이메일 중복 검사 후 인증코드 발신
+     * @param email
+     * @return true if 이메일 발신 성공
+     *         else false
+     * @throws Exception
+     */
     @ApiOperation(
             value = "인증 이메일 발신"
             , notes = "인증 이메일 발신"
@@ -112,7 +133,7 @@ public class UserController {
 
         if (userService.selectUserEmail(email) != null) {
             log.info("it is used email, please use other email");
-            return new ResponseEntity<>(false, HttpStatus.OK);
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
         try {
             userService.sendEmail(email);
@@ -120,10 +141,18 @@ public class UserController {
             return new ResponseEntity<>(true, HttpStatus.OK);
         } catch (Exception e) {
             log.info("fail");
-            return new ResponseEntity<>(false, HttpStatus.OK);
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
     }
 
+    /**
+     * 인증코드와 이메일을 비교하여 DB와 일치하는지 확인
+     * @param insert_code
+     * @param insert_email
+     * @return true if 인증코드 일치
+     *         else false
+     * @throws Exception
+     */
     @ApiOperation(
             value = "인증 확인"
             , notes = "인증 확인"
@@ -144,10 +173,16 @@ public class UserController {
             return new ResponseEntity<>(true, HttpStatus.OK);
         } else {
             log.info("인증 실패");
-            return new ResponseEntity<>(false, HttpStatus.OK);
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
     }
 
+    /**
+     * 입력받은 정보들 DB에 저장, 이미 아아디가 존재하는지 한번 더 체크
+     * @param userInfoModel
+     * @return
+     * @throws Exception
+     */
     @ApiOperation(
             value = "회원가입"
             , notes = "회원가입"
@@ -158,10 +193,24 @@ public class UserController {
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public ResponseEntity<Void> signUp(
             @ModelAttribute final UserInfoModel userInfoModel) throws Exception {
+        String loginId = userInfoModel.getLoginId();
+        if(userService.selectUser(loginId)!=null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         userService.insertUser(userInfoModel);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /**
+     * 입력받은 아이디와 비밀번호로 로그인, 성공 시 Map형태로 Access Token과 Refres Token 리턴
+     * @param loginId
+     * @param password
+     * @return Map {
+     *              "accessToken" : access_token ,
+     *              "refreshToken" : refresh_token
+     *             }
+     * @throws Exception
+     */
     @ApiOperation(
             value = "로그인"
             , notes = "로그인"
@@ -180,7 +229,6 @@ public class UserController {
             error.put("error", "id or password is not valid");
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
-        log.info("in controller : "+userDto.getUserId());
         Map<String, String> token = new HashMap<>();
         String access_token = jwtTokenProvider.createAccessToken(userDto.getUsername(), userDto.getUserId(), userDto.getNickname(), userDto.getRole());
         String refresh_token = jwtTokenProvider.createRefreshToken();
@@ -194,9 +242,26 @@ public class UserController {
     }
 
     /**
+     * 입력받은 refresh_token이 레디스에서 access_token에서 추출한 id를 키값으로 하는 refresh_token 존재 시 accessToken 재발급
      * @param access_token  만료된 accessToken
-     * @param refresh_token 안전한저장소에 저장된 refreshToken
-     * @return 정상적 -> 새로 발급한 access_token
+     * @param refresh_token 안전한 저장소에 저장된 refreshToken
+     * @return      if (refreshToken이 우효할 시)
+     *              Map {
+     *                 "success" : true,
+     *                 "accessToken" : newtok
+     *              }
+     *
+     *              else if( refreshToken expired date를 지났을 시)
+     *              Map {
+     *                  "success" : false,
+     *                  "msg" : "refresh token is expired."
+     *              }
+     *
+     *              else (refreshToken이 존재하지 않을 시)
+     *              Map {
+     *                  "success" : false,
+     *                  "msg" : "your refresh token does not exist."
+     *              }
      */
     @ApiOperation(
             value = "토큰 재발급 요청"
@@ -263,6 +328,7 @@ public class UserController {
     }
 
     /**
+     * 로그아웃 시 받은 accessToken을 레디스 블랙리스트에 추가, 일치하는 refreshToken은 삭제
      * @param access_token 만료된 accessToken
      * @return
      */
@@ -304,15 +370,21 @@ public class UserController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    /**
+     * 아이디를 찾기 위해 다시 이메일 인증. 가입 시 입력한 이메일로 다시 인증코드 보내기.
+     * @param email
+     * @return
+     * @throws Exception
+     */
     @ApiOperation(
-            value = "아이디 찾기"
+            value = "아이디 찾기를 위해 이메일 인증 -> 이미 db에 저장돼있던 코드 업데이트"
             , notes = "아이디 찾기"
     )
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/searchId", method = RequestMethod.GET)
-    public ResponseEntity<String> searchId(
+    @RequestMapping(value = "/sendEmail_searchId", method = RequestMethod.GET)
+    public ResponseEntity<Boolean> sendEmail_searchId(
             @ApiParam(value = "email", required = true) @RequestParam(name = "email", required = true) String email
     ) throws Exception {
 
@@ -320,11 +392,59 @@ public class UserController {
         if (userDto == null) {
             return new ResponseEntity("user does not exist", HttpStatus.BAD_REQUEST);
         } else {
-            log.info(userDto.getLoginId());
-            return new ResponseEntity(userDto.getLoginId(), HttpStatus.OK);
+
+            try {
+                userService.sendEmail(email);
+                log.info("success");
+                return new ResponseEntity<>(true, HttpStatus.OK);
+            } catch (Exception e) {
+                log.info("fail");
+                return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+            }
         }
     }
 
+    /**
+     * 인증코드 입력으로 아이디 찾기. 인증코드가 일치할 시 loginId 리턴
+     * @param insert_code
+     * @param insert_email
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(
+            value = "아이디 찾기"
+            , notes = "아이디 찾기"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "complete")
+    })
+    @RequestMapping(value = "/getId", method = RequestMethod.GET)
+    public ResponseEntity<String> getId(
+            @ApiParam(value = "입력 코드", required = true) @RequestParam(name = "insert_code", required = true) String insert_code,
+            @ApiParam(value = "입력 이메일", required = true) @RequestParam(name = "insert_email", required = true) String insert_email
+    ) throws Exception {
+
+        long now_time = Long.parseLong(userService.time_now());
+        CodeInfoModel codeInfoModel = userService.selectCode(insert_code);
+        long created_time = Long.parseLong(codeInfoModel.getCreatedTime());
+
+        if (codeInfoModel.getEmail().equals(insert_email) && now_time - created_time <= 3000) {
+            log.info("인증 성공");
+            return new ResponseEntity<>(userService.selectUserEmail(insert_email).getLoginId(), HttpStatus.OK);
+        } else {
+            log.info("인증 실패");
+            return new ResponseEntity<>("인증 실패", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /**
+     * 비밀번호 분실 시 기존 비밀번호를 알 수 없고 비밀번호 변경만 가능. 이메일과 loginId를 입력하여 변경 가능
+     * @param email
+     * @param loginId
+     * @param newpw
+     * @return
+     * @throws Exception
+     */
     @ApiOperation(
             value = "비밀번호 변경"
             , notes = "비밀번호 변경"
@@ -340,7 +460,7 @@ public class UserController {
     ) throws Exception {
 
         UserDto userDto = userService.selectUser(loginId);
-        if (userDto == null) {
+        if (userDto == null || !userDto.getEmail().equals(email)) {
             return new ResponseEntity("user does not exist", HttpStatus.BAD_REQUEST);
         } else {
 

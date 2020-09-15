@@ -15,6 +15,7 @@ public interface UserMapper {
     void insertUser(UserDto userDto);
     CodeInfoModel selectCode(String code);
     void insertCodeEmail(String code, String email, String time);
+    void updateCodeEmail(String code, String email, String time);
     int selectUserNickname(String nickname);
     void updateUserNickname(String loginId, String nickname);
     void updateUserPassword(String loginId, String password);
