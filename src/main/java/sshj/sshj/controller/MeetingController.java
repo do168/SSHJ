@@ -113,8 +113,12 @@ public class MeetingController {
     public ResponseEntity<List> readAllMeeting(
             @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel
     ) throws Exception{
+    	log.info("실행 readAll");
         log.info("userId : "+userHeaderModel.getUserId());
         List<MeetingDto> list=meetingService.selectMeetingList();
+        
+        log.info("list [{}]", list);
+        
         return new ResponseEntity<List>(list,HttpStatus.OK);
     }
 

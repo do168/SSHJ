@@ -11,6 +11,8 @@ import sshj.sshj.mapper.S3FileMapper;
 
 @Service
 public class MeetingServiceImpl implements MeetingService {
+	
+	private static String S3_DOMAIN = "";
 
     @Autowired
     private MeetingMapper meetingMapper;
@@ -45,7 +47,8 @@ public class MeetingServiceImpl implements MeetingService {
     	
     	for(MeetingDto it : meetingList) {
     		
-    		List<String> imgUrlList = s3FileMapper.getMeetingFiles(it.getMeetingId());
+    		List<String> imgUrlList =  s3FileMapper.getMeetingFiles(it.getMeetingId());
+    		imgUrlList.stream().map(url -> url = S3_DOMAIN + url);
     		it.setImgUrlList(imgUrlList);
     	}
     	

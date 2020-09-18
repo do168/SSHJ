@@ -84,26 +84,27 @@ public class UploadServiceImpl implements UploadService{
 			List<MultipartFile> list = multipartHttpServletRequest.getFiles(fileList.next());
 			for(MultipartFile file : list) {
 				try {
-					String mimeType = new Tika().detect(file.getInputStream());
+					
+					// 파일 S3로 업로드
+					imgUrl = s3Utils.upload(file, FileDirEnum.club, newFilename);
 
+					// 업로드할 파일 정보 DB에 저장
+					String mimeType = new Tika().detect(file.getInputStream());
+					
 					FileUploadDto fileUploadDto = new FileUploadDto();
 					fileUploadDto.setUserId(userId);
 					fileUploadDto.setOriginFileName(file.getOriginalFilename());
-					fileUploadDto.setFileUrl("/" + FileDirEnum.club +"/" + newFilename);
+					fileUploadDto.setFileUrl(imgUrl);
 					fileUploadDto.setMimeType(mimeType);
 					fileUploadDto.setMeetingId(meetingId);
 					fileUploadDto.setSize(file.getSize());
 					
-					// 업로드할 파일 정보 DB에 저장
 					int cnt = fileMapper.uploadContent(fileUploadDto);
 
 					if (cnt < 1) {
 						log.error("Save content upload info failed!!");
 						throw new RuntimeException();
 					}
-					
-					// 파일 S3로 업로드
-					imgUrl = s3Utils.upload(file, FileDirEnum.club, newFilename);
 
 					imgUrls.add(imgUrl);
 
