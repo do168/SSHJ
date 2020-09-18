@@ -127,7 +127,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/signup/sendEmail", method = RequestMethod.GET)
+    @RequestMapping(value = "/signup/sendEmail", method = RequestMethod.POST)
     public ResponseEntity<Boolean> sendEmail(
             @ApiParam(value = "입력 이메일", required = true) @RequestParam(name = "email", required = true) String email) throws Exception {
 
@@ -218,7 +218,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/signin", method = RequestMethod.GET)
+    @RequestMapping(value = "/signin", method = RequestMethod.POST)
     public ResponseEntity<Map<String, String>> singIn(
             @ApiParam(value = "아이디", required = true) @RequestParam(name = "loginId", required = true) String loginId,
             @ApiParam(value = "패스워드", required = true) @RequestParam(name = "password", required = true) String password) throws Exception {
@@ -235,8 +235,7 @@ public class UserController {
         token.put("accessToken", access_token);
         token.put("refreshToken", refresh_token);
         log.info(userDto.getUsername());
-//        if("dev".equals(activeProfile))
-        	redisTemplate.opsForValue().set(userDto.getUsername(), refresh_token); // refresh_token은 따로 redis에 저장
+        redisTemplate.opsForValue().set(userDto.getUsername(), refresh_token); // refresh_token은 따로 redis에 저장
         
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
@@ -339,7 +338,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
     public ResponseEntity<Void> logout(
             @ApiParam(value = "access_token", required = true) @RequestParam(name = "access_token", required = true) String access_token
     ) throws Exception {
@@ -383,7 +382,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/sendEmail_searchId", method = RequestMethod.GET)
+    @RequestMapping(value = "/sendEmail_searchId", method = RequestMethod.POST)
     public ResponseEntity<Boolean> sendEmail_searchId(
             @ApiParam(value = "email", required = true) @RequestParam(name = "email", required = true) String email
     ) throws Exception {
@@ -452,7 +451,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/searchPw", method = RequestMethod.GET)
+    @RequestMapping(value = "/searchPw", method = RequestMethod.POST)
     public ResponseEntity<String> searchPw(
             @ApiParam(value = "email", required = true) @RequestParam(name = "email", required = true) String email,
             @ApiParam(value = "loginId", required = true) @RequestParam(name = "loginId", required = true) String loginId,
