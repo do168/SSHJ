@@ -393,7 +393,7 @@ public class UserController {
         } else {
 
             try {
-                userService.sendEmail(email);
+                userService.sendEmail_findId(email);
                 log.info("success");
                 return new ResponseEntity<>(true, HttpStatus.OK);
             } catch (Exception e) {
