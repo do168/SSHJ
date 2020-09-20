@@ -1,6 +1,7 @@
 package sshj.sshj.configuration;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -22,13 +23,19 @@ public class EmbeddedRedisConfig {
     private RedisServer redisServer;
 
     @PostConstruct
-    public void startRedis() throws IOException {
-       redisServer = new RedisServer(redisPort);
-       redisServer.start(); //Redis 시작
+    public void startRedis() throws IOException, URISyntaxException {
+        redisServer = RedisServer.builder()
+                .port(redisPort)
+                //.redisExecProvider(customRedisExec) //com.github.kstyrc (not com.orange.redis-embedded)
+                .setting("maxmemory 128M") //maxheap 128M
+                .build();
+        redisServer.start(); //Redis 시작
     }
 
     @PreDestroy
     public void stopRedis() {
-       redisServer.stop(); //Redis 종료
+        if (redisServer != null) {
+            redisServer.stop();  //Redis 종료
+        }
     }
 }
