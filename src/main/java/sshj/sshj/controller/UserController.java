@@ -65,24 +65,27 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/signup/idcheck", method = RequestMethod.GET)
-    public ResponseEntity<Boolean> idCheck(
+    @RequestMapping(value = "/signup/idcheck", method = RequestMethod.POST)
+    public ResponseEntity<String> idCheck(
             @ApiParam(value = "입력 아이디", required = true) @RequestParam(name = "loginId", required = true) String loginId) throws Exception {
 
         if(!loginId.matches("^[a-zA-Z0-9]*$")) {
             log.info("아이디는 영문 혹은 숫자로만 가능합니다.");
-            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+            String msg = "아이디는 영문 혹은 숫자로만 가능합니다.";
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
 
         if (userService.selectUserLoginId(loginId) == 0) {
             log.info("사용 가능한 아이디입니다.");
-            return new ResponseEntity<>(true, HttpStatus.OK);
+            String msg = "사용 가능한 아이디입니다.";
+            return new ResponseEntity<>(msg, HttpStatus.OK);
         }
 
 
         else {
             log.info("중복된 아이디입니다");
-            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+            String msg = "중복된 아이디입니다";
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -100,16 +103,18 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/signup/nicknamecheck", method = RequestMethod.GET)
-    public ResponseEntity<Boolean> nicknameCheck(
+    @RequestMapping(value = "/signup/nicknamecheck", method = RequestMethod.POST)
+    public ResponseEntity<String> nicknameCheck(
             @ApiParam(value = "입력 닉네임", required = true) @RequestParam(name = "nickname", required = true) String nickname) throws Exception {
 
         if (userService.selectUserNickname(nickname) == 0) {
             log.info("사용 가능한 닉네임입니다.");
-            return new ResponseEntity<>(true, HttpStatus.OK);
+            String msg = "사용 가능한 닉네임입니다.";
+            return new ResponseEntity<>(msg, HttpStatus.OK);
         } else {
             log.info("중복된 닉네임입니다");
-            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+            String msg = "중복된 닉네임입니다";
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -128,20 +133,24 @@ public class UserController {
             @ApiResponse(code = 200, message = "complete")
     })
     @RequestMapping(value = "/signup/sendEmail", method = RequestMethod.POST)
-    public ResponseEntity<Boolean> sendEmail(
+    public ResponseEntity<String> sendEmail(
             @ApiParam(value = "입력 이메일", required = true) @RequestParam(name = "email", required = true) String email) throws Exception {
-
+//        if (email.matches())
         if (userService.selectUserEmail(email) != null) {
             log.info("it is used email, please use other email");
-            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+            String msg = "이미 인증에 사용된 이메일입니다. 다른 이메일을 사용해주세요";
+
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
         try {
             userService.sendEmail(email);
             log.info("success");
-            return new ResponseEntity<>(true, HttpStatus.OK);
+            String msg = "인증 이메일 발신 성공";
+            return new ResponseEntity<>(msg, HttpStatus.OK);
         } catch (Exception e) {
             log.info("fail");
-            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+            String msg = "인증 이메일 발신 실패";
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -160,8 +169,8 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/signup/certificate", method = RequestMethod.GET)
-    public ResponseEntity<Boolean> certificate(
+    @RequestMapping(value = "/signup/certificate", method = RequestMethod.POST)
+    public ResponseEntity<String> certificate(
             @ApiParam(value = "입력 코드", required = true) @RequestParam(name = "insert_code", required = true) String insert_code,
             @ApiParam(value = "입력 이메일", required = true) @RequestParam(name = "insert_email", required = true) String insert_email) throws Exception {
         long now_time = Long.parseLong(userService.time_now());
@@ -170,10 +179,12 @@ public class UserController {
 
         if (codeInfoModel.getEmail().equals(insert_email) && now_time - created_time <= 3000) {
             log.info("인증 성공");
-            return new ResponseEntity<>(true, HttpStatus.OK);
+            String msg = "인증 성공";
+            return new ResponseEntity<>(msg, HttpStatus.OK);
         } else {
             log.info("인증 실패");
-            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+            String msg = "인증 실패";
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -191,14 +202,16 @@ public class UserController {
             @ApiResponse(code = 200, message = "complete")
     })
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    public ResponseEntity<Void> signUp(
+    public ResponseEntity<String> signUp(
             @ModelAttribute final UserInfoModel userInfoModel) throws Exception {
         String loginId = userInfoModel.getLoginId();
         if(userService.selectUser(loginId)!=null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            String msg = "이지 존재하는 아이디입니다";
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
         userService.insertUser(userInfoModel);
-        return new ResponseEntity<>(HttpStatus.OK);
+        String msg = "회원가입 성공";
+        return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
     /**
@@ -339,7 +352,7 @@ public class UserController {
             @ApiResponse(code = 200, message = "complete")
     })
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
-    public ResponseEntity<Void> logout(
+    public ResponseEntity<String> logout(
             @ApiParam(value = "access_token", required = true) @RequestParam(name = "access_token", required = true) String access_token
     ) throws Exception {
 
@@ -366,7 +379,7 @@ public class UserController {
         redisTemplate.opsForValue().set(accessToken, true);
         redisTemplate.expire(accessToken, 30 * 60 * 1000L, TimeUnit.MILLISECONDS);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity("로그아웃 성공", HttpStatus.OK);
     }
 
     /**
@@ -383,7 +396,7 @@ public class UserController {
             @ApiResponse(code = 200, message = "complete")
     })
     @RequestMapping(value = "/sendEmail_searchId", method = RequestMethod.POST)
-    public ResponseEntity<Boolean> sendEmail_searchId(
+    public ResponseEntity<String> sendEmail_searchId(
             @ApiParam(value = "email", required = true) @RequestParam(name = "email", required = true) String email
     ) throws Exception {
 
@@ -395,10 +408,12 @@ public class UserController {
             try {
                 userService.sendEmail_findId(email);
                 log.info("success");
-                return new ResponseEntity<>(true, HttpStatus.OK);
+                String msg = "인증 이메일 발신 성공";
+                return new ResponseEntity<>(msg, HttpStatus.OK);
             } catch (Exception e) {
                 log.info("fail");
-                return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+                String msg = "인증 이메일 발신 실패";
+                return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
             }
         }
     }
@@ -417,7 +432,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/getId", method = RequestMethod.GET)
+    @RequestMapping(value = "/getId", method = RequestMethod.POST)
     public ResponseEntity<String> getId(
             @ApiParam(value = "입력 코드", required = true) @RequestParam(name = "insert_code", required = true) String insert_code,
             @ApiParam(value = "입력 이메일", required = true) @RequestParam(name = "insert_email", required = true) String insert_email
@@ -432,7 +447,8 @@ public class UserController {
             return new ResponseEntity<>(userService.selectUserEmail(insert_email).getLoginId(), HttpStatus.OK);
         } else {
             log.info("인증 실패");
-            return new ResponseEntity<>("인증 실패", HttpStatus.BAD_REQUEST);
+            String msg = "인증 실패";
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -470,9 +486,11 @@ public class UserController {
                 catch (Exception e){
                     log.error(e.getMessage());
                 }
-                return new ResponseEntity("password changed", HttpStatus.OK);
+                String msg = "비밀번호가 변경되었습니다.";
+                return new ResponseEntity(msg, HttpStatus.OK);
             } else {
-                return new ResponseEntity<>("id and email is not matched", HttpStatus.BAD_REQUEST);
+                String msg = "아이디와 이메일이 일치하지 않습니다";
+                return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
             }
         }
     }
