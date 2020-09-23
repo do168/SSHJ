@@ -44,3 +44,4 @@
 		        (sender = #{loginId} and receiver = #{other}) or (sender = #{other} and receiver = #{loginId})
 	    ]]>
     </select>
+</mapper>
