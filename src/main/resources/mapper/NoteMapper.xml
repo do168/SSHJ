@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sshj.sshj.mapper.NoteMapper">
+
+    <!-- 회원가입 유저 정보 등록	-->
+    <insert id="insertMessage" parameterType="sshj.sshj.dto.NoteDto">
+        <![CDATA[
+		/*	UserMapper.insertMessage	*/
+		insert into tb_note (
+			sender, receiver, time, message
+		) values (
+			#{sender}, #{receiver}, #{sendTime}, #{msg}
+		)
+	]]>
+    </insert>
+
+    <!-- 회원가입 유저 검색	-->
+    <select id="selectPerson" parameterType="string" resultType="string">
+        <![CDATA[
+		/*	UserMapper.selectUserInfo	*/
+		    SELECT
+		        sender
+		        receiver
+		    FROM
+		        tb_note
+		    WHERE
+		        sender = #{loginId} or receiver = #{loginId}
+	    ]]>
+    </select>
+
+    <!-- 회원가입 유저 검색	-->
+    <select id="selectMessages" parameterType="string" resultType="sshj.sshj.dto.NoteDto">
+        <![CDATA[
+		/*	UserMapper.selectUserInfo	*/
+		    SELECT
+		        sender as sender,
+		        receiver as receiver,
+		        time as sendTime,
+		        message as msg
+		    FROM
+		        tb_note
+		    WHERE
+		        (sender = #{loginId} and receiver = #{other}) or (sender = #{other} and receiver = #{loginId})
+	    ]]>
+    </select>

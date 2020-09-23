@@ -242,8 +242,8 @@ public class UserController {
 
     /**
      * 입력받은 refresh_token이 레디스에서 access_token에서 추출한 id를 키값으로 하는 refresh_token 존재 시 accessToken 재발급
-     * @param access_token  만료된 accessToken
-     * @param refresh_token 안전한 저장소에 저장된 refreshToken
+     * @param accessToken  만료된 accessToken
+     * @param refreshToken 안전한 저장소에 저장된 refreshToken
      * @return      if (refreshToken이 우효할 시)
      *              Map {
      *                 "success" : true,
@@ -271,22 +271,22 @@ public class UserController {
     })
     @RequestMapping(value = "/retoken", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> reToken(
-            @ApiParam(value = "access_token", required = true) @RequestParam(name = "access_token", required = true) String access_token,
-            @ApiParam(value = "refresh_token", required = true) @RequestParam(name = "refresh_token", required = true) String refresh_token
+            @ApiParam(value = "accessToken", required = true) @RequestParam(name = "accessToken", required = true) String accessToken,
+            @ApiParam(value = "refreshToken", required = true) @RequestParam(name = "refreshToken", required = true) String refreshToken
     ) throws Exception {
 
-        String accessToken = null;
-        String refreshToken = null;
+        String newAccessToken = null;
+        String newRefreshToken = null;
         String refreshTokenFromDb = null;
         String loginId = null;
 
         Map<String, Object> map = new HashMap<>();
         try {
-            accessToken = access_token;
-            refreshToken = refresh_token;
-            log.info("access token in param: " + accessToken);
+            newAccessToken = accessToken;
+            newRefreshToken = refreshToken;
+            log.info("access token in param: " + newAccessToken);
             try {
-                loginId = jwtTokenProvider.getUserPk(accessToken);
+                loginId = jwtTokenProvider.getUserPk(newAccessToken);
             } catch (IllegalArgumentException e) {
 
             } catch (ExpiredJwtException e) { //expire됐을 때
@@ -303,8 +303,8 @@ public class UserController {
                     log.warn("illegal argument!!");
                 }
                 //둘이 일치하고 만료도 안됐으면 재발급 해주기.
-                if (refreshToken.equals(refreshTokenFromDb) && jwtTokenProvider.validateToken(refreshToken)) {
-                    UserDto userDto = jwtTokenProvider.getUserDto(accessToken);
+                if (newRefreshToken.equals(refreshTokenFromDb) && jwtTokenProvider.validateToken(newRefreshToken)) {
+                    UserDto userDto = jwtTokenProvider.getUserDto(newAccessToken);
 
                     String newtok = jwtTokenProvider.createAccessToken(userDto.getUsername(), userDto.getUserId(), userDto.getNickname(), userDto.getRole());
                     map.put("success", true);

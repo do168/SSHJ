@@ -39,4 +39,4 @@ spring:
 #    port: 6379
 
 server:
-  port: 9090
+  port: 8080
