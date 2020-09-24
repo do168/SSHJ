@@ -6,7 +6,12 @@ spring:
     multipart:
       max-file-size: 50MB
       max-request-size: 50MB
-    
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
 cloud:
   aws:
     s3:
@@ -15,6 +20,8 @@ cloud:
       static: ap-northeast-2
     stack:
       auto: false
+
+
 ---
 spring:
   profiles: local
