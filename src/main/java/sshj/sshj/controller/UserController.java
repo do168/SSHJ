@@ -65,7 +65,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/signup/idcheck", method = RequestMethod.POST)
+    @RequestMapping(value = "/signup/idcheck", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> idCheck(
             @ApiParam(value = "입력 아이디", required = true) @RequestParam(name = "loginId", required = true) String loginId) throws Exception {
 
@@ -103,7 +103,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/signup/nicknamecheck", method = RequestMethod.POST)
+    @RequestMapping(value = "/signup/nicknamecheck", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> nicknameCheck(
             @ApiParam(value = "입력 닉네임", required = true) @RequestParam(name = "nickname", required = true) String nickname) throws Exception {
 
@@ -132,7 +132,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/signup/sendEmail", method = RequestMethod.POST)
+    @RequestMapping(value = "/signup/sendEmail", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> sendEmail(
             @ApiParam(value = "입력 이메일", required = true) @RequestParam(name = "email", required = true) String email) throws Exception {
 //        if (email.matches())
@@ -169,7 +169,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/signup/certificate", method = RequestMethod.POST)
+    @RequestMapping(value = "/signup/certificate", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> certificate(
             @ApiParam(value = "입력 코드", required = true) @RequestParam(name = "insert_code", required = true) String insert_code,
             @ApiParam(value = "입력 이메일", required = true) @RequestParam(name = "insert_email", required = true) String insert_email) throws Exception {
@@ -201,7 +201,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/signup", method = RequestMethod.POST)
+    @RequestMapping(value = "/signup", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> signUp(
             @ModelAttribute final UserInfoModel userInfoModel) throws Exception {
         String loginId = userInfoModel.getLoginId();
@@ -231,7 +231,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/signin", method = RequestMethod.POST)
+    @RequestMapping(value = "/signin", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
     public ResponseEntity<Map<String, String>> singIn(
             @ApiParam(value = "아이디", required = true) @RequestParam(name = "loginId", required = true) String loginId,
             @ApiParam(value = "패스워드", required = true) @RequestParam(name = "password", required = true) String password) throws Exception {
@@ -282,7 +282,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/retoken", method = RequestMethod.GET)
+    @RequestMapping(value = "/retoken", method = RequestMethod.GET, produces="text/plain;charset=UTF-8")
     public ResponseEntity<Map<String, Object>> reToken(
             @ApiParam(value = "accessToken", required = true) @RequestParam(name = "accessToken", required = true) String accessToken,
             @ApiParam(value = "refreshToken", required = true) @RequestParam(name = "refreshToken", required = true) String refreshToken
@@ -351,7 +351,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    @RequestMapping(value = "/logout", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> logout(
             @ApiParam(value = "access_token", required = true) @RequestParam(name = "access_token", required = true) String access_token
     ) throws Exception {
@@ -395,7 +395,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/sendEmail_searchId", method = RequestMethod.POST)
+    @RequestMapping(value = "/sendEmail_searchId", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> sendEmail_searchId(
             @ApiParam(value = "email", required = true) @RequestParam(name = "email", required = true) String email
     ) throws Exception {
@@ -432,7 +432,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/getId", method = RequestMethod.POST)
+    @RequestMapping(value = "/getId", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> getId(
             @ApiParam(value = "입력 코드", required = true) @RequestParam(name = "insert_code", required = true) String insert_code,
             @ApiParam(value = "입력 이메일", required = true) @RequestParam(name = "insert_email", required = true) String insert_email
@@ -467,7 +467,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/searchPw", method = RequestMethod.POST)
+    @RequestMapping(value = "/searchPw", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> searchPw(
             @ApiParam(value = "email", required = true) @RequestParam(name = "email", required = true) String email,
             @ApiParam(value = "loginId", required = true) @RequestParam(name = "loginId", required = true) String loginId,
