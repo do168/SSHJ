@@ -156,8 +156,8 @@ public class UserController {
 
     /**
      * 인증코드와 이메일을 비교하여 DB와 일치하는지 확인
-     * @param insert_code
-     * @param insert_email
+     * @param code
+     * @param email
      * @return true if 인증코드 일치
      *         else false
      * @throws Exception
@@ -171,13 +171,13 @@ public class UserController {
     })
     @RequestMapping(value = "/signup/certificate", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> certificate(
-            @ApiParam(value = "입력 코드", required = true) @RequestParam(name = "insert_code", required = true) String insert_code,
-            @ApiParam(value = "입력 이메일", required = true) @RequestParam(name = "insert_email", required = true) String insert_email) throws Exception {
+            @ApiParam(value = "입력 코드", required = true) @RequestParam(name = "insert_code", required = true) String code,
+            @ApiParam(value = "입력 이메일", required = true) @RequestParam(name = "insert_email", required = true) String email) throws Exception {
         long now_time = Long.parseLong(userService.time_now());
-        CodeInfoModel codeInfoModel = userService.selectCode(insert_code);
+        CodeInfoModel codeInfoModel = userService.selectCode(code);
         long created_time = Long.parseLong(codeInfoModel.getCreatedTime());
 
-        if (codeInfoModel.getEmail().equals(insert_email) && now_time - created_time <= 3000) {
+        if (codeInfoModel.getEmail().equals(email) && now_time - created_time <= 3000) {
             log.info("인증 성공");
             String msg = "인증 성공";
             return new ResponseEntity<>(msg, HttpStatus.OK);
@@ -341,7 +341,7 @@ public class UserController {
 
     /**
      * 로그아웃 시 받은 accessToken을 레디스 블랙리스트에 추가, 일치하는 refreshToken은 삭제
-     * @param access_token 만료된 accessToken
+     * @param accessToken 만료된 accessToken
      * @return
      */
     @ApiOperation(
@@ -353,11 +353,11 @@ public class UserController {
     })
     @RequestMapping(value = "/logout", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> logout(
-            @ApiParam(value = "access_token", required = true) @RequestParam(name = "access_token", required = true) String access_token
+            @ApiParam(value = "access_token", required = true) @RequestParam(name = "access_token", required = true) String accessToken
     ) throws Exception {
 
         String loginId = null;
-        String accessToken = access_token;
+        String at = accessToken;
         try {
             loginId = jwtTokenProvider.getUserPk(accessToken);
         } catch (IllegalArgumentException e) {
@@ -376,8 +376,8 @@ public class UserController {
         }
         //accessToken은 30분 후에 블랙리스트에서 파기
         log.info(" logout ing : " + accessToken);
-        redisTemplate.opsForValue().set(accessToken, true);
-        redisTemplate.expire(accessToken, 30 * 60 * 1000L, TimeUnit.MILLISECONDS);
+        redisTemplate.opsForValue().set(at, true);
+        redisTemplate.expire(at, 30 * 60 * 1000L, TimeUnit.MILLISECONDS);
 
         return new ResponseEntity("로그아웃 성공", HttpStatus.OK);
     }
@@ -420,8 +420,8 @@ public class UserController {
 
     /**
      * 인증코드 입력으로 아이디 찾기. 인증코드가 일치할 시 loginId 리턴
-     * @param insert_code
-     * @param insert_email
+     * @param code
+     * @param email
      * @return
      * @throws Exception
      */
@@ -432,19 +432,19 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/getId", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
+    @RequestMapping(value = "/getId", method = RequestMethod.GET, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> getId(
-            @ApiParam(value = "입력 코드", required = true) @RequestParam(name = "insert_code", required = true) String insert_code,
-            @ApiParam(value = "입력 이메일", required = true) @RequestParam(name = "insert_email", required = true) String insert_email
+            @ApiParam(value = "입력 코드", required = true) @RequestParam(name = "insert_code", required = true) String code,
+            @ApiParam(value = "입력 이메일", required = true) @RequestParam(name = "insert_email", required = true) String email
     ) throws Exception {
 
         long now_time = Long.parseLong(userService.time_now());
-        CodeInfoModel codeInfoModel = userService.selectCode(insert_code);
+        CodeInfoModel codeInfoModel = userService.selectCode(code);
         long created_time = Long.parseLong(codeInfoModel.getCreatedTime());
 
-        if (codeInfoModel.getEmail().equals(insert_email) && now_time - created_time <= 3000) {
+        if (codeInfoModel.getEmail().equals(email) && now_time - created_time <= 3000) {
             log.info("인증 성공");
-            return new ResponseEntity<>(userService.selectUserEmail(insert_email).getLoginId(), HttpStatus.OK);
+            return new ResponseEntity<>(userService.selectUserEmail(email).getLoginId(), HttpStatus.OK);
         } else {
             log.info("인증 실패");
             String msg = "인증 실패";
@@ -456,7 +456,7 @@ public class UserController {
      * 비밀번호 분실 시 기존 비밀번호를 알 수 없고 비밀번호 변경만 가능. 이메일과 loginId를 입력하여 변경 가능
      * @param email
      * @param loginId
-     * @param newpw
+     * @param newPw
      * @return
      * @throws Exception
      */
@@ -471,7 +471,7 @@ public class UserController {
     public ResponseEntity<String> searchPw(
             @ApiParam(value = "email", required = true) @RequestParam(name = "email", required = true) String email,
             @ApiParam(value = "loginId", required = true) @RequestParam(name = "loginId", required = true) String loginId,
-            @ApiParam(value = "newpw", required = true) @RequestParam(name = "newqw", required = true) String newpw
+            @ApiParam(value = "newpw", required = true) @RequestParam(name = "newqw", required = true) String newPw
     ) throws Exception {
 
         UserDto userDto = userService.selectUser(loginId);
@@ -481,7 +481,7 @@ public class UserController {
 
             if (userDto.getEmail().equals(email)) {
                 try {
-                    userService.updateUserPassword(loginId, passwordEncoder.encode(newpw));
+                    userService.updateUserPassword(loginId, passwordEncoder.encode(newPw));
                 }
                 catch (Exception e){
                     log.error(e.getMessage());
