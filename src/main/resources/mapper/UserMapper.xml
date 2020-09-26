@@ -89,8 +89,9 @@
 
     <update id="updateCodeEmail" parameterType="string">
         <![CDATA[
-			UPDATE tb_user
-			SET code=#{code}
+			UPDATE tb_codeemail
+			SET code=#{code},
+			    created_time=#{time}
 			WHERE email=#{email}
 		]]>
     </update>

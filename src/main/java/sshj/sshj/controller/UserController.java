@@ -137,7 +137,7 @@ public class UserController {
             @ApiParam(value = "입력 이메일", required = true) @RequestParam(name = "email", required = true) String email) throws Exception {
 //        if (email.matches())
         if (userService.selectUserEmail(email) != null) {
-            log.info("it is used email, please use other email");
+            log.info(email+":  it is used email, please use other email");
             String msg = "이미 인증에 사용된 이메일입니다. 다른 이메일을 사용해주세요";
 
             return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
@@ -145,11 +145,11 @@ public class UserController {
         try {
             userService.sendEmail(email);
             log.info("success");
-            String msg = "인증 이메일 발신 성공";
+            String msg = email+": 인증 이메일 발신 성공";
             return new ResponseEntity<>(msg, HttpStatus.OK);
         } catch (Exception e) {
-            log.info("fail");
-            String msg = "인증 이메일 발신 실패";
+            log.info(e.toString());
+            String msg = email+": 인증 이메일 발신 실패";
             return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
     }
@@ -402,17 +402,17 @@ public class UserController {
 
         UserDto userDto = userService.selectUserEmail(email);
         if (userDto == null) {
-            return new ResponseEntity("user does not exist", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(email+": user does not exist", HttpStatus.BAD_REQUEST);
         } else {
 
             try {
                 userService.sendEmail_findId(email);
-                log.info("success");
-                String msg = "인증 이메일 발신 성공";
+                log.info(email+ " : success");
+                String msg = email+": 인증 이메일 발신 성공";
                 return new ResponseEntity<>(msg, HttpStatus.OK);
             } catch (Exception e) {
-                log.info("fail");
-                String msg = "인증 이메일 발신 실패";
+                log.info(e.toString());
+                String msg = email+": 인증 이메일 발신 실패";
                 return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
             }
         }
