@@ -38,18 +38,18 @@ public class UserController {
 
     @Autowired
     private RedisTemplate redisTemplate;
-    
+
     @Autowired
     private UserService userService;
-    
+
     @Autowired
     private PasswordEncoder passwordEncoder;
-    
+
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
-    
+
     @Value("${spring.profiles.active}")
-	private String activeProfile;
+    private String activeProfile;
 
     /**
      * 생성할 아이디 정규식 체크 & 중복 체크
@@ -174,7 +174,7 @@ public class UserController {
             @ApiParam(value = "입력 코드", required = true) @RequestParam(name = "insert_code", required = true) String code,
             @ApiParam(value = "입력 이메일", required = true) @RequestParam(name = "insert_email", required = true) String email) throws Exception {
         long now_time = Long.parseLong(userService.time_now());
-        CodeInfoModel codeInfoModel = userService.selectCode(code);
+        CodeInfoModel codeInfoModel = userService.selectCodeInfo(code);
         long created_time = Long.parseLong(codeInfoModel.getCreatedTime());
 
         if (codeInfoModel.getEmail().equals(email) && now_time - created_time <= 3000) {
@@ -207,6 +207,10 @@ public class UserController {
         String loginId = userInfoModel.getLoginId();
         if(userService.selectUser(loginId)!=null) {
             String msg = "이지 존재하는 아이디입니다";
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+        }
+        if (userService.selectCode(userInfoModel.getEmail()) != userInfoModel.getCode()) {
+            String msg = "인증코드가 일치하지 않습니다.";
             return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
         userService.insertUser(userInfoModel);
@@ -249,7 +253,7 @@ public class UserController {
         token.put("refreshToken", refresh_token);
         log.info(userDto.getUsername());
         redisTemplate.opsForValue().set(userDto.getUsername(), refresh_token); // refresh_token은 따로 redis에 저장
-        
+
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
@@ -439,7 +443,7 @@ public class UserController {
     ) throws Exception {
 
         long now_time = Long.parseLong(userService.time_now());
-        CodeInfoModel codeInfoModel = userService.selectCode(code);
+        CodeInfoModel codeInfoModel = userService.selectCodeInfo(code);
         long created_time = Long.parseLong(codeInfoModel.getCreatedTime());
 
         if (codeInfoModel.getEmail().equals(email) && now_time - created_time <= 3000) {

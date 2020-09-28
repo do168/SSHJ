@@ -17,4 +17,7 @@ public class UserInfoModel {
 
     @ApiModelProperty(value = "닉네임", required = true)
     private String nickname;
+
+    @ApiModelProperty(value = "인증코드", required = true)
+    private String code;
 }

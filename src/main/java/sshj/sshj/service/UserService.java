@@ -104,19 +104,21 @@ public class UserService implements UserDetailsService {
     public void insertUser(UserInfoModel userInfoModel) {
         String time = time_now();
         this.userMapper.insertUser(UserDto.builder()
-            .loginId(userInfoModel.getLoginId())
-            .password(passwordEncoder.encode(userInfoModel.getPassword()))
-            .email(userInfoModel.getEmail())
-            .role("ROLE_USER")
-            .nickname(userInfoModel.getNickname())
-            .createdTime(time)
-            .build()); //getId() 없앴는데 뭐가 달라지나?
+                .loginId(userInfoModel.getLoginId())
+                .password(passwordEncoder.encode(userInfoModel.getPassword()))
+                .email(userInfoModel.getEmail())
+                .role("ROLE_USER")
+                .nickname(userInfoModel.getNickname())
+                .createdTime(time)
+                .build()); //getId() 없앴는데 뭐가 달라지나?
         return;
     }
 
-    public CodeInfoModel selectCode(String code) {
-        return userMapper.selectCode(code);
+    public CodeInfoModel selectCodeInfo(String code) {
+        return userMapper.selectCodeInfo(code);
     }
+
+    public String selectCode(String email) { return userMapper.selectCode(email); }
 
     public void updateUserNickname(String loginId, String nickname) {
         userMapper.updateUserNickname(loginId, nickname);

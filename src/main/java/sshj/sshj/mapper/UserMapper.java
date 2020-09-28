@@ -13,7 +13,8 @@ public interface UserMapper {
     int selectUserLoginId(String loginId);
     UserDto selectUserEmail(String email);
     void insertUser(UserDto userDto);
-    CodeInfoModel selectCode(String code);
+    String selectCode(String email);
+    CodeInfoModel selectCodeInfo(String code);
     void insertCodeEmail(String code, String email, String time);
     void updateCodeEmail(String code, String email, String time);
     int selectUserNickname(String nickname);

@@ -67,9 +67,18 @@
 	]]>
     </select>
 
-    <select id="selectCode" parameterType="string" resultType="sshj.sshj.dto.CodeInfoModel">
+    <select id="selectCode" parameterType="string" resultType="string">
         <![CDATA[
 		/*	UserMapper.selectCode	*/
+		select code
+		from tb_codeemail
+		where email = #{email}
+	]]>
+    </select>
+
+    <select id="selectCodeInfo" parameterType="string" resultType="sshj.sshj.dto.CodeInfoModel">
+        <![CDATA[
+		/*	UserMapper.selectCodeInfo	*/
 		select email as email, created_time as createdTime
 		from tb_codeemail
 		where code = #{code}
