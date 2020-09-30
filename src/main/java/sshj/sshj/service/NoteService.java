@@ -13,4 +13,6 @@ public interface NoteService {
     List<String> selectPersonList(String loginId);
 
     List<NoteDto> selectMessages(String loginId, String other);
+
+    int selectCountOfReceiveMessage(String Id);
 }
