@@ -53,6 +53,6 @@
                 count(id)
                 from tb_note
                 where receiver = #{Id} and isread = 0
-        ]
+        ]]>
     </select>
 </mapper>
