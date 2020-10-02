@@ -70,7 +70,7 @@
     <select id="selectCode" parameterType="string" resultType="string">
         <![CDATA[
 		/*	UserMapper.selectCode	*/
-		select code
+		select code as code
 		from tb_codeemail
 		where email = #{email}
 	]]>

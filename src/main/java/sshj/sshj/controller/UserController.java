@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -47,9 +48,6 @@ public class UserController {
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
-
-    @Value("${spring.profiles.active}")
-    private String activeProfile;
 
     /**
      * 생성할 아이디 정규식 체크 & 중복 체크
@@ -206,10 +204,11 @@ public class UserController {
             @ModelAttribute final UserInfoModel userInfoModel) throws Exception {
         String loginId = userInfoModel.getLoginId();
         if(userService.selectUser(loginId)!=null) {
-            String msg = "이지 존재하는 아이디입니다";
+            String msg = "이미 존재하는 아이디입니다";
             return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
-        if (userService.selectCode(userInfoModel.getEmail()) != userInfoModel.getCode()) {
+        if (!userService.selectCode(userInfoModel.getEmail()).equals(userInfoModel.getCode())) {
+            log.info(userService.selectCode(userInfoModel.getEmail())+" "+userInfoModel.getCode());
             String msg = "인증코드가 일치하지 않습니다.";
             return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
@@ -235,12 +234,13 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/signin", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
+    @RequestMapping(value = "/signin", method = RequestMethod.POST, produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, String>> singIn(
             @ApiParam(value = "아이디", required = true) @RequestParam(name = "loginId", required = true) String loginId,
             @ApiParam(value = "패스워드", required = true) @RequestParam(name = "password", required = true) String password) throws Exception {
 
         UserDto userDto = userService.selectUser(loginId);
+        log.info("test");
         if (userDto == null || !passwordEncoder.matches(password, userDto.getPassword())) {
             Map<String, String> error = new HashMap<>();
             error.put("error", "id or password is not valid");
