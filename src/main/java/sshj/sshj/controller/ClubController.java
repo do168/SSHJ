@@ -30,11 +30,11 @@ public class ClubController {
     })
     @RequestMapping(value = "/createDescription", method= RequestMethod.POST)
     public ResponseEntity<Void> createClubDescription
-            (@ApiParam(value = "클럽 description", required = true) @RequestParam(name = "description", required = true) String description,
+            (@ApiParam(value = "생성할 클럽 description", required = true) @RequestParam(name = "description", required = true) String description,
              @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
         ClubDescriptionDto clubDescriptionDto = new ClubDescriptionDto(userHeaderModel.getUserId(), description);
         clubService.insertClubDescription(clubDescriptionDto);
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @ApiOperation(
@@ -47,9 +47,9 @@ public class ClubController {
     })
     @RequestMapping(value = "/readDescription", method= RequestMethod.POST)
     public ResponseEntity<String> selectClubDescription(
-            @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel
+            @ApiParam(value = "club_id", required = true) @RequestParam(name = "club_id", required = true) int clubId
     ) throws Exception{
-        return new ResponseEntity<String>(clubService.selectClubDescription(userHeaderModel.getUserId()), HttpStatus.OK);
+        return new ResponseEntity<>(clubService.selectClubDescription(clubId), HttpStatus.OK);
     }
 
     @ApiOperation(
@@ -65,7 +65,7 @@ public class ClubController {
                              @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
         ClubDescriptionDto clubDescriptionDto = new ClubDescriptionDto(userHeaderModel.getUserId(), description);
         clubService.updateClubDescription(clubDescriptionDto);
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @ApiOperation(
@@ -81,7 +81,7 @@ public class ClubController {
             @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel
     ) throws Exception{
         clubService.deleteClubDescription(userHeaderModel.getUserId());
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @ApiOperation(
@@ -95,7 +95,7 @@ public class ClubController {
     @RequestMapping(value = "/createNotice", method= RequestMethod.POST)
     public ResponseEntity<Void> createClubNotice(@ModelAttribute ClubNoticeDto clubNoticeDto) throws Exception{
         clubService.insertClubNotice(clubNoticeDto);
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @ApiOperation(
@@ -123,7 +123,7 @@ public class ClubController {
     @RequestMapping(value = "/readWholeNotice", method= RequestMethod.POST)
     public ResponseEntity<List> readClubNoticeList(int clubId) throws Exception{
         List<ClubNoticeDto> list=clubService.selectClubNoticeList(clubId);
-        return new ResponseEntity<List>(list,HttpStatus.OK);
+        return new ResponseEntity<>(list,HttpStatus.OK);
     }
 
     @ApiOperation(
@@ -137,7 +137,7 @@ public class ClubController {
     @RequestMapping(value = "/updateNotice", method= RequestMethod.POST)
     public ResponseEntity<Void> updateClubNotice(@ModelAttribute ClubNoticeDto dto) throws Exception{
         clubService.updateClubNotice(dto);
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @ApiOperation(
@@ -151,7 +151,7 @@ public class ClubController {
     @RequestMapping(value = "/deleteNotice", method= RequestMethod.POST)
     public ResponseEntity<Void> deleteClubNotice(int noticeId) throws Exception{
         clubService.deleteClubNotice(noticeId);
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @ApiOperation(
@@ -165,7 +165,7 @@ public class ClubController {
     @RequestMapping(value = "/createNoticeLike", method= RequestMethod.POST)
     public ResponseEntity<Void> createClubNoticeLike(int userId,int noticeId) throws Exception{
         clubService.insertClubNoticeLike(userId,noticeId);
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @ApiOperation(
@@ -179,7 +179,7 @@ public class ClubController {
     @RequestMapping(value = "/deleteNoticeLike", method= RequestMethod.POST)
     public ResponseEntity<Void> deleteClubNoticeLike(int userId,int noticeId) throws Exception{
         clubService.deleteClubNoticeLike(userId,noticeId);
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @ApiOperation(
@@ -193,7 +193,7 @@ public class ClubController {
     @RequestMapping(value = "/countNoticeLike", method= RequestMethod.POST)
     public ResponseEntity<Integer> countClubNoticeLike(int noticeId) throws Exception{
         int cnt=clubService.selectClubNoticeCnt(noticeId);
-        return new ResponseEntity<Integer>(cnt,HttpStatus.OK);
+        return new ResponseEntity<>(cnt,HttpStatus.OK);
     }
 
     @ApiOperation(
@@ -207,7 +207,7 @@ public class ClubController {
     @RequestMapping(value = "/createSubs", method= RequestMethod.POST)
     public ResponseEntity<Void> createClubSubs(int userId,int clubId) throws Exception{
         clubService.insertClubSubs(userId,clubId);
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @ApiOperation(
@@ -221,6 +221,6 @@ public class ClubController {
     @RequestMapping(value = "/deleteSubs", method= RequestMethod.POST)
     public ResponseEntity<Void> deleteClubSubs(int userId,int clubId) throws Exception{
         clubService.deleteClubSubs(userId,clubId);
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

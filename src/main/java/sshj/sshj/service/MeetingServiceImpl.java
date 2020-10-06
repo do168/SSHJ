@@ -45,11 +45,11 @@ public class MeetingServiceImpl implements MeetingService {
     	
     	List<MeetingDto> meetingList = meetingMapper.selectMeetingList();
     	
-    	for(MeetingDto it : meetingList) {
+    	for(MeetingDto md : meetingList) {
     		
-    		List<String> imgUrlList =  s3FileMapper.getMeetingFiles(it.getMeetingId());
+    		List<String> imgUrlList =  s3FileMapper.getMeetingFiles(md.getMeetingId());
     		imgUrlList.stream().map(url -> url = S3_DOMAIN + url);
-    		it.setImgUrlList(imgUrlList);
+    		md.setImgUrlList(imgUrlList);
     	}
     	
     	return meetingList;
@@ -57,6 +57,15 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public List<MeetingDto> selectClubByMeetingList(int clubId) throws Exception {
+
+        List<MeetingDto> meetingList = meetingMapper.selectClubByMeetingList(clubId);
+
+        for(MeetingDto md : meetingList) {
+
+            List<String> imgUrlList = s3FileMapper.getMeetingFiles(md.getMeetingId());
+            imgUrlList.stream().map(url-> url = S3_DOMAIN + url);
+            md.setImgUrlList(imgUrlList);
+        }
         return meetingMapper.selectClubByMeetingList(clubId);
     }
 
