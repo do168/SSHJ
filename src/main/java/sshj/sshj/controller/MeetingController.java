@@ -61,7 +61,7 @@ public class MeetingController {
     @RequestMapping(value = "/read", method= RequestMethod.GET)
     public ResponseEntity<MeetingDto> readMeeting(int meetingId) throws Exception{
         MeetingDto meetingDto=meetingService.selectMeeting(meetingId);
-        return new ResponseEntity<MeetingDto>(meetingDto,HttpStatus.OK);
+        return new ResponseEntity<>(meetingDto,HttpStatus.OK);
     }
 
     @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
