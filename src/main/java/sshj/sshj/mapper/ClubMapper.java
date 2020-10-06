@@ -1,11 +1,13 @@
 package sshj.sshj.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 import sshj.sshj.dto.ClubDescriptionDto;
 import sshj.sshj.dto.ClubNoticeDto;
 
 import java.util.List;
 
+@Repository
 @Mapper
 public interface ClubMapper {
     void insertClubNotice(ClubNoticeDto dto) throws Exception;

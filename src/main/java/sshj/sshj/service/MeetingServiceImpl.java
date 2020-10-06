@@ -27,7 +27,11 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public MeetingDto selectMeeting(int meetingId) throws Exception {
-        return meetingMapper.selectMeeting(meetingId);
+        MeetingDto md = meetingMapper.selectMeeting(meetingId);
+        List<String> imgUrlList =  s3FileMapper.getMeetingFiles(md.getMeetingId());
+        imgUrlList.stream().map(url -> url = S3_DOMAIN + url);
+        md.setImgUrlList(imgUrlList);
+        return md;
     }
 
     @Override
@@ -45,11 +49,10 @@ public class MeetingServiceImpl implements MeetingService {
     	
     	List<MeetingDto> meetingList = meetingMapper.selectMeetingList();
     	
-    	for(MeetingDto it : meetingList) {
-    		
-    		List<String> imgUrlList =  s3FileMapper.getMeetingFiles(it.getMeetingId());
+    	for(MeetingDto md : meetingList) {
+    		List<String> imgUrlList =  s3FileMapper.getMeetingFiles(md.getMeetingId());
     		imgUrlList.stream().map(url -> url = S3_DOMAIN + url);
-    		it.setImgUrlList(imgUrlList);
+    		md.setImgUrlList(imgUrlList);
     	}
     	
     	return meetingList;
@@ -57,12 +60,30 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public List<MeetingDto> selectClubByMeetingList(int clubId) throws Exception {
-        return meetingMapper.selectClubByMeetingList(clubId);
+
+        List<MeetingDto> meetingList = meetingMapper.selectClubByMeetingList(clubId);
+
+        for(MeetingDto md : meetingList) {
+            List<String> imgUrlList = s3FileMapper.getMeetingFiles(md.getMeetingId());
+            imgUrlList.stream().map(url-> url = S3_DOMAIN + url);
+            md.setImgUrlList(imgUrlList);
+        }
+
+        return meetingList;
     }
 
     @Override
     public List<MeetingDto> selectUserByMeetingList(int userId) throws Exception {
-        return meetingMapper.selectUserByMeetingList(userId);
+
+        List<MeetingDto> meetingList = meetingMapper.selectUserByMeetingList(userId);
+
+        for(MeetingDto md : meetingList) {
+            List<String> imgUrlList = s3FileMapper.getMeetingFiles(md.getMeetingId());
+            imgUrlList.stream().map(url-> url = S3_DOMAIN + url);
+            md.setImgUrlList(imgUrlList);
+        }
+
+        return meetingList;
     }
 
     @Override

@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import org.springframework.stereotype.Repository;
 import sshj.sshj.dto.FileUploadDto;
 
 /**
@@ -13,12 +14,13 @@ import sshj.sshj.dto.FileUploadDto;
  *
  */
 @Mapper
+@Repository
 public interface S3FileMapper {
 	
-	public int uploadProfile(@Param("userId") long userId, @Param("profileUrl") String profileUrl);
+	int uploadProfile(@Param("userId") long userId, @Param("profileUrl") String profileUrl);
 	
-	public int uploadContent(FileUploadDto fileUploadDto);
+	int uploadContent(FileUploadDto fileUploadDto);
 	
-	public List<String> getMeetingFiles(@Param("meetingId") long meetingId);
+	List<String> getMeetingFiles(@Param("meetingId") long meetingId);
 	
 }

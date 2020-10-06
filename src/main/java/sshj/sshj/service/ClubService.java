@@ -14,8 +14,8 @@ public interface ClubService {
     void insertClubNoticeLike(int userId,int noticeId) throws Exception;
     void deleteClubNoticeLike(int userId,int noticeId) throws Exception;
     int selectClubNoticeCnt(int noticeId) throws Exception;
-    void insertClubSubs(int userId,int clubId) throws Exception;
-    void deleteClubSubs(int userId,int clubId) throws Exception;
+    void insertClubSubs(int userId, int clubId) throws Exception;
+    void deleteClubSubs(int userId, int clubId) throws Exception;
 
     void insertClubDescription(ClubDescriptionDto clubDescriptionDto) throws Exception;
     String selectClubDescription(int clubId) throws Exception;
