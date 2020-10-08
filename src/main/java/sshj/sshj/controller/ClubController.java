@@ -47,7 +47,7 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/readDescription", method= RequestMethod.GET)
+    @RequestMapping(value = "/readDescription", method= RequestMethod.GET, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> selectClubDescription(
             @ApiParam(value = "club_id", required = true) @RequestParam(name = "club_id", required = true) int clubId
     ) throws Exception{
@@ -111,7 +111,7 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/readNotice", method= RequestMethod.GET)
+    @RequestMapping(value = "/readNotice", method= RequestMethod.GET, produces="text/plain;charset=UTF-8")
     public ResponseEntity<ClubNoticeDto> readClubNotice(int noticeId) throws Exception{
         ClubNoticeDto clubNoticeDto=clubService.selectClubNotice(noticeId);
         return new ResponseEntity<ClubNoticeDto>(clubNoticeDto,HttpStatus.OK);
