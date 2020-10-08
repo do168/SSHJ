@@ -15,4 +15,6 @@ public interface NoteMapper {
     List<String> selectPerson(String loginId);
 
     List<NoteDto> selectMessage(String loginId, String other);
+
+    int selectCountOfReceiveMessage(String Id);
 }

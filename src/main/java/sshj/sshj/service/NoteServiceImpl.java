@@ -39,6 +39,10 @@ public class NoteServiceImpl implements NoteService {
         return noteMapper.selectMessage(loginId, other);
     }
 
+    @Override
+    public int selectCountOfReceiveMessage(String Id) {
+        return noteMapper.selectCountOfReceiveMessage(Id);
+    }
 
 
     public String time_now() {
