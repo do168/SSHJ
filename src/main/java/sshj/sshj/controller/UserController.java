@@ -218,7 +218,7 @@ public class UserController {
     }
 
     /**
-     * 입력받은 아이디와 비밀번호로 로그인, 성공 시 Map형태로 Access Token과 Refres Token 리턴
+     * 입력받은 아이디와 비밀번호로 로그인, 성공 시 Map형태로 Access Token과 Refresh Token 리턴
      * @param loginId
      * @param password
      * @return Map {
@@ -244,6 +244,52 @@ public class UserController {
         if (userDto == null || !passwordEncoder.matches(password, userDto.getPassword())) {
             Map<String, String> error = new HashMap<>();
             error.put("error", "id or password is not valid");
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
+        Map<String, String> token = new HashMap<>();
+        String access_token = jwtTokenProvider.createAccessToken(userDto.getUsername(), userDto.getUserId(), userDto.getNickname(), userDto.getRole());
+        String refresh_token = jwtTokenProvider.createRefreshToken();
+        token.put("accessToken", access_token);
+        token.put("refreshToken", refresh_token);
+        log.info(userDto.getUsername());
+        redisTemplate.opsForValue().set(userDto.getUsername(), refresh_token); // refresh_token은 따로 redis에 저장
+
+        return new ResponseEntity<>(token, HttpStatus.OK);
+    }
+
+    /**
+     * 동아리사이트 전용 로그인 API
+     * 입력받은 아이디와 비밀번호로 로그인, 성공 시 Map형태로 Access Token과 Refresh Token 리턴
+     * @param loginId
+     * @param password
+     * @return Map {
+     *              "accessToken" : access_token ,
+     *              "refreshToken" : refresh_token
+     *             }
+     * @throws Exception
+     */
+    @ApiOperation(
+            value ="로그인 for 동아리 사이트"
+            , notes = "로그인 for 동아리 사이트"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "complete")
+    })
+    @RequestMapping(value = "/signInforClub", method = RequestMethod.POST, produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, String>> singInForClub(
+            @ApiParam(value = "아이디", required = true) @RequestParam(name = "loginId", required = true) String loginId,
+            @ApiParam(value = "패스워드", required = true) @RequestParam(name = "password", required = true) String password) throws Exception {
+
+        UserDto userDto = userService.selectUser(loginId);
+        log.info("test");
+        if (userDto == null || !passwordEncoder.matches(password, userDto.getPassword())) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "id or password is not valid");
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
+        if (userDto.getRole().equals("ROLE_USER")) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "ROLE_USER can't login this page");
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
         Map<String, String> token = new HashMap<>();
