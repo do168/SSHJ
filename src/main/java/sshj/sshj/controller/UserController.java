@@ -286,7 +286,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/retoken", method = RequestMethod.GET, produces="text/plain;charset=UTF-8")
+    @RequestMapping(value = "/retoken", method = RequestMethod.POST, produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> reToken(
             @ApiParam(value = "accessToken", required = true) @RequestParam(name = "accessToken", required = true) String accessToken,
             @ApiParam(value = "refreshToken", required = true) @RequestParam(name = "refreshToken", required = true) String refreshToken
