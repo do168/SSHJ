@@ -4,6 +4,7 @@ import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 import sshj.sshj.dto.ClubDescriptionDto;
@@ -20,6 +21,7 @@ public class ClubController {
     @Autowired
     private ClubService clubService;
 
+    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "동아리 설명 생성 Api"
             , notes = "동아리 설명 생성 Api"
@@ -45,13 +47,14 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/readDescription", method= RequestMethod.POST)
+    @RequestMapping(value = "/readDescription", method= RequestMethod.GET, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> selectClubDescription(
             @ApiParam(value = "club_id", required = true) @RequestParam(name = "club_id", required = true) int clubId
     ) throws Exception{
         return new ResponseEntity<>(clubService.selectClubDescription(clubId), HttpStatus.OK);
     }
 
+    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "동아리 설명 수정 Api"
             , notes = "동아리 설명 수정 Api"
@@ -68,6 +71,7 @@ public class ClubController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "동아리 설명 삭제 Api"
             , notes = "동아리 설명 삭제 Api"
@@ -84,6 +88,7 @@ public class ClubController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "동아리 공지 생성 Api"
             , notes = "동아리 공지 생성 Api"
@@ -106,7 +111,7 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/readNotice", method= RequestMethod.POST)
+    @RequestMapping(value = "/readNotice", method= RequestMethod.GET, produces="text/plain;charset=UTF-8")
     public ResponseEntity<ClubNoticeDto> readClubNotice(int noticeId) throws Exception{
         ClubNoticeDto clubNoticeDto=clubService.selectClubNotice(noticeId);
         return new ResponseEntity<ClubNoticeDto>(clubNoticeDto,HttpStatus.OK);
@@ -120,12 +125,13 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/readWholeNotice", method= RequestMethod.POST)
+    @RequestMapping(value = "/readWholeNotice", method= RequestMethod.GET)
     public ResponseEntity<List> readClubNoticeList(int clubId) throws Exception{
         List<ClubNoticeDto> list=clubService.selectClubNoticeList(clubId);
         return new ResponseEntity<>(list,HttpStatus.OK);
     }
 
+    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "동아리 공지 업데이트 Api"
             , notes = "동아리 공지 업데이트 Api"
@@ -140,6 +146,7 @@ public class ClubController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "동아리 공지 삭제 Api"
             , notes = "동아리 공지 삭제 Api"
