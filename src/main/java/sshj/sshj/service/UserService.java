@@ -128,6 +128,10 @@ public class UserService implements UserDetailsService {
         userMapper.updateUserPassword(loginId, password);
     }
 
+    public void insertDeviceToken(String loginId, String deviceToken) {
+        userMapper.insertDeviceToken(loginId, deviceToken);
+    }
+
     public String time_now() {
         long systemTime = System.currentTimeMillis();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA);

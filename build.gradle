@@ -88,6 +88,9 @@ dependencies {
 	implementation 'org.webjars:sockjs-client:1.1.2'
 	implementation 'org.webjars:stomp-websocket:2.3.3-1'
 
+	//expo-server-sdk-java
+	implementation 'io.github.jav:expo-server-sdk:1.1.0'
+
 }
 
 dependencyManagement {
