@@ -104,6 +104,14 @@
         ]]>
     </insert>
 
+    <select id="selectClubSubs" parameterType="int" resultType="list">
+        <![CDATA[
+            SELECT user_id
+            FROM tb_club_notice_like
+            WHERE club_id = #{clubId}
+    ]]>
+    </select>
+
     <delete id="deleteClubSubs" parameterType="int">
         <![CDATA[
             DELETE FROM tb_club_subscription

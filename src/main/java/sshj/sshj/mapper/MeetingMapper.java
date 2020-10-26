@@ -18,4 +18,5 @@ public interface MeetingMapper {
     List<MeetingDto> selectUserByMeetingList(int userId) throws Exception;
     void insertMeetingLike(int userId,int meetingId) throws Exception;
     void deleteMeetingLike(int userId,int meetingId) throws Exception;
+
 }

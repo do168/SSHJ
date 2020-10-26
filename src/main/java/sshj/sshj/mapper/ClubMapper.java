@@ -20,6 +20,8 @@ public interface ClubMapper {
     int selectClubNoticeCnt(int noticeId) throws Exception;
     void insertClubSubs(int userId,int clubId) throws Exception;
     void deleteClubSubs(int userId,int clubId) throws Exception;
+    List selectClubSubs(int clubId) throws Exception;
+
 
     void insertClubDescription(ClubDescriptionDto clubDescriptionDto) throws Exception;
     String selectClubDescription(int clubId) throws Exception;
