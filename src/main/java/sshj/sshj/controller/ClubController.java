@@ -11,6 +11,7 @@ import sshj.sshj.dto.ClubDescriptionDto;
 import sshj.sshj.dto.ClubNoticeDto;
 import sshj.sshj.dto.UserHeaderModel;
 import sshj.sshj.service.ClubService;
+import sshj.sshj.service.ExpoPushService;
 
 import java.util.List;
 
@@ -20,6 +21,9 @@ import java.util.List;
 public class ClubController {
     @Autowired
     private ClubService clubService;
+
+    @Autowired
+    private ExpoPushService expoPushService;
 
     @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
@@ -98,8 +102,11 @@ public class ClubController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/createNotice", method= RequestMethod.POST)
-    public ResponseEntity<Void> createClubNotice(@ModelAttribute ClubNoticeDto clubNoticeDto) throws Exception{
+    public ResponseEntity<Void> createClubNotice(@ModelAttribute ClubNoticeDto clubNoticeDto,
+                                                 @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
         clubService.insertClubNotice(clubNoticeDto);
+        // 동아리 공지 생성 시 구독한 유저들에게 푸시알림
+        expoPushService.sendingPushClubNoticeCreated(userHeaderModel.getUserId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

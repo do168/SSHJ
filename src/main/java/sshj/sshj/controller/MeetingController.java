@@ -23,6 +23,7 @@ import io.swagger.annotations.ApiResponses;
 import springfox.documentation.annotations.ApiIgnore;
 import sshj.sshj.dto.MeetingDto;
 import sshj.sshj.dto.UserHeaderModel;
+import sshj.sshj.service.ExpoPushService;
 import sshj.sshj.service.MeetingService;
 
 @Api(value="MeetingController", description="MeetingController")
@@ -32,6 +33,9 @@ import sshj.sshj.service.MeetingService;
 public class MeetingController {
     @Autowired
     private MeetingService meetingService;
+
+    @Autowired
+    private ExpoPushService expoPushService;
 
     @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
@@ -47,6 +51,8 @@ public class MeetingController {
             @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
             @ModelAttribute MeetingDto meetingDto) throws Exception{
         meetingService.insertMeeting(meetingDto);
+        // 모임 생성 시 해당 동아리를 구독 중이던 유저들에게 푸시알림
+        expoPushService.sendingPushMeetingCreated(userHeaderModel.getUserId());
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
