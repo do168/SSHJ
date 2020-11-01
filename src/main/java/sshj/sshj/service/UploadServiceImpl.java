@@ -35,6 +35,7 @@ public class UploadServiceImpl implements UploadService{
 
 		String newFilename = Long.toString(System.nanoTime());
 		String imgUrl = "";
+		String bucket = "profile";
 		try {
 			log.error("[{}]", multipartFile);
 			log.error("[{}]", multipartFile.getInputStream());
@@ -53,7 +54,7 @@ public class UploadServiceImpl implements UploadService{
 			/*
 			 * 유저 테이블에서 프로필 이미지 링크 update			
 			 */
-			int cnt = fileMapper.uploadProfile(userId, imgUrl);
+			int cnt = fileMapper.uploadProfile(userId, imgUrl, bucket);
 
 			if (cnt != 1) {
 				log.error("Save profile upload info failed!!");
@@ -116,5 +117,10 @@ public class UploadServiceImpl implements UploadService{
 			}
 		}
 		return imgUrls;
+	}
+
+	@Override
+	public String executeDownloadProfile(long userId, String bucket) {
+		return fileMapper.selectProfileImage(userId, bucket);
 	}
 }

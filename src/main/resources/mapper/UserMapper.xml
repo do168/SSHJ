@@ -43,6 +43,15 @@
 	]]>
     </select>
 
+    <select id="selectLoginId" parameterType="int" resultType="string">
+        <![CDATA[
+            select login_id
+            from tb_user
+            where user_id = #{userId}
+        ]]>
+    </select>
+
+
     <select id="selectUserEmail" parameterType="string" resultType="sshj.sshj.dto.UserDto">
         <![CDATA[
 		/*	UserMapper.selectUserEmail	*/
@@ -58,12 +67,21 @@
 	]]>
     </select>
 
-    <select id="selectUserNickname" parameterType="string" resultType="int">
+    <select id="selectUserNicknameIsOk" parameterType="string" resultType="int">
         <![CDATA[
-		/*	UserMapper.selectUserNickname	*/
+		/*	UserMapper.selectUserNicknameIsOk	*/
 		select count(nickname)
 		from tb_user
 		where nickname = #{nickname}
+	]]>
+    </select>
+
+    <select id="selectUserNickname" parameterType="int" resultType="string">
+        <![CDATA[
+		/*	UserMapper.selectUserNickname	*/
+		select nickname
+		from tb_user
+		where user_id = #{userId}
 	]]>
     </select>
 
@@ -96,6 +114,18 @@
 	]]>
     </insert>
 
+    <insert id="insertDeviceToken" parameterType="string">
+        <![CDATA[
+        insert into tb_user (
+            device_token
+        ) values (
+            #{deviceToken}
+        )
+        where login_id = #{loginId}
+
+        ]]>
+    </insert>
+
     <update id="updateCodeEmail" parameterType="string">
         <![CDATA[
 			UPDATE tb_codeemail
@@ -120,5 +150,13 @@
 			WHERE login_id=#{loginId}
 		]]>
     </update>
+
+    <select id="selectUserDeviceToken" parameterType="int" resultType="string">
+        <![CDATA[
+            SELECT device_token
+            FROM tb_user
+            WHERE user_id = #{userId}
+        ]]>
+    </select>
 
 </mapper>

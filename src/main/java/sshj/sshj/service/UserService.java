@@ -51,8 +51,12 @@ public class UserService implements UserDetailsService {
         return userMapper.selectUserEmail(email);
     }
 
-    public int selectUserNickname(String nickname) throws Exception {
-        return userMapper.selectUserNickname(nickname);
+    public String selectUserNickname(int userId) throws Exception {
+        return userMapper.selectUserNickname(userId);
+    }
+
+    public int selectUserNicknameIsOk(String nickname) throws Exception {
+        return userMapper.selectUserNicknameIsOk(nickname);
     }
 
     public UserDto selectUser(String loginId) throws Exception {
@@ -126,6 +130,10 @@ public class UserService implements UserDetailsService {
 
     public void updateUserPassword(String loginId, String password) {
         userMapper.updateUserPassword(loginId, password);
+    }
+
+    public void insertDeviceToken(String loginId, String deviceToken) {
+        userMapper.insertDeviceToken(loginId, deviceToken);
     }
 
     public String time_now() {

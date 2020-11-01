@@ -10,7 +10,10 @@ import springfox.documentation.annotations.ApiIgnore;
 import sshj.sshj.dto.ClubDescriptionDto;
 import sshj.sshj.dto.ClubNoticeDto;
 import sshj.sshj.dto.UserHeaderModel;
+import sshj.sshj.mapper.S3FileMapper;
 import sshj.sshj.service.ClubService;
+import sshj.sshj.service.ExpoPushService;
+import sshj.sshj.service.UserService;
 
 import java.util.List;
 
@@ -20,6 +23,46 @@ import java.util.List;
 public class ClubController {
     @Autowired
     private ClubService clubService;
+
+    @Autowired
+    private ExpoPushService expoPushService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private S3FileMapper fileMapper;
+
+    @ApiOperation(
+            value = "동아리 이름 읽기 Api"
+            , notes = "동아리 이름 읽기 Api"
+            ,authorizations = {@Authorization(value = "JWT")}
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/selectClubName", method= RequestMethod.GET, produces="text/plain;charset=UTF-8")
+    public ResponseEntity<String> selectClubName(
+            @ApiParam(value = "club_id", required = true) @RequestParam(name = "club_id", required = true) int clubId
+    ) throws Exception{
+        return new ResponseEntity<>(userService.selectUserNickname(clubId), HttpStatus.OK);
+    }
+
+    @ApiOperation(
+            value = "동아리 프로필 사진 읽기 Api"
+            , notes = "동아리 프로필 사진 읽기 Api"
+            ,authorizations = {@Authorization(value = "JWT")}
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/selectClubProfileImage", method= RequestMethod.GET, produces="text/plain;charset=UTF-8")
+    public ResponseEntity<String> selectClubProfileImage(
+            @ApiParam(value = "club_id", required = true) @RequestParam(name = "club_id", required = true) long clubId
+    ) throws Exception{
+        String bucket = "profile";
+        return new ResponseEntity<>(fileMapper.selectProfileImage(clubId, bucket), HttpStatus.OK);
+    }
 
     @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
@@ -98,8 +141,11 @@ public class ClubController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/createNotice", method= RequestMethod.POST)
-    public ResponseEntity<Void> createClubNotice(@ModelAttribute ClubNoticeDto clubNoticeDto) throws Exception{
+    public ResponseEntity<Void> createClubNotice(@ModelAttribute ClubNoticeDto clubNoticeDto,
+                                                 @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
         clubService.insertClubNotice(clubNoticeDto);
+        // 동아리 공지 생성 시 구독한 유저들에게 푸시알림
+        expoPushService.sendingPushClubNoticeCreated(userHeaderModel.getUserId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
