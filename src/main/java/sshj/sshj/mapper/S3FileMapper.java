@@ -17,12 +17,12 @@ import sshj.sshj.dto.FileUploadDto;
 @Repository
 public interface S3FileMapper {
 	
-	int uploadProfile(@Param("userId") long userId, @Param("profileUrl") String profileUrl);
+	int uploadProfile(@Param("userId") long userId, @Param("profileUrl") String profileUrl, @Param("bucket type") String bucket);
 	
 	int uploadContent(FileUploadDto fileUploadDto);
 	
 	List<String> getMeetingFiles(@Param("meetingId") long meetingId);
 
-	String selectProfileImage(@Param("userId") long userId);
+	String selectProfileImage(@Param("userId") long userId, @Param("bucket type") String bucket);
 	
 }

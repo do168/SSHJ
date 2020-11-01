@@ -10,6 +10,7 @@
 		update tb_user
 		set
 			profile_url = #{profileUrl}
+			bucket = #{bucket}
 		where
 			user_id = #{userId}
 	]]>
@@ -49,7 +50,7 @@
 		from
 			tb_file
 		where
-			user_id = #{userId}
+			user_id = #{userId} and bucket = #{bucket}
 	]]>
 	</select>
 	

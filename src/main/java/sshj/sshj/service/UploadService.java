@@ -31,6 +31,6 @@ public interface UploadService {
 
 
 
-	public String executeDownloadProfile(long userId);
+	public String executeDownloadProfile(long userId, String bucket);
 
 }

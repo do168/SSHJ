@@ -2,6 +2,7 @@ package sshj.sshj.service;
 
 import io.github.jav.exposerversdk.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import sshj.sshj.mapper.ClubMapper;
 import sshj.sshj.mapper.UserMapper;
 
@@ -11,6 +12,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
+@Service
 public class ExpoPushServiceImpl implements ExpoPushService {
     @Autowired
     private ClubMapper clubMapper;

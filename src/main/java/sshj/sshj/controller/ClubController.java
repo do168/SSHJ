@@ -41,7 +41,7 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/readDescription", method= RequestMethod.GET, produces="text/plain;charset=UTF-8")
+    @RequestMapping(value = "/selectClubName", method= RequestMethod.GET, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> selectClubName(
             @ApiParam(value = "club_id", required = true) @RequestParam(name = "club_id", required = true) int clubId
     ) throws Exception{
@@ -56,11 +56,12 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/readDescription", method= RequestMethod.GET, produces="text/plain;charset=UTF-8")
+    @RequestMapping(value = "/selectClubProfileImage", method= RequestMethod.GET, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> selectClubProfileImage(
             @ApiParam(value = "club_id", required = true) @RequestParam(name = "club_id", required = true) long clubId
     ) throws Exception{
-        return new ResponseEntity<>(fileMapper.selectProfileImage(clubId), HttpStatus.OK);
+        String bucket = "profile";
+        return new ResponseEntity<>(fileMapper.selectProfileImage(clubId, bucket), HttpStatus.OK);
     }
 
     @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
