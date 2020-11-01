@@ -105,7 +105,7 @@ public class UserController {
     public ResponseEntity<String> nicknameCheck(
             @ApiParam(value = "입력 닉네임", required = true) @RequestParam(name = "nickname", required = true) String nickname) throws Exception {
 
-        if (userService.selectUserNickname(nickname) == 0) {
+        if (userService.selectUserNicknameIsOk(nickname) == 0) {
             log.info("사용 가능한 닉네임입니다.");
             String msg = "사용 가능한 닉네임입니다.";
             return new ResponseEntity<>(msg, HttpStatus.OK);
@@ -248,11 +248,11 @@ public class UserController {
         }
         Map<String, String> token = new HashMap<>();
         String access_token = jwtTokenProvider.createAccessToken(userDto.getUsername(), userDto.getUserId(), userDto.getNickname(), userDto.getRole());
-        String refresh_token = jwtTokenProvider.createRefreshToken();
+//        String refresh_token = jwtTokenProvider.createRefreshToken();
         token.put("accessToken", access_token);
-        token.put("refreshToken", refresh_token);
+//        token.put("refreshToken", refresh_token);
         log.info(userDto.getUsername());
-        redisTemplate.opsForValue().set(userDto.getUsername(), refresh_token); // refresh_token은 따로 redis에 저장
+//        redisTemplate.opsForValue().set(userDto.getUsername(), refresh_token); // refresh_token은 따로 redis에 저장
 
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
@@ -294,11 +294,11 @@ public class UserController {
         }
         Map<String, String> token = new HashMap<>();
         String access_token = jwtTokenProvider.createAccessToken(userDto.getUsername(), userDto.getUserId(), userDto.getNickname(), userDto.getRole());
-        String refresh_token = jwtTokenProvider.createRefreshToken();
+//        String refresh_token = jwtTokenProvider.createRefreshToken();
         token.put("accessToken", access_token);
-        token.put("refreshToken", refresh_token);
+//        token.put("refreshToken", refresh_token);
         log.info(userDto.getUsername());
-        redisTemplate.opsForValue().set(userDto.getUsername(), refresh_token); // refresh_token은 따로 redis에 저장
+//        redisTemplate.opsForValue().set(userDto.getUsername(), refresh_token); // refresh_token은 따로 redis에 저장
 
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
@@ -306,7 +306,7 @@ public class UserController {
     /**
      * 입력받은 refresh_token이 레디스에서 access_token에서 추출한 id를 키값으로 하는 refresh_token 존재 시 accessToken 재발급
      * @param accessToken  만료된 accessToken
-     * @param refreshToken 안전한 저장소에 저장된 refreshToken
+//     * @param refreshToken 안전한 저장소에 저장된 refreshToken
      * @return      if (refreshToken이 우효할 시)
      *              Map {
      *                 "success" : true,
@@ -334,19 +334,19 @@ public class UserController {
     })
     @RequestMapping(value = "/retoken", method = RequestMethod.POST, produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> reToken(
-            @ApiParam(value = "accessToken", required = true) @RequestParam(name = "accessToken", required = true) String accessToken,
-            @ApiParam(value = "refreshToken", required = true) @RequestParam(name = "refreshToken", required = true) String refreshToken
+            @ApiParam(value = "accessToken", required = true) @RequestParam(name = "accessToken", required = true) String accessToken
+//            ,@ApiParam(value = "refreshToken", required = true) @RequestParam(name = "refreshToken", required = true) String refreshToken
     ) throws Exception {
 
         String newAccessToken = null;
-        String newRefreshToken = null;
-        String refreshTokenFromDb = null;
+//        String newRefreshToken = null;
+//        String refreshTokenFromDb = null;
         String loginId = null;
 
         Map<String, Object> map = new HashMap<>();
         try {
             newAccessToken = accessToken;
-            newRefreshToken = refreshToken;
+//            newRefreshToken = refreshToken;
             log.info("access token in param: " + newAccessToken);
             try {
                 loginId = jwtTokenProvider.getUserPk(newAccessToken);
@@ -357,29 +357,28 @@ public class UserController {
                 log.info("loginId from expired access token: " + loginId);
             }
 
-            if (refreshToken != null) { //refresh를 같이 보냈으면.
-                try {
-
-                    refreshTokenFromDb = (String) redisTemplate.opsForValue().get(loginId);
-                    log.info("rtfrom db: " + refreshTokenFromDb);
-                } catch (IllegalArgumentException e) {
-                    log.warn("illegal argument!!");
-                }
-                //둘이 일치하고 만료도 안됐으면 재발급 해주기.
-                if (newRefreshToken.equals(refreshTokenFromDb) && jwtTokenProvider.validateToken(newRefreshToken)) {
-                    UserDto userDto = jwtTokenProvider.getUserDto(newAccessToken);
-
-                    String newtok = jwtTokenProvider.createAccessToken(userDto.getUsername(), userDto.getUserId(), userDto.getNickname(), userDto.getRole());
-                    map.put("success", true);
-                    map.put("accessToken", newtok);
-                } else {
-                    map.put("success", false);
-                    map.put("msg", "refresh token is expired.");
-                }
-            } else { //refresh token이 없으면
-                map.put("success", false);
-                map.put("msg", "your refresh token does not exist.");
-            }
+//            if (refreshToken != null) { //refresh를 같이 보냈으면.
+//                try {
+//
+//                    refreshTokenFromDb = (String) redisTemplate.opsForValue().get(loginId);
+//                    log.info("rtfrom db: " + refreshTokenFromDb);
+//                } catch (IllegalArgumentException e) {
+//                    log.warn("illegal argument!!");
+//                }
+//                //둘이 일치하고 만료도 안됐으면 재발급 해주기.
+//                if (newRefreshToken.equals(refreshTokenFromDb) && jwtTokenProvider.validateToken(newRefreshToken)) {
+            UserDto userDto = jwtTokenProvider.getUserDto(newAccessToken);
+            String newtok = jwtTokenProvider.createAccessToken(userDto.getUsername(), userDto.getUserId(), userDto.getNickname(), userDto.getRole());
+            map.put("success", true);
+            map.put("accessToken", newtok);
+//                } else {
+//                    map.put("success", false);
+//                    map.put("msg", "refresh token is expired.");
+//                }
+//            } else { //refresh token이 없으면
+//                map.put("success", false);
+//                map.put("msg", "your refresh token does not exist.");
+//            }
 
         } catch (Exception e) {
             throw e;
@@ -416,14 +415,14 @@ public class UserController {
             log.info("loginId from expired access token: " + loginId);
         }
 
-        try {
-            if (redisTemplate.opsForValue().get(loginId) != null) {
-                //delete refresh token
-                redisTemplate.delete(loginId);
-            }
-        } catch (IllegalArgumentException e) {
-            log.warn("user does not exist");
-        }
+//        try {
+//            if (redisTemplate.opsForValue().get(loginId) != null) {
+//                //delete refresh token
+//                redisTemplate.delete(loginId);
+//            }
+//        } catch (IllegalArgumentException e) {
+//            log.warn("user does not exist");
+//        }
         //accessToken은 30분 후에 블랙리스트에서 파기
         log.info(" logout ing : " + accessToken);
         redisTemplate.opsForValue().set(at, true);

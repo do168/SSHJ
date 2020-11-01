@@ -14,7 +14,7 @@ public interface UploadService {
 
 	/**
 	 * 프로필 파일 업로드
-	 * @param multipartHttpServletRequest
+//	 * @param multipartHttpServletRequest
 	 * @param userId
 	 * @return
 	 */
@@ -27,5 +27,10 @@ public interface UploadService {
 	 * @return
 	 */
 	public List<String> executeUploadClubContents(MultipartHttpServletRequest multipartHttpServletRequest, long userId, long meetingId);
+
+
+
+
+	public String executeDownloadProfile(long userId);
 
 }

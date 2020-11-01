@@ -10,8 +10,10 @@ import springfox.documentation.annotations.ApiIgnore;
 import sshj.sshj.dto.ClubDescriptionDto;
 import sshj.sshj.dto.ClubNoticeDto;
 import sshj.sshj.dto.UserHeaderModel;
+import sshj.sshj.mapper.S3FileMapper;
 import sshj.sshj.service.ClubService;
 import sshj.sshj.service.ExpoPushService;
+import sshj.sshj.service.UserService;
 
 import java.util.List;
 
@@ -24,6 +26,42 @@ public class ClubController {
 
     @Autowired
     private ExpoPushService expoPushService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private S3FileMapper fileMapper;
+
+    @ApiOperation(
+            value = "동아리 이름 읽기 Api"
+            , notes = "동아리 이름 읽기 Api"
+            ,authorizations = {@Authorization(value = "JWT")}
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/readDescription", method= RequestMethod.GET, produces="text/plain;charset=UTF-8")
+    public ResponseEntity<String> selectClubName(
+            @ApiParam(value = "club_id", required = true) @RequestParam(name = "club_id", required = true) int clubId
+    ) throws Exception{
+        return new ResponseEntity<>(userService.selectUserNickname(clubId), HttpStatus.OK);
+    }
+
+    @ApiOperation(
+            value = "동아리 프로필 사진 읽기 Api"
+            , notes = "동아리 프로필 사진 읽기 Api"
+            ,authorizations = {@Authorization(value = "JWT")}
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/readDescription", method= RequestMethod.GET, produces="text/plain;charset=UTF-8")
+    public ResponseEntity<String> selectClubProfileImage(
+            @ApiParam(value = "club_id", required = true) @RequestParam(name = "club_id", required = true) long clubId
+    ) throws Exception{
+        return new ResponseEntity<>(fileMapper.selectProfileImage(clubId), HttpStatus.OK);
+    }
 
     @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(

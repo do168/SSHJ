@@ -117,4 +117,10 @@ public class UploadServiceImpl implements UploadService{
 		}
 		return imgUrls;
 	}
+
+	@Override
+	public String executeDownloadProfile(long userId) {
+
+		return fileMapper.selectProfileImage(userId);
+	}
 }

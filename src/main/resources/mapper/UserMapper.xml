@@ -67,12 +67,21 @@
 	]]>
     </select>
 
-    <select id="selectUserNickname" parameterType="string" resultType="int">
+    <select id="selectUserNicknameIsOk" parameterType="string" resultType="int">
         <![CDATA[
-		/*	UserMapper.selectUserNickname	*/
+		/*	UserMapper.selectUserNicknameIsOk	*/
 		select count(nickname)
 		from tb_user
 		where nickname = #{nickname}
+	]]>
+    </select>
+
+    <select id="selectUserNickname" parameterType="int" resultType="string">
+        <![CDATA[
+		/*	UserMapper.selectUserNickname	*/
+		select nickname
+		from tb_user
+		where user_id = #{userId}
 	]]>
     </select>
 

@@ -22,5 +22,7 @@ public interface S3FileMapper {
 	int uploadContent(FileUploadDto fileUploadDto);
 	
 	List<String> getMeetingFiles(@Param("meetingId") long meetingId);
+
+	String selectProfileImage(@Param("userId") long userId);
 	
 }

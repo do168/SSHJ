@@ -39,5 +39,18 @@
 			meeting_id = #{meetingId}
 	]]>
 	</select>
+
+	<!--프로필 사진 가져오기 -->
+	<select id="selectProfileImage" resultType="string">
+		<![CDATA[
+		/*	S3FileMapper.selectProfileImage	*/
+		select
+			file_url
+		from
+			tb_file
+		where
+			user_id = #{userId}
+	]]>
+	</select>
 	
 </mapper>
