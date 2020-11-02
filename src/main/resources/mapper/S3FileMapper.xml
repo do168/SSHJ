@@ -7,7 +7,7 @@
 	<update id="uploadProfile">
 	<![CDATA[
 		/*	S3FileMapper.uploadProfile	*/
-		update tb_user
+		update tb_file
 		set
 			profile_url = #{profileUrl}
 			bucket = #{bucket}
