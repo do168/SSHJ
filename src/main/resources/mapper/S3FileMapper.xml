@@ -7,10 +7,9 @@
 	<update id="uploadProfile">
 	<![CDATA[
 		/*	S3FileMapper.uploadProfile	*/
-		update tb_file
+		update tb_user
 		set
 			profile_url = #{profileUrl}
-			bucket = #{bucket}
 		where
 			user_id = #{userId}
 	]]>
@@ -46,11 +45,11 @@
 		<![CDATA[
 		/*	S3FileMapper.selectProfileImage	*/
 		select
-			file_url
+			profile_url
 		from
-			tb_file
+			tb_user
 		where
-			user_id = #{userId} and bucket = #{bucket}
+			user_id = #{userId}
 	]]>
 	</select>
 	
