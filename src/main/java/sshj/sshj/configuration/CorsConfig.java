@@ -16,7 +16,7 @@ public class CorsConfig extends WebMvcConfigurationSupport {
 	@Override
 	public void addCorsMappings(CorsRegistry cr) {
 		cr.addMapping("/**").allowedOrigins("*").allowedOrigins("http://localhost:9090") // 허용할 주소 및 포트
-				.allowCredentials(true).allowedHeaders("*");
+				.allowCredentials(true).allowedHeaders("*").allowedMethods("GET","POST","DELETE","OPTIONS");
 		// allowed method 는 default로 GET, POST, DELETE 만 설정 PUT을 직접넣어줘야함
 	}
 
