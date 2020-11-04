@@ -27,4 +27,7 @@ public interface ClubMapper {
     String selectClubDescription(int clubId) throws Exception;
     void updateClubDescription(ClubDescriptionDto clubDescriptionDto) throws Exception;
     void deleteClubDescription(int clubId) throws Exception;
+
+    int selectIsSubClub(int userId, int clubId) throws Exception;
+    List<Integer> selectSubClubList(int userId) throws Exception;
 }

@@ -21,4 +21,7 @@ public interface ClubService {
     String selectClubDescription(int clubId) throws Exception;
     void updateClubDescription(ClubDescriptionDto clubDescriptionDto) throws Exception;
     void deleteClubDescription(int clubId) throws Exception;
+
+    boolean selectIsSubClub(int userId, int clubId) throws Exception;
+    List<Integer> selectSubClubList(int userId) throws Exception;
 }

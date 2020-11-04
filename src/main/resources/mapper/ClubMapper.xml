@@ -152,4 +152,52 @@
             where club_id = #{clubId}
             ]]>
     </delete>
+
+    <select id="selectIsSubClub" parameterType="int" resultType="int">
+        <![CDATA[
+            SELECT count(*)
+            from tb_club_subscription
+            where user_id = #{userId} and club_id = #{clubId}
+            ]]>
+    </select>
+
+    <select id="selectSubClubList" parameterType="int" resultType="list">
+        <![CDATA[
+            SELECT club_id
+            from tb_club_subscription
+            where user_id = #{userId}
+            ]]>
+    </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </mapper>

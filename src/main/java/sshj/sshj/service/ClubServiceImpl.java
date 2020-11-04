@@ -82,4 +82,14 @@ public class ClubServiceImpl implements ClubService{
     public void deleteClubDescription(int clubId) throws Exception{
         clubMapper.deleteClubDescription(clubId);
     }
+
+    @Override
+    public boolean selectIsSubClub(int userId, int clubId) throws Exception {
+        return clubMapper.selectIsSubClub(userId, clubId) == 1;
+    }
+
+    @Override
+    public List<Integer> selectSubClubList(int userId) throws Exception {
+        return clubMapper.selectSubClubList(userId);
+    }
 }

@@ -15,7 +15,9 @@ import sshj.sshj.service.ClubService;
 import sshj.sshj.service.ExpoPushService;
 import sshj.sshj.service.UserService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Api(value="ClubController")
 @RequestMapping("/club")
@@ -280,4 +282,91 @@ public class ClubController {
         clubService.deleteClubSubs(userHeaderModel.getUserId(),clubId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @ApiOperation(
+            value = "동아리 구독 여부 Api"
+            , notes = "동아리 구독 여부 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/isSubClub", method= RequestMethod.GET)
+    public ResponseEntity<Boolean> isSubClub(@ApiParam(value = "클럽 id", required = true) @RequestParam(name = "club_id", required = true) int clubId,
+                                               @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
+        boolean isSubClub = clubService.selectIsSubClub(userHeaderModel.getUserId(), clubId);
+        return new ResponseEntity<>(isSubClub, HttpStatus.OK);
+    }
+
+    @ApiOperation(
+            value = "구독 동아리 리스트"
+            , notes = "구독 동아리 리스트"
+            ,authorizations = {@Authorization (value = "JWT")}
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/SubClubList", method= RequestMethod.GET)
+    public ResponseEntity<List<Integer>> SubClubList(@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
+        List<Integer> clubList = clubService.selectSubClubList(userHeaderModel.getUserId());
+        return new ResponseEntity<>(clubList, HttpStatus.OK);
+    }
+
+    @ApiOperation(
+            value = "동아리 통합 api"
+            , notes = "동아리 통합 api"
+            ,authorizations = {@Authorization (value = "JWT")}
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/ClubPackage", method= RequestMethod.GET)
+    public ResponseEntity<Map<String, Object>> ClubPackage(@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
+                                                           @ApiParam(value = "클럽 id", required = true) @RequestParam(name = "club_id", required = true) int clubId) throws Exception{
+
+        Map<String, Object> clubPackage = new HashMap();
+
+        String bucket = "profile";
+
+        clubPackage.put("동아리 이름", userService.selectUserNickname(clubId));
+        clubPackage.put("동아리 설명", clubService.selectClubDescription(clubId));
+        clubPackage.put("동아리 프로필 이미지", fileMapper.selectProfileImage(clubId, bucket));
+        clubPackage.put("해당 동아리 구독 여부", clubService.selectIsSubClub(userHeaderModel.getUserId(), clubId));
+        return new ResponseEntity<>(clubPackage, HttpStatus.OK);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
