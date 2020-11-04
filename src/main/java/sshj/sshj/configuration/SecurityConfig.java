@@ -65,7 +65,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and() // 로그인 설정
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
-                        UsernamePasswordAuthenticationFilter.class);
+                        UsernamePasswordAuthenticationFilter.class)
+                .cors();
         // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
     }
 

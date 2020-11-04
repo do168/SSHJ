@@ -13,12 +13,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 @EnableWebMvc
 public class CorsConfig extends WebMvcConfigurationSupport {
 
-	@Override
-	public void addCorsMappings(CorsRegistry cr) {
-		cr.addMapping("/**").allowedOrigins("*").allowedOrigins("http://localhost:9090") // 허용할 주소 및 포트
-				.allowCredentials(true).allowedHeaders("*").allowedMethods("GET","POST","DELETE","OPTIONS");
-		// allowed method 는 default로 GET, POST, DELETE 만 설정 PUT을 직접넣어줘야함
-	}
+//	@Override
+//	public void addCorsMappings(CorsRegistry cr) {
+//		cr.addMapping("/**").allowedOrigins("*").allowedOrigins("http://localhost:9090") // 허용할 주소 및 포트
+//				.allowCredentials(true).allowedHeaders("*").allowedMethods("GET","POST","DELETE","OPTIONS");
+//		// allowed method 는 default로 GET, POST, DELETE 만 설정 PUT을 직접넣어줘야함
+//	}
 
     @Bean
     public CorsFilter corsFilter() {
@@ -27,7 +27,6 @@ public class CorsConfig extends WebMvcConfigurationSupport {
         // Allow anyone and anything access. Probably ok for Swagger spec
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("*");
         config.addAllowedOrigin("*");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
