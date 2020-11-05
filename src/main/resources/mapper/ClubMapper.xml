@@ -104,10 +104,10 @@
         ]]>
     </insert>
 
-    <select id="selectClubSubs" parameterType="int" resultType="list">
+    <select id="selectClubSubsUserList" parameterType="int" resultType="list">
         <![CDATA[
             SELECT user_id
-            FROM tb_club_notice_like
+            FROM tb_club_subscription
             WHERE club_id = #{clubId}
     ]]>
     </select>

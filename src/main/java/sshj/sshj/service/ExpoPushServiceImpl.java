@@ -27,7 +27,7 @@ public class ExpoPushServiceImpl implements ExpoPushService {
      */
     @Override
     public void sendingPushMeetingCreated(int clubId) throws Exception {
-        List<Integer> clubSubscribeUsers = clubMapper.selectClubSubs(clubId);
+        List<Integer> clubSubscribeUsers = clubMapper.selectClubSubsUserList(clubId);
         String clubName = userMapper.selectLoginId(clubId);
         for (int userId : clubSubscribeUsers) {
             String deviceToken = userMapper.selectUserDeviceToken(userId);
@@ -40,7 +40,7 @@ public class ExpoPushServiceImpl implements ExpoPushService {
 
     @Override
     public void sendingPushClubNoticeCreated(int clubId) throws Exception {
-        List<Integer> clubSubscribeUsers = clubMapper.selectClubSubs(clubId);
+        List<Integer> clubSubscribeUsers = clubMapper.selectClubSubsUserList(clubId);
         String clubName = userMapper.selectLoginId(clubId);
         for (int userId : clubSubscribeUsers) {
             String deviceToken = userMapper.selectUserDeviceToken(userId);

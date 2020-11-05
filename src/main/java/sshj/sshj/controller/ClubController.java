@@ -284,8 +284,8 @@ public class ClubController {
     }
 
     @ApiOperation(
-            value = "동아리 구독 여부 Api"
-            , notes = "동아리 구독 여부 Api"
+            value = "유저의 특정 동아리 구독 여부 Api"
+            , notes = "유저의 특정 동아리 구독 여부 Api"
             ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
@@ -299,8 +299,8 @@ public class ClubController {
     }
 
     @ApiOperation(
-            value = "구독 동아리 리스트"
-            , notes = "구독 동아리 리스트"
+            value = "유저가 구독 중인 동아리 리스트"
+            , notes = "유저가 구독 중인 동아리 리스트"
             ,authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
@@ -328,10 +328,10 @@ public class ClubController {
 
         String bucket = "profile";
 
-        clubPackage.put("동아리 이름", userService.selectUserNickname(clubId));
-        clubPackage.put("동아리 설명", clubService.selectClubDescription(clubId));
-        clubPackage.put("동아리 프로필 이미지", fileMapper.selectProfileImage(clubId, bucket));
-        clubPackage.put("해당 동아리 구독 여부", clubService.selectIsSubClub(userHeaderModel.getUserId(), clubId));
+        clubPackage.put("club name", userService.selectUserNickname(clubId));
+        clubPackage.put("club description", clubService.selectClubDescription(clubId));
+        clubPackage.put("club profile image", fileMapper.selectProfileImage(clubId, bucket));
+        clubPackage.put("Is user subscribing club? ", clubService.selectIsSubClub(userHeaderModel.getUserId(), clubId));
         return new ResponseEntity<>(clubPackage, HttpStatus.OK);
     }
 
