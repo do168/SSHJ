@@ -66,6 +66,21 @@ public class ClubController {
         return new ResponseEntity<>(fileMapper.selectProfileImage(clubId, bucket), HttpStatus.OK);
     }
 
+    @ApiOperation(
+            value = "동아리 컨텐츠 url 읽기 Api"
+            , notes = "동아리 컨텐츠 url 읽기 Api"
+            ,authorizations = {@Authorization(value = "JWT")}
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/selectClubContentsUrl", method= RequestMethod.GET, produces="text/plain;charset=UTF-8")
+    public ResponseEntity<String> selectClubContentsUrl(
+            @ApiParam(value = "club_id", required = true) @RequestParam(name = "club_id", required = true) long clubId
+    ) throws Exception{
+        return new ResponseEntity<>(fileMapper.selectContentsUrl(clubId), HttpStatus.OK);
+    }
+
     @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "동아리 설명 생성 Api"

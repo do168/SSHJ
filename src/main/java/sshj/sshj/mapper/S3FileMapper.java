@@ -24,5 +24,7 @@ public interface S3FileMapper {
 	List<String> getMeetingFiles(@Param("meetingId") long meetingId);
 
 	String selectProfileImage(@Param("userId") long userId, @Param("bucket type") String bucket);
+
+	String selectContentsUrl(@Param("userId") long userId);
 	
 }

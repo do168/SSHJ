@@ -52,5 +52,18 @@
 			user_id = #{userId}
 	]]>
 	</select>
+
+	<!--Contents Url 가져오기 -->
+	<select id="selectContentsUrl" resultType="string">
+		<![CDATA[
+		/*	S3FileMapper.selectContentsUrl	*/
+		select
+			file_url
+		from
+			tb_file
+		where
+			user_id = #{clubId}
+	]]>
+	</select>
 	
 </mapper>
