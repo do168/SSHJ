@@ -20,7 +20,7 @@ public interface UserMapper {
     int selectUserNicknameIsOk(String nickname);
     void updateUserNickname(String loginId, String nickname);
     void updateUserPassword(String loginId, String password);
-    void insertDeviceToken(String loginId, String deviceToken);
+    void updateDeviceToken(String loginId, String deviceToken);
     String selectUserDeviceToken(int userId);
     String selectLoginId(int userId);
     String selectUserNickname(int userId);

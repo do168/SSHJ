@@ -132,8 +132,8 @@ public class UserService implements UserDetailsService {
         userMapper.updateUserPassword(loginId, password);
     }
 
-    public void insertDeviceToken(String loginId, String deviceToken) {
-        userMapper.insertDeviceToken(loginId, deviceToken);
+    public void updateDeviceToken(String loginId, String deviceToken) {
+        userMapper.updateDeviceToken(loginId, deviceToken);
     }
 
     public String time_now() {

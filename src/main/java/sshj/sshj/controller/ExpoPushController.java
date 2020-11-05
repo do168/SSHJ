@@ -40,7 +40,7 @@ public class ExpoPushController {
         }
 
         try{
-            userService.insertDeviceToken(userHeaderModel.getLoginId(), expoPushToken);
+            userService.updateDeviceToken(userHeaderModel.getLoginId(), expoPushToken);
         } catch (Exception e) {
             log.error(e.toString());
             return new ResponseEntity<>("에러", HttpStatus.BAD_REQUEST);

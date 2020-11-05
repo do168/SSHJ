@@ -114,17 +114,14 @@
 	]]>
     </insert>
 
-    <insert id="insertDeviceToken" parameterType="string">
+    <update id="updateDeviceToken" parameterType="string">
         <![CDATA[
-        insert into tb_user (
-            device_token
-        ) values (
-            #{deviceToken}
-        )
-        where login_id = #{loginId}
+        UPDATE tb_user
+        SET device_token = #{deviceToken}
+        WHERE login_id = #{loginId}
 
         ]]>
-    </insert>
+    </update>
 
     <update id="updateCodeEmail" parameterType="string">
         <![CDATA[
