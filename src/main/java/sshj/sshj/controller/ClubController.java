@@ -343,10 +343,10 @@ public class ClubController {
 
         String bucket = "profile";
 
-        clubPackage.put("club name", userService.selectUserNickname(clubId));
-        clubPackage.put("club description", clubService.selectClubDescription(clubId));
-        clubPackage.put("club profile image", fileMapper.selectProfileImage(clubId, bucket));
-        clubPackage.put("Is user subscribing club? ", clubService.selectIsSubClub(userHeaderModel.getUserId(), clubId));
+        clubPackage.put("club_name", userService.selectUserNickname(clubId));
+        clubPackage.put("club_description", clubService.selectClubDescription(clubId));
+        clubPackage.put("club_profile_image", fileMapper.selectProfileImage(clubId, bucket));
+        clubPackage.put("Is_user_subscribing_club", clubService.selectIsSubClub(userHeaderModel.getUserId(), clubId));
         return new ResponseEntity<>(clubPackage, HttpStatus.OK);
     }
 
