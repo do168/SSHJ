@@ -25,17 +25,18 @@ public class ExpoPushController {
     @ApiOperation(
             value = "expo_Push 토큰 저장"
             , notes = "expo_Push 토큰 저장"
+            ,authorizations = {@Authorization(value = "JWT")}
     )
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/getExpoPushToken", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
+    @RequestMapping(value = "/getExpoPushToken", method = RequestMethod.POST)
     public ResponseEntity<String> getExpoPushToken(
             @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
             @ApiParam(value = "expoPush 토큰", required = true) @RequestParam(name = "expoPushToken", required = true) String expoPushToken) throws Exception {
 
         if (userService.selectUser(userHeaderModel.getLoginId()) == null) {
-            String error = "유저가 존재하지 않습니다";
+            String error = "user doesn't exit";
             return new ResponseEntity<String>(error, HttpStatus.BAD_REQUEST);
         }
 
@@ -43,9 +44,9 @@ public class ExpoPushController {
             userService.updateDeviceToken(userHeaderModel.getLoginId(), expoPushToken);
         } catch (Exception e) {
             log.error(e.toString());
-            return new ResponseEntity<>("에러", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);
         }
-        String msg = "expoPush 토큰 저장 성공";
+        String msg = "expoPush token saved success";
         return new ResponseEntity<>(msg, HttpStatus.OK);
 
 
