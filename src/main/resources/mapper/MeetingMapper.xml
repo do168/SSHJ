@@ -44,11 +44,12 @@
 				tm.created_time as createdTime,
 				tm.max_participant as maxParticipant,
 				tm.club_id as clubId,
-				(SELECT count(*) FROM tb_user_by_meeting WHERE meeting_id = #{meetingId}) as curPaticipant,
+				(SELECT nickname FROM tb_user WHERE user_id = tm.club_id ) as clubName,
+				(SELECT count(*) FROM tb_user_by_meeting WHERE meeting_id = #{meetingId}) as curParticipant,
 				EXISTS (
 					SELECT * FROM tb_user_by_meeting tubm 
 					WHERE user_id = #{userId} and meeting_id = #{meetingId}
-					) as isParticipant
+					) as applied
 			FROM
 				tb_meeting AS tm
 			WHERE
