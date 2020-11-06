@@ -33,21 +33,26 @@
     <select id="selectMeeting" parameterType="int" resultType="sshj.sshj.dto.MeetingDto">
         <![CDATA[
 			SELECT
-				meeting_id as meetingId,
-				meeting_name as meetingName,
-				deadline as deadline,
-				start_date as startDate,
-				end_date as endDate,
-				category as category,
-				explanation_title as explanationTitle,
-				explanation_content as explanationContent,
-				created_time as createdTime,
-				max_participant as maxParticipant,
-				club_id as clubId
+				tm.meeting_id as meetingId,
+				tm.meeting_name as meetingName,
+				tm.deadline as deadline,
+				tm.start_date as startDate,
+				tm.end_date as endDate,
+				tm.category as category,
+				tm.explanation_title as explanationTitle,
+				tm.explanation_content as explanationContent,
+				tm.created_time as createdTime,
+				tm.max_participant as maxParticipant,
+				tm.club_id as clubId,
+				(SELECT count(*) FROM tb_user_by_meeting WHERE meeting_id = #{meetingId}) as curPaticipant,
+				EXISTS (
+					SELECT * FROM tb_user_by_meeting tubm 
+					WHERE user_id = #{userId} and meeting_id = #{meetingId}
+					) as isParticipant
 			FROM
-				tb_meeting
+				tb_meeting AS tm
 			WHERE
-			    meeting_id=#{meetingId}
+			    tm.meeting_id=#{meetingId};
 		]]>
     </select>
 

@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface MeetingMapper {
     void insertMeeting(MeetingDto dto) throws Exception;
-    MeetingDto selectMeeting(int meetingId) throws Exception;
+    MeetingDto selectMeeting(int userId, int meetingId) throws Exception;
     void updateMeeting(MeetingDto dto) throws Exception;
     void deleteMeeting(int meetingId) throws Exception;
     List<MeetingDto> selectMeetingList() throws Exception;

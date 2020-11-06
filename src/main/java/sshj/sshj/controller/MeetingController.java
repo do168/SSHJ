@@ -2,14 +2,12 @@ package sshj.sshj.controller;
 
 import java.util.List;
 
-import io.swagger.annotations.*;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +18,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.Authorization;
+import lombok.extern.slf4j.Slf4j;
 import springfox.documentation.annotations.ApiIgnore;
 import sshj.sshj.dto.MeetingDto;
 import sshj.sshj.dto.UserHeaderModel;
@@ -65,8 +65,10 @@ public class MeetingController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/read", method= RequestMethod.GET)
-    public ResponseEntity<MeetingDto> readMeeting(int meetingId) throws Exception{
-        MeetingDto meetingDto=meetingService.selectMeeting(meetingId);
+    public ResponseEntity<MeetingDto> readMeeting(
+    		@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
+    		@ApiParam("meetingId") int meetingId ) throws Exception{
+        MeetingDto meetingDto=meetingService.selectMeeting(userHeaderModel.getUserId() ,meetingId);
         return new ResponseEntity<>(meetingDto,HttpStatus.OK);
     }
 

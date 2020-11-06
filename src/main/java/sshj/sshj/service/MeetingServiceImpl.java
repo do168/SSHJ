@@ -26,8 +26,8 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public MeetingDto selectMeeting(int meetingId) throws Exception {
-        MeetingDto md = meetingMapper.selectMeeting(meetingId);
+    public MeetingDto selectMeeting(int userId, int meetingId) throws Exception {
+        MeetingDto md = meetingMapper.selectMeeting(userId, meetingId);
         List<String> imgUrlList =  s3FileMapper.getMeetingFiles(md.getMeetingId());
         imgUrlList.stream().map(url -> url = S3_DOMAIN + url);
         md.setImgUrlList(imgUrlList);
