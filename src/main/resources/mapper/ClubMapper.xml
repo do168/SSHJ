@@ -20,7 +20,7 @@
         ]]>
     </insert>
 
-    <select id="selectClubNotice" parameterType="int" resultType="sshj.sshj.dto.ClubNoticeDto">
+    <select id="selectClubNotice" parameterType="long" resultType="sshj.sshj.dto.ClubNoticeDto">
         <![CDATA[
 			SELECT
 				notice_id as noticeId,
@@ -35,7 +35,7 @@
 		]]>
     </select>
 
-    <select id="selectClubNoticeList" parameterType="int" resultType="sshj.sshj.dto.ClubNoticeDto">
+    <select id="selectClubNoticeList" parameterType="long" resultType="sshj.sshj.dto.ClubNoticeDto">
         <![CDATA[
 			SELECT
 				notice_id as noticeId,
@@ -60,16 +60,16 @@
 		]]>
     </update>
 
-    <delete id="deleteClubNotice" parameterType="int">
+    <delete id="deleteClubNotice" parameterType="long">
         <![CDATA[
             DELETE FROM tb_club_notice
             WHERE notice_id=#{noticeId}
         ]]>
     </delete>
 
-    <insert id="insertClubNoticeLike" parameterType="int">
+    <insert id="insertClubNoticeLike" parameterType="long">
         <![CDATA[
-        INSERT INTO tb_club_notice_like(
+        INSERT longO tb_club_notice_like(
             user_id,
             notice_id)
         VALUES(
@@ -78,14 +78,14 @@
         ]]>
     </insert>
 
-    <delete id="deleteClubNoticeLike" parameterType="int">
+    <delete id="deleteClubNoticeLike" parameterType="long">
         <![CDATA[
             DELETE FROM tb_club_notice_like
             WHERE user_id=#{userId} AND notice_id=#{noticeId}
         ]]>
     </delete>
 
-    <select id="selectClubNoticeCnt" parameterType="int" resultType="int">
+    <select id="selectClubNoticeCnt" parameterType="long" resultType="long">
         <![CDATA[
             SELECT COUNT(*)
             FROM tb_club_notice_like
@@ -93,9 +93,9 @@
         ]]>
     </select>
 
-    <insert id="insertClubSubs" parameterType="int">
+    <insert id="insertClubSubs" parameterType="long">
         <![CDATA[
-        INSERT INTO tb_club_subscription(
+        INSERT longO tb_club_subscription(
             user_id,
             club_id)
         VALUES(
@@ -104,7 +104,7 @@
         ]]>
     </insert>
 
-    <select id="selectClubSubsUserList" parameterType="int" resultType="list">
+    <select id="selectClubSubsUserList" parameterType="long" resultType="list">
         <![CDATA[
             SELECT user_id
             FROM tb_club_subscription
@@ -130,7 +130,7 @@
             ]]>
     </insert>
 
-    <select id="selectClubDescription" parameterType="int" resultType="string">
+    <select id="selectClubDescription" parameterType="long" resultType="string">
         <![CDATA[
             SELECT description
             from tb_club_description
@@ -146,14 +146,14 @@
             ]]>
     </update>
 
-    <delete id="deleteClubDescription" parameterType="int">
+    <delete id="deleteClubDescription" parameterType="long">
         <![CDATA[
             delete from tb_club_description
             where club_id = #{clubId}
             ]]>
     </delete>
 
-    <select id="selectIsSubClub" parameterType="int" resultType="int">
+    <select id="selectIsSubClub" parameterType="long" resultType="int">
         <![CDATA[
             SELECT count(*)
             from tb_club_subscription
@@ -161,7 +161,7 @@
             ]]>
     </select>
 
-    <select id="selectSubClubList" parameterType="int" resultType="list">
+    <select id="selectSubClubList" parameterType="long" resultType="list">
         <![CDATA[
             SELECT club_id
             from tb_club_subscription

@@ -26,7 +26,7 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public MeetingDto selectMeeting(int meetingId) throws Exception {
+    public MeetingDto selectMeeting(long meetingId) throws Exception {
         MeetingDto md = meetingMapper.selectMeeting(meetingId);
         List<String> imgUrlList =  s3FileMapper.getMeetingFiles(md.getMeetingId());
         imgUrlList.stream().map(url -> url = S3_DOMAIN + url);
@@ -40,7 +40,7 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public void deleteMeeting(int meetingId) throws Exception {
+    public void deleteMeeting(long meetingId) throws Exception {
         meetingMapper.deleteMeeting(meetingId);
     }
 
@@ -59,7 +59,7 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public List<MeetingDto> selectClubByMeetingList(int clubId) throws Exception {
+    public List<MeetingDto> selectClubByMeetingList(long clubId) throws Exception {
 
         List<MeetingDto> meetingList = meetingMapper.selectClubByMeetingList(clubId);
 
@@ -73,7 +73,7 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public List<MeetingDto> selectUserByMeetingList(int userId) throws Exception {
+    public List<MeetingDto> selectUserByMeetingList(long userId) throws Exception {
 
         List<MeetingDto> meetingList = meetingMapper.selectUserByMeetingList(userId);
 
@@ -87,12 +87,12 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public void insertMeetingLike(int userId, int meetingId) throws Exception {
+    public void insertMeetingLike(long userId, long meetingId) throws Exception {
         meetingMapper.insertMeetingLike(userId,meetingId);
     }
 
     @Override
-    public void deleteMeetingLike(int userId, int meetingId) throws Exception {
+    public void deleteMeetingLike(long userId, long meetingId) throws Exception {
         meetingMapper.deleteMeetingLike(userId,meetingId);
     }
 }

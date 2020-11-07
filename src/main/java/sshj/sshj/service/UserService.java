@@ -51,7 +51,7 @@ public class UserService implements UserDetailsService {
         return userMapper.selectUserEmail(email);
     }
 
-    public String selectUserNickname(int userId) throws Exception {
+    public String selectUserNickname(long userId) throws Exception {
         return userMapper.selectUserNickname(userId);
     }
 

@@ -8,19 +8,19 @@ public interface MeetingService {
 	
     void insertMeeting(MeetingDto dto) throws Exception;
 
-    MeetingDto selectMeeting(int meetingId) throws Exception;
+    MeetingDto selectMeeting(long meetingId) throws Exception;
 
     void updateMeeting(MeetingDto dto) throws Exception;
 
-    void deleteMeeting(int meetingId) throws Exception;
+    void deleteMeeting(long meetingId) throws Exception;
 
     List<MeetingDto> selectMeetingList() throws Exception;
 
-    List<MeetingDto> selectClubByMeetingList(int clubId) throws Exception;
+    List<MeetingDto> selectClubByMeetingList(long clubId) throws Exception;
 
-    List<MeetingDto> selectUserByMeetingList(int userId) throws Exception;
+    List<MeetingDto> selectUserByMeetingList(long userId) throws Exception;
 
-    void insertMeetingLike(int userId,int meetingId) throws Exception;
+    void insertMeetingLike(long userId,long meetingId) throws Exception;
 
-    void deleteMeetingLike(int userId,int meetingId) throws Exception;
+    void deleteMeetingLike(long userId,long meetingId) throws Exception;
 }

@@ -30,7 +30,7 @@
 		]]>
     </insert>
 
-    <select id="selectMeeting" parameterType="int" resultType="sshj.sshj.dto.MeetingDto">
+    <select id="selectMeeting" parameterType="long" resultType="sshj.sshj.dto.MeetingDto">
         <![CDATA[
 			SELECT
 				meeting_id as meetingId,
@@ -77,7 +77,7 @@
 		]]>
     </select>
 
-    <select id="selectClubByMeetingList" parameterType="int" resultType="sshj.sshj.dto.MeetingDto">
+    <select id="selectClubByMeetingList" parameterType="long" resultType="sshj.sshj.dto.MeetingDto">
         <![CDATA[
 			SELECT
 				meeting_id as meetingId,
@@ -114,7 +114,7 @@
 		]]>
     </update>
 
-    <delete id="deleteMeeting" parameterType="int">
+    <delete id="deleteMeeting" parameterType="long">
         <![CDATA[
             DELETE FROM tb_meeting
             WHERE meeting_id=#{meetingId}

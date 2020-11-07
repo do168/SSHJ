@@ -26,7 +26,7 @@ public class ExpoPushServiceImpl implements ExpoPushService {
      * @throws Exception
      */
     @Override
-    public void sendingPushMeetingCreated(int clubId) throws Exception {
+    public void sendingPushMeetingCreated(long clubId) throws Exception {
         List<Integer> clubSubscribeUsers = clubMapper.selectClubSubsUserList(clubId);
         String clubName = userMapper.selectLoginId(clubId);
         for (int userId : clubSubscribeUsers) {
@@ -39,7 +39,7 @@ public class ExpoPushServiceImpl implements ExpoPushService {
     }
 
     @Override
-    public void sendingPushClubNoticeCreated(int clubId) throws Exception {
+    public void sendingPushClubNoticeCreated(long clubId) throws Exception {
         List<Integer> clubSubscribeUsers = clubMapper.selectClubSubsUserList(clubId);
         String clubName = userMapper.selectLoginId(clubId);
         for (int userId : clubSubscribeUsers) {

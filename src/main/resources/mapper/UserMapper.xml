@@ -43,7 +43,7 @@
 	]]>
     </select>
 
-    <select id="selectLoginId" parameterType="int" resultType="string">
+    <select id="selectLoginId" parameterType="long" resultType="string">
         <![CDATA[
             select login_id
             from tb_user
@@ -76,7 +76,7 @@
 	]]>
     </select>
 
-    <select id="selectUserNickname" parameterType="int" resultType="string">
+    <select id="selectUserNickname" parameterType="long" resultType="string">
         <![CDATA[
 		/*	UserMapper.selectUserNickname	*/
 		select nickname
@@ -148,7 +148,7 @@
 		]]>
     </update>
 
-    <select id="selectUserDeviceToken" parameterType="int" resultType="string">
+    <select id="selectUserDeviceToken" parameterType="long" resultType="string">
         <![CDATA[
             SELECT device_token
             FROM tb_user

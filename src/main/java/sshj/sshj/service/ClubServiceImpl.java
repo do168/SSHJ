@@ -19,12 +19,12 @@ public class ClubServiceImpl implements ClubService{
     }
 
     @Override
-    public ClubNoticeDto selectClubNotice(int noticeId) throws Exception {
+    public ClubNoticeDto selectClubNotice(long noticeId) throws Exception {
         return clubMapper.selectClubNotice(noticeId);
     }
 
     @Override
-    public List<ClubNoticeDto> selectClubNoticeList(int clubId) throws Exception {
+    public List<ClubNoticeDto> selectClubNoticeList(long clubId) throws Exception {
         return clubMapper.selectClubNoticeList(clubId);
     }
 
@@ -34,32 +34,32 @@ public class ClubServiceImpl implements ClubService{
     }
 
     @Override
-    public void deleteClubNotice(int noticeId) throws Exception {
+    public void deleteClubNotice(long noticeId) throws Exception {
         clubMapper.deleteClubNotice(noticeId);
     }
 
     @Override
-    public void insertClubNoticeLike(int userId, int noticeId) throws Exception {
+    public void insertClubNoticeLike(long userId, long noticeId) throws Exception {
         clubMapper.insertClubNoticeLike(userId,noticeId);
     }
 
     @Override
-    public void deleteClubNoticeLike(int userId, int noticeId) throws Exception {
+    public void deleteClubNoticeLike(long userId, long noticeId) throws Exception {
         clubMapper.deleteClubNoticeLike(userId,noticeId);
     }
 
     @Override
-    public int selectClubNoticeCnt(int noticeId) throws Exception {
+    public int selectClubNoticeCnt(long noticeId) throws Exception {
         return clubMapper.selectClubNoticeCnt(noticeId);
     }
 
     @Override
-    public void insertClubSubs(int userId, int clubId) throws Exception {
+    public void insertClubSubs(long userId, long clubId) throws Exception {
         clubMapper.insertClubSubs(userId,clubId);
     }
 
     @Override
-    public void deleteClubSubs(int userId, int clubId) throws Exception {
+    public void deleteClubSubs(long userId, long clubId) throws Exception {
         clubMapper.deleteClubSubs(userId,clubId);
     }
 
@@ -69,7 +69,7 @@ public class ClubServiceImpl implements ClubService{
     }
 
     @Override
-    public String selectClubDescription(int clubId) throws Exception{
+    public String selectClubDescription(long clubId) throws Exception{
         return clubMapper.selectClubDescription(clubId);
     }
 
@@ -79,17 +79,17 @@ public class ClubServiceImpl implements ClubService{
     }
 
     @Override
-    public void deleteClubDescription(int clubId) throws Exception{
+    public void deleteClubDescription(long clubId) throws Exception{
         clubMapper.deleteClubDescription(clubId);
     }
 
     @Override
-    public boolean selectIsSubClub(int userId, int clubId) throws Exception {
+    public boolean selectIsSubClub(long userId, long clubId) throws Exception {
         return clubMapper.selectIsSubClub(userId, clubId) == 1;
     }
 
     @Override
-    public List<Integer> selectSubClubList(int userId) throws Exception {
+    public List<Long> selectSubClubList(long userId) throws Exception {
         return clubMapper.selectSubClubList(userId);
     }
 }

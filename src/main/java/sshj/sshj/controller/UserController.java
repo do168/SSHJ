@@ -297,7 +297,6 @@ public class UserController {
 //        String refresh_token = jwtTokenProvider.createRefreshToken();
         token.put("accessToken", access_token);
 //        token.put("refreshToken", refresh_token);
-        log.info(userDto.getUsername());
 //        redisTemplate.opsForValue().set(userDto.getUsername(), refresh_token); // refresh_token은 따로 redis에 저장
 
         return new ResponseEntity<>(token, HttpStatus.OK);

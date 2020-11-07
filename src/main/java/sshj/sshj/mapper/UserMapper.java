@@ -21,7 +21,7 @@ public interface UserMapper {
     void updateUserNickname(String loginId, String nickname);
     void updateUserPassword(String loginId, String password);
     void updateDeviceToken(String loginId, String deviceToken);
-    String selectUserDeviceToken(int userId);
-    String selectLoginId(int userId);
-    String selectUserNickname(int userId);
+    String selectUserDeviceToken(long userId);
+    String selectLoginId(long userId);
+    String selectUserNickname(long userId);
 }
