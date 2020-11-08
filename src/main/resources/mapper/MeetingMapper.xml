@@ -15,7 +15,8 @@
 				explanation_content,
 				created_time,
 				max_participant,
-				club_id)
+				club_id,
+				meeting_place)
 			VALUES(
 				#{meetingName},
 				#{deadline},
@@ -26,7 +27,8 @@
 				#{explanationContent},
 				now(),
 				#{maxParticipant},
-				#{clubId})
+				#{clubId},
+				#{meetingPlace})
 		]]>
     </insert>
 
