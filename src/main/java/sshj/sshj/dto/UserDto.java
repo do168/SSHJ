@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Builder
 @ToString
 public class UserDto implements UserDetails {
-    private int userId;
+    private long userId;
 
     private String loginId;
 

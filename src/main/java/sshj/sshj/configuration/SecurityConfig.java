@@ -63,6 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/swagger-ui.html**", "/swagger-resources/**",
                         "/v2/api-docs**", "/webjars/**").permitAll()
                 .and()
+                // 권한 실패 시 handling
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and() // 로그인 설정
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),

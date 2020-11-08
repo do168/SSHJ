@@ -45,7 +45,7 @@ public class ClubController {
     })
     @RequestMapping(value = "/selectClubName", method= RequestMethod.GET, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> selectClubName(
-            @ApiParam(value = "club_id", required = true) @RequestParam(name = "club_id", required = true) int clubId
+            @ApiParam(value = "club_id", required = true) @RequestParam(name = "club_id", required = true) long clubId
     ) throws Exception{
         return new ResponseEntity<>(userService.selectUserNickname(clubId), HttpStatus.OK);
     }
@@ -109,7 +109,7 @@ public class ClubController {
     })
     @RequestMapping(value = "/readDescription", method= RequestMethod.GET, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> selectClubDescription(
-            @ApiParam(value = "club_id", required = true) @RequestParam(name = "club_id", required = true) int clubId
+            @ApiParam(value = "club_id", required = true) @RequestParam(name = "club_id", required = true) long clubId
     ) throws Exception{
         return new ResponseEntity<>(clubService.selectClubDescription(clubId), HttpStatus.OK);
     }
@@ -175,7 +175,7 @@ public class ClubController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/readNotice", method= RequestMethod.GET, produces="text/plain;charset=UTF-8")
-    public ResponseEntity<ClubNoticeDto> readClubNotice(int noticeId) throws Exception{
+    public ResponseEntity<ClubNoticeDto> readClubNotice(long noticeId) throws Exception{
         ClubNoticeDto clubNoticeDto=clubService.selectClubNotice(noticeId);
         return new ResponseEntity<ClubNoticeDto>(clubNoticeDto,HttpStatus.OK);
     }
@@ -189,7 +189,7 @@ public class ClubController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/readWholeNotice", method= RequestMethod.GET)
-    public ResponseEntity<List> readClubNoticeList(int clubId) throws Exception{
+    public ResponseEntity<List> readClubNoticeList(long clubId) throws Exception{
         List<ClubNoticeDto> list=clubService.selectClubNoticeList(clubId);
         return new ResponseEntity<>(list,HttpStatus.OK);
     }
@@ -219,7 +219,7 @@ public class ClubController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/deleteNotice", method= RequestMethod.POST)
-    public ResponseEntity<Void> deleteClubNotice(int noticeId) throws Exception{
+    public ResponseEntity<Void> deleteClubNotice(long noticeId) throws Exception{
         clubService.deleteClubNotice(noticeId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -233,7 +233,7 @@ public class ClubController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/createNoticeLike", method= RequestMethod.POST)
-    public ResponseEntity<Void> createClubNoticeLike(@ApiParam(value = "공지사항 id", required = true) @RequestParam(name = "notice_id", required = true) int noticeId,
+    public ResponseEntity<Void> createClubNoticeLike(@ApiParam(value = "공지사항 id", required = true) @RequestParam(name = "notice_id", required = true) long noticeId,
                                                      @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
         clubService.insertClubNoticeLike(userHeaderModel.getUserId(),noticeId);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -248,7 +248,7 @@ public class ClubController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/deleteNoticeLike", method= RequestMethod.POST)
-    public ResponseEntity<Void> deleteClubNoticeLike(@ApiParam(value = "공지사항 id", required = true) @RequestParam(name = "notice_id", required = true) int noticeId,
+    public ResponseEntity<Void> deleteClubNoticeLike(@ApiParam(value = "공지사항 id", required = true) @RequestParam(name = "notice_id", required = true) long noticeId,
                                                      @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
         clubService.deleteClubNoticeLike(userHeaderModel.getUserId(),noticeId);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -263,7 +263,7 @@ public class ClubController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/countNoticeLike", method= RequestMethod.POST)
-    public ResponseEntity<Integer> countClubNoticeLike(int noticeId) throws Exception{
+    public ResponseEntity<Integer> countClubNoticeLike(long noticeId) throws Exception{
         int cnt=clubService.selectClubNoticeCnt(noticeId);
         return new ResponseEntity<>(cnt,HttpStatus.OK);
     }
@@ -277,7 +277,7 @@ public class ClubController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/createSubs", method= RequestMethod.POST)
-    public ResponseEntity<Void> createClubSubs(@ApiParam(value = "클럽 id", required = true) @RequestParam(name = "club_id", required = true) int clubId,
+    public ResponseEntity<Void> createClubSubs(@ApiParam(value = "클럽 id", required = true) @RequestParam(name = "club_id", required = true) long clubId,
      @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
         clubService.insertClubSubs(userHeaderModel.getUserId(),clubId);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -292,7 +292,7 @@ public class ClubController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/deleteSubs", method= RequestMethod.POST)
-    public ResponseEntity<Void> deleteClubSubs(@ApiParam(value = "클럽 id", required = true) @RequestParam(name = "club_id", required = true) int clubId,
+    public ResponseEntity<Void> deleteClubSubs(@ApiParam(value = "클럽 id", required = true) @RequestParam(name = "club_id", required = true) long clubId,
                                                @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
         clubService.deleteClubSubs(userHeaderModel.getUserId(),clubId);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -307,7 +307,7 @@ public class ClubController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/isSubClub", method= RequestMethod.GET)
-    public ResponseEntity<Boolean> isSubClub(@ApiParam(value = "클럽 id", required = true) @RequestParam(name = "club_id", required = true) int clubId,
+    public ResponseEntity<Boolean> isSubClub(@ApiParam(value = "클럽 id", required = true) @RequestParam(name = "club_id", required = true) long clubId,
                                                @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
         boolean isSubClub = clubService.selectIsSubClub(userHeaderModel.getUserId(), clubId);
         return new ResponseEntity<>(isSubClub, HttpStatus.OK);
@@ -322,8 +322,8 @@ public class ClubController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/SubClubList", method= RequestMethod.GET)
-    public ResponseEntity<List<Integer>> SubClubList(@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
-        List<Integer> clubList = clubService.selectSubClubList(userHeaderModel.getUserId());
+    public ResponseEntity<List<Long>> SubClubList(@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
+        List<Long> clubList = clubService.selectSubClubList(userHeaderModel.getUserId());
         return new ResponseEntity<>(clubList, HttpStatus.OK);
     }
 
@@ -337,7 +337,7 @@ public class ClubController {
     })
     @RequestMapping(value = "/ClubPackage", method= RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> ClubPackage(@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
-                                                           @ApiParam(value = "클럽 id", required = true) @RequestParam(name = "club_id", required = true) int clubId) throws Exception{
+                                                           @ApiParam(value = "클럽 id", required = true) @RequestParam(name = "club_id", required = true) long clubId) throws Exception{
 
         Map<String, Object> clubPackage = new HashMap();
 

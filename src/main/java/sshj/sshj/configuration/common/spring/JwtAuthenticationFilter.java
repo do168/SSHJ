@@ -33,6 +33,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         // 유효한 토큰인지 확인합니다.
         if (token != null && jwtTokenProvider.validateToken(token)) {
             // 토큰이 유효하면 토큰으로부터 유저 정보를 받아옵니다.
+            // 원래는 Userservice 를 통해 디비에 저장된 유저 정보와 비교를 해야하지만 이는 토큰 사용의 장점과 모순되는 점이 많음
+            // 따라서 유효성만을 검사한 후 Authentication 객체를 만들어 SecurityContextHolder에 저장
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
             // SecurityContext 에 Authentication 객체를 저장합니다.
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -43,6 +45,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             userHeaderModel.setLoginId(userDto.getLoginId());
             userHeaderModel.setRole(userDto.getRole());
             userHeaderModel.setUserId(userDto.getUserId());
+            // HttpServletRequest에 생성한 UserHeaderModel 객체를 담아 보낸다.
+            // 다른 api에서 @ReqeustAttribute Annotation을 통해 정보 사용이 가능하다
             request.setAttribute("UserHeaderInfo", userHeaderModel);
         }
         chain.doFilter(request, response);

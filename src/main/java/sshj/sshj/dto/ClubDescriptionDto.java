@@ -4,11 +4,11 @@ import lombok.Data;
 
 @Data
 public class ClubDescriptionDto {
-    private int clubId;
+    private long clubId;
 
     private String description;
 
-    public ClubDescriptionDto(int clubId, String description) {
+    public ClubDescriptionDto(long clubId, String description) {
         this.clubId = clubId;
         this.description = description;
     }

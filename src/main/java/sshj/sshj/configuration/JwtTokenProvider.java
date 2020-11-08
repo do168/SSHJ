@@ -47,7 +47,7 @@ public class JwtTokenProvider {
     }
 
     // JWT 토큰 생성
-    public String createAccessToken(String userPk, int userId, String nickname, String role) {
+    public String createAccessToken(String userPk, long userId, String nickname, String role) {
         List<String> roles = new ArrayList<>();
         roles.add(role);
         Claims claims = Jwts.claims().setSubject(userPk); // JWT payload 에 저장되는 정보단위
@@ -111,6 +111,8 @@ public class JwtTokenProvider {
     // 토큰의 유효성 + 만료일자 확인
     public boolean validateToken(String jwtToken) {
         try {
+            // 이 부분 고칠필요가 있다. secretKey로 복호화하는데, 엉뚱한 토큰을 보낸다면 Signature에서 걸러줄 필요가 있다.
+            // 그 부분 추가가 필요하다.
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
             // 블랙리스트에 access_token이나 refresh_token이 존재하는지 체크, 존재한다면 로그아웃한 토큰이므로 통과 X
             boolean inblacklist = true;

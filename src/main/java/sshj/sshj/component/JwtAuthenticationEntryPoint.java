@@ -10,6 +10,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
+//권한 실패 시 핸들링되어 오는 컴포넌트
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Serializable {
 
