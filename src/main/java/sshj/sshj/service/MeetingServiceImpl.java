@@ -21,8 +21,8 @@ public class MeetingServiceImpl implements MeetingService {
     private S3FileMapper s3FileMapper;
     
     @Override
-    public void insertMeeting(MeetingDto dto) throws Exception {
-        meetingMapper.insertMeeting(dto);
+    public int insertMeeting(MeetingDto dto) throws Exception {
+        return meetingMapper.insertMeeting(dto);
     }
 
     @Override

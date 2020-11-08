@@ -14,6 +14,7 @@
 				explanation_title,
 				explanation_content,
 				created_time,
+				meeting_place,
 				max_participant,
 				club_id,
 				meeting_place)
@@ -26,10 +27,14 @@
 				#{explanationTitle},
 				#{explanationContent},
 				now(),
+				#{meetingPlace},
 				#{maxParticipant},
 				#{clubId},
 				#{meetingPlace})
 		]]>
+		<selectKey keyProperty="id" resultType="Integer">
+        	SELECT LAST_INSERT_ID()
+    	</selectKey>
     </insert>
 
     <select id="selectMeeting" parameterType="long" resultType="sshj.sshj.dto.MeetingDto">
@@ -46,6 +51,7 @@
 				tm.created_time as createdTime,
 				tm.max_participant as maxParticipant,
 				tm.club_id as clubId,
+				tm.meeting_place as meetingPlace,
 				(SELECT nickname FROM tb_user WHERE user_id = tm.club_id ) as clubName,
 				(SELECT count(*) FROM tb_user_by_meeting WHERE meeting_id = #{meetingId}) as curParticipant,
 				EXISTS (
@@ -96,6 +102,7 @@
 				category as category,
 				explanation_title as explanationTitle,
 				explanation_content as explanationContent,
+				meeting_place as meetingPlace,
 				created_time as createdTime,
 				max_participant as maxParticipant,
 				club_id as clubId
@@ -116,6 +123,7 @@
 				category=#{category},
 				explanation_title=#{explanationTitle},
 				explanation_content=#{explanationContent},
+				meeting_place=#{meetingPlace},
 				created_time=now(),
 				max_participant=#{maxParticipant}
 			WHERE meeting_id=#{meetingId}
@@ -141,6 +149,7 @@
 				explanation_title as explanationTitle,
 				explanation_content as explanationContent,
 				created_time as createdTime,
+				meeting_place as meetingPlace,
 				max_participant as maxParticipant,
 				club_id as clubId
 			FROM
