@@ -3,7 +3,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="sshj.sshj.mapper.MeetingMapper">
-    <insert id="insertMeeting" parameterType="sshj.sshj.dto.MeetingDto">
+	<insert id="insertMeeting"
+		parameterType="sshj.sshj.dto.MeetingDto">
         <![CDATA[
 			INSERT INTO tb_meeting(
 				meeting_name,
@@ -16,8 +17,7 @@
 				created_time,
 				meeting_place,
 				max_participant,
-				club_id,
-				meeting_place)
+				club_id)
 			VALUES(
 				#{meetingName},
 				#{deadline},
@@ -29,15 +29,15 @@
 				now(),
 				#{meetingPlace},
 				#{maxParticipant},
-				#{clubId},
-				#{meetingPlace})
+				#{clubId})
 		]]>
 		<selectKey keyProperty="id" resultType="Integer">
-        	SELECT LAST_INSERT_ID()
-    	</selectKey>
-    </insert>
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
 
-    <select id="selectMeeting" parameterType="long" resultType="sshj.sshj.dto.MeetingDto">
+	<select id="selectMeeting" parameterType="long"
+		resultType="sshj.sshj.dto.MeetingDto">
         <![CDATA[
 			SELECT
 				tm.meeting_id as meetingId,
@@ -63,9 +63,10 @@
 			WHERE
 			    tm.meeting_id=#{meetingId};
 		]]>
-    </select>
+	</select>
 
-    <select id="selectMeetingList" resultType="sshj.sshj.dto.MeetingDto">
+	<select id="selectMeetingList"
+		resultType="sshj.sshj.dto.MeetingDto">
         <![CDATA[
 			SELECT
 				tbm.meeting_id as meetingId,
@@ -89,9 +90,10 @@
 			ON
 				tbm.club_id = tbu.user_id;
 		]]>
-    </select>
+	</select>
 
-    <select id="selectClubByMeetingList" parameterType="long" resultType="sshj.sshj.dto.MeetingDto">
+	<select id="selectClubByMeetingList" parameterType="long"
+		resultType="sshj.sshj.dto.MeetingDto">
         <![CDATA[
 			SELECT
 				meeting_id as meetingId,
@@ -111,9 +113,10 @@
 			WHERE
 			    club_id=#{clubId}
 		]]>
-    </select>
+	</select>
 
-    <update id="updateMeeting" parameterType="sshj.sshj.dto.MeetingDto">
+	<update id="updateMeeting"
+		parameterType="sshj.sshj.dto.MeetingDto">
         <![CDATA[
 			UPDATE tb_meeting
 			SET meeting_name=#{meetingName},
@@ -128,16 +131,17 @@
 				max_participant=#{maxParticipant}
 			WHERE meeting_id=#{meetingId}
 		]]>
-    </update>
+	</update>
 
-    <delete id="deleteMeeting" parameterType="long">
+	<delete id="deleteMeeting" parameterType="long">
         <![CDATA[
             DELETE FROM tb_meeting
             WHERE meeting_id=#{meetingId}
         ]]>
-    </delete>
+	</delete>
 
-    <select id="selectUserByMeetingList" resultType="sshj.sshj.dto.MeetingDto">
+	<select id="selectUserByMeetingList"
+		resultType="sshj.sshj.dto.MeetingDto">
         <![CDATA[
 			SELECT
 				meeting_id as meetingId,
@@ -157,9 +161,9 @@
 			WHERE
 			    meeting_id IN (SELECT meeting_id FROM tb_user_by_meeting WHERE user_id = #{userId})
 		]]>
-    </select>
+	</select>
 
-    <insert id="insertMeetingLike">
+	<insert id="insertMeetingLike">
         <![CDATA[
         INSERT INTO tb_meeting_like(
             user_id,
@@ -168,12 +172,12 @@
         #{userId},
         #{meetingId})
         ]]>
-    </insert>
+	</insert>
 
-    <delete id="deleteMeetingLike">
+	<delete id="deleteMeetingLike">
         <![CDATA[
             DELETE FROM tb_meeting_like
             WHERE user_id=#{userId} AND meeting_id=#{meetingId}
         ]]>
-    </delete>
+	</delete>
 </mapper>

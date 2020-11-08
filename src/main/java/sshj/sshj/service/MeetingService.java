@@ -8,7 +8,7 @@ public interface MeetingService {
 	
     int insertMeeting(MeetingDto dto) throws Exception;
 
-    MeetingDto selectMeeting(long meetingId) throws Exception;
+    MeetingDto selectMeeting(long userId, long meetingId) throws Exception;
 
     void updateMeeting(MeetingDto dto) throws Exception;
 
