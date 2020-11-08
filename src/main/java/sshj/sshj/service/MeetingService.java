@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface MeetingService {
 	
-    int insertMeeting(MeetingDto dto) throws Exception;
+	MeetingDto insertMeeting(MeetingDto dto) throws Exception;
 
     MeetingDto selectMeeting(long userId, long meetingId) throws Exception;
 

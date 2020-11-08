@@ -104,12 +104,12 @@
         ]]>
     </insert>
 
-    <select id="selectClubSubsUserList" parameterType="long" resultType="list">
+    <select id="selectClubSubsUserList" parameterType="long" resultType="int">
         <![CDATA[
             SELECT user_id
             FROM tb_club_subscription
             WHERE club_id = #{clubId}
-    ]]>
+   		]]>
     </select>
 
     <delete id="deleteClubSubs" parameterType="int">

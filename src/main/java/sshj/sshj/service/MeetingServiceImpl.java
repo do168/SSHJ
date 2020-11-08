@@ -5,10 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
 import sshj.sshj.dto.MeetingDto;
 import sshj.sshj.mapper.MeetingMapper;
 import sshj.sshj.mapper.S3FileMapper;
 
+@Slf4j
 @Service
 public class MeetingServiceImpl implements MeetingService {
 	
@@ -21,8 +23,14 @@ public class MeetingServiceImpl implements MeetingService {
     private S3FileMapper s3FileMapper;
     
     @Override
-    public int insertMeeting(MeetingDto dto) throws Exception {
-        return meetingMapper.insertMeeting(dto);
+    public MeetingDto insertMeeting(MeetingDto dto) throws Exception {
+        
+    	int cnt = meetingMapper.insertMeeting(dto);
+    	if(cnt < 1) {
+    		log.info("insert failed!");
+    	}
+    	
+    	return dto;
     }
 
     @Override

@@ -47,16 +47,16 @@ public class MeetingController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/create", method= RequestMethod.POST)
-    public ResponseEntity<Integer> createMeeting(
+    public ResponseEntity<MeetingDto> createMeeting(
             @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
             @ModelAttribute MeetingDto meetingDto) throws Exception{
         
-    	int meetingId = meetingService.insertMeeting(meetingDto);
+    	MeetingDto resultDto = meetingService.insertMeeting(meetingDto);
         
         // 모임 생성 시 해당 동아리를 구독 중이던 유저들에게 푸시알림
-        expoPushService.sendingPushMeetingCreated(userHeaderModel.getUserId());
+//        expoPushService.sendingPushMeetingCreated(userHeaderModel.getUserId());
         
-        return new ResponseEntity<Integer>(meetingId, HttpStatus.OK);
+        return new ResponseEntity<MeetingDto>(resultDto, HttpStatus.OK);
     }
 
     @ApiOperation(

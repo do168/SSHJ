@@ -9,7 +9,7 @@ import java.util.List;
 @Mapper
 @Repository
 public interface MeetingMapper {
-    int insertMeeting(MeetingDto dto) throws Exception;
+	int insertMeeting(MeetingDto dto) throws Exception;
     MeetingDto selectMeeting(long userId, long meetingId) throws Exception;
     void updateMeeting(MeetingDto dto) throws Exception;
     void deleteMeeting(long meetingId) throws Exception;
