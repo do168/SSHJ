@@ -31,7 +31,7 @@
 				#{maxParticipant},
 				#{clubId})
 		]]>
-		<selectKey keyProperty="id" resultType="Integer">
+		<selectKey keyProperty="meeting_id" resultType="Integer">
 			SELECT LAST_INSERT_ID()
 		</selectKey>
 	</insert>
