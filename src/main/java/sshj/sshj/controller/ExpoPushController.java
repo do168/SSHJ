@@ -47,6 +47,7 @@ public class ExpoPushController {
             return new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);
         }
         String msg = "expoPush token saved success";
+        log.info("msg");
         return new ResponseEntity<>(msg, HttpStatus.OK);
 
 
