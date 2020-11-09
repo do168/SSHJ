@@ -56,7 +56,7 @@ public class MeetingController {
     	MeetingDto resultDto = meetingService.insertMeeting(meetingDto);
         
         // 모임 생성 시 해당 동아리를 구독 중이던 유저들에게 푸시알림
-//        expoPushService.sendingPushMeetingCreated(userHeaderModel.getUserId());
+        expoPushService.sendingPushMeetingCreated(userHeaderModel.getUserId());
         
         return new ResponseEntity<MeetingDto>(resultDto, HttpStatus.OK);
     }
