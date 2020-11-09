@@ -104,7 +104,7 @@
         ]]>
     </insert>
 
-    <select id="selectClubSubsUserList" parameterType="long" resultType="int">
+    <select id="selectClubSubsUserList" parameterType="long" resultType="long">
         <![CDATA[
             SELECT user_id
             FROM tb_club_subscription

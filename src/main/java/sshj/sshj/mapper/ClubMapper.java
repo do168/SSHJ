@@ -20,7 +20,7 @@ public interface ClubMapper {
     int selectClubNoticeCnt(long noticeId) throws Exception;
     void insertClubSubs(long userId,long clubId) throws Exception;
     void deleteClubSubs(long userId,long clubId) throws Exception;
-    List selectClubSubsUserList(long clubId) throws Exception;
+    List<Long> selectClubSubsUserList(long clubId) throws Exception;
 
 
     void insertClubDescription(ClubDescriptionDto clubDescriptionDto) throws Exception;
