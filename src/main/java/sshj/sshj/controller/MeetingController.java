@@ -71,7 +71,7 @@ public class MeetingController {
     public ResponseEntity<MeetingDto> readMeeting(
     		@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
     		@ApiParam("meetingId") @RequestParam("meetingId")long meetingId ) throws Exception{
-        MeetingDto meetingDto=meetingService.selectMeeting(meetingId);
+        MeetingDto meetingDto=meetingService.selectMeeting(userHeaderModel.getUserId(), meetingId);
         return new ResponseEntity<>(meetingDto,HttpStatus.OK);
     }
 
