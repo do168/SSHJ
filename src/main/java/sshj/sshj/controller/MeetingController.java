@@ -47,7 +47,7 @@ public class MeetingController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/create", method= RequestMethod.POST)
-    public ResponseEntity<Void> createMeeting(
+    public ResponseEntity<MeetingDto> createMeeting(
             @ModelAttribute MeetingDto meetingDto) throws Exception{
         
     	log.info("meetingDto [{}]", meetingDto);
@@ -56,7 +56,7 @@ public class MeetingController {
         
         // 모임 생성 시 해당 동아리를 구독 중이던 유저들에게 푸시알림
 //        expoPushService.sendingPushMeetingCreated(meetingDto.getClubId());
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        return new ResponseEntity<MeetingDto>(resultDto, HttpStatus.OK);
     }
 
     @ApiOperation(
