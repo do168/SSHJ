@@ -69,7 +69,7 @@
 
     <insert id="insertClubNoticeLike" parameterType="long">
         <![CDATA[
-        INSERT longO tb_club_notice_like(
+        INSERT INTO tb_club_notice_like(
             user_id,
             notice_id)
         VALUES(
@@ -95,7 +95,7 @@
 
     <insert id="insertClubSubs" parameterType="long">
         <![CDATA[
-        INSERT longO tb_club_subscription(
+        INSERT INTO tb_club_subscription(
             user_id,
             club_id)
         VALUES(
