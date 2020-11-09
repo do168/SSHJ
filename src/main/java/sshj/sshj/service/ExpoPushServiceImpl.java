@@ -27,9 +27,9 @@ public class ExpoPushServiceImpl implements ExpoPushService {
      */
     @Override
     public void sendingPushMeetingCreated(long clubId) throws Exception {
-        List<Integer> clubSubscribeUsers = clubMapper.selectClubSubsUserList(clubId);
+        List<Long> clubSubscribeUsers = clubMapper.selectClubSubsUserList(clubId);
         String clubName = userMapper.selectLoginId(clubId);
-        for (int userId : clubSubscribeUsers) {
+        for (long userId : clubSubscribeUsers) {
             String deviceToken = userMapper.selectUserDeviceToken(userId);
             String title = "모임 등록!";
             String message = clubName+"의 새 모임이 등록되었습니다!";
@@ -40,9 +40,9 @@ public class ExpoPushServiceImpl implements ExpoPushService {
 
     @Override
     public void sendingPushClubNoticeCreated(long clubId) throws Exception {
-        List<Integer> clubSubscribeUsers = clubMapper.selectClubSubsUserList(clubId);
+        List<Long> clubSubscribeUsers = clubMapper.selectClubSubsUserList(clubId);
         String clubName = userMapper.selectLoginId(clubId);
-        for (int userId : clubSubscribeUsers) {
+        for (long userId : clubSubscribeUsers) {
             String deviceToken = userMapper.selectUserDeviceToken(userId);
             String title = "공지 등록!";
             String message = clubName+"의 새 공지가 등록되었습니다!";
