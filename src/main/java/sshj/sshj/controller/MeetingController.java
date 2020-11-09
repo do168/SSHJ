@@ -51,6 +51,8 @@ public class MeetingController {
             @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
             @ModelAttribute MeetingDto meetingDto) throws Exception{
         
+    	log.info("meetingDto [{}]", meetingDto);
+    	
     	MeetingDto resultDto = meetingService.insertMeeting(meetingDto);
         
         // 모임 생성 시 해당 동아리를 구독 중이던 유저들에게 푸시알림
