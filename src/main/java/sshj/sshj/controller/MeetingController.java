@@ -47,8 +47,7 @@ public class MeetingController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/create", method= RequestMethod.POST)
-    public ResponseEntity<MeetingDto> createMeeting(
-            @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
+    public ResponseEntity<Void> createMeeting(
             @ModelAttribute MeetingDto meetingDto) throws Exception{
         
     	log.info("meetingDto [{}]", meetingDto);
@@ -56,9 +55,8 @@ public class MeetingController {
     	MeetingDto resultDto = meetingService.insertMeeting(meetingDto);
         
         // 모임 생성 시 해당 동아리를 구독 중이던 유저들에게 푸시알림
-        expoPushService.sendingPushMeetingCreated(userHeaderModel.getUserId());
-        
-        return new ResponseEntity<MeetingDto>(resultDto, HttpStatus.OK);
+        expoPushService.sendingPushMeetingCreated(meetingDto.getClubId());
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     @ApiOperation(
@@ -72,8 +70,8 @@ public class MeetingController {
     @RequestMapping(value = "/read", method= RequestMethod.GET)
     public ResponseEntity<MeetingDto> readMeeting(
     		@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
-    		@ApiParam("meetingId") @RequestParam("meetingId")int meetingId ) throws Exception{
-        MeetingDto meetingDto=meetingService.selectMeeting(userHeaderModel.getUserId() ,meetingId);
+    		@ApiParam("meetingId") @RequestParam("meetingId")long meetingId ) throws Exception{
+        MeetingDto meetingDto=meetingService.selectMeeting(meetingId);
         return new ResponseEntity<>(meetingDto,HttpStatus.OK);
     }
 

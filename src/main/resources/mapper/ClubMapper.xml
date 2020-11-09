@@ -112,7 +112,7 @@
    		]]>
     </select>
 
-    <delete id="deleteClubSubs" parameterType="int">
+    <delete id="deleteClubSubs" parameterType="long">
         <![CDATA[
             DELETE FROM tb_club_subscription
             WHERE user_id=#{userId} AND club_id=#{clubId}
@@ -161,7 +161,7 @@
             ]]>
     </select>
 
-    <select id="selectSubClubList" parameterType="long" resultType="list">
+    <select id="selectSubClubList" parameterType="long" resultType="long">
         <![CDATA[
             SELECT club_id
             from tb_club_subscription

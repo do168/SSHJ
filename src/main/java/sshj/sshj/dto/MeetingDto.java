@@ -51,7 +51,7 @@ public class MeetingDto {
     private String clubName;
 	
 	@ApiModelProperty(value = "동아리 번호")
-    private int clubId;
+    private long clubId;
 
 	@ApiModelProperty(value = "현재 사용자 신청여부")
     private boolean applied;
