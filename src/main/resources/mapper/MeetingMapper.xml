@@ -180,4 +180,27 @@
             WHERE user_id=#{userId} AND meeting_id=#{meetingId}
         ]]>
 	</delete>
+	
+	<insert id="registerUserApplied">
+        <![CDATA[
+        INSERT INTO tb_user_by_meeting(
+            user_id,
+            meeting_id,
+            created_time)
+        VALUES(
+        #{userId},
+        #{meetingId},
+        now())
+        ]]>
+	</insert>
+	
+	<delete id="deleteUserApplied">
+        <![CDATA[
+            DELETE FROM tb_user_by_meeting
+            WHERE user_id=#{userId} AND meeting_id=#{meetingId}
+        ]]>
+	</delete>
+	
+
+	
 </mapper>

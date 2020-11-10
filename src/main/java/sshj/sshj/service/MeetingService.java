@@ -23,4 +23,8 @@ public interface MeetingService {
     void insertMeetingLike(long userId,long meetingId) throws Exception;
 
     void deleteMeetingLike(long userId,long meetingId) throws Exception;
+    
+    void registerUserApplied(long userId, long meetingId) throws Exception;
+    
+    void deleteUserApplied(long userId, long meetingId) throws Exception;
 }

@@ -198,8 +198,29 @@ public class MeetingController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/user/register", method= RequestMethod.POST)
-    public ResponseEntity<Void> registerUserMeeting(@ApiParam(value = "모임 번호") @RequestParam("meetingId")long meetingId) throws Exception{
+    public ResponseEntity<Void> registerUserMeeting(
+    		@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
+    		@ApiParam(value = "모임 번호") @RequestParam("meetingId")long meetingId) throws Exception{
     	
+    	meetingService.registerUserApplied(userHeaderModel.getUserId(), meetingId);
+    	
+    	return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
+    @ApiOperation(
+            value = "유저 모임 참여 취소 Api"
+            , notes = "유저 모임 참여 취소 Api"
+            ,authorizations = {@Authorization (value = "JWT")}
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/user/cancel", method= RequestMethod.POST)
+    public ResponseEntity<Void> cancelUserMeeting(
+    		@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
+    		@ApiParam(value = "모임 번호") @RequestParam("meetingId")long meetingId) throws Exception{
+    	
+    	meetingService.deleteUserApplied(userHeaderModel.getUserId(), meetingId);
     	
     	return new ResponseEntity<>(HttpStatus.OK);
     }

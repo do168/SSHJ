@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import lombok.extern.slf4j.Slf4j;
+import springfox.documentation.annotations.ApiIgnore;
+import sshj.sshj.dto.UserHeaderModel;
 import sshj.sshj.service.UploadService;
 
 
@@ -43,9 +46,9 @@ public class UploadController {
 	})
 	@RequestMapping(value = "/profile", method=RequestMethod.POST)
 	public ResponseEntity<String> profileUpload(
-//		@ApiIgnore @RequestAttribute("userInfoModel") UserInfoModel userInfoModel,
+		@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
 		@RequestParam("file")MultipartFile multipartFile) throws IOException {
-		String imgUrl = uploadService.executeUploadProfile(multipartFile, 1);	
+		String imgUrl = uploadService.executeUploadProfile(multipartFile, userHeaderModel.getUserId());	
 		// TODO: 1=admin userInfoModel 생성시 교체
 		log.info("profile files uploaded[{}]", imgUrl);		
 		

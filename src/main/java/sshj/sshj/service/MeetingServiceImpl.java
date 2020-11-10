@@ -50,6 +50,7 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     public void deleteMeeting(long meetingId) throws Exception {
         meetingMapper.deleteMeeting(meetingId);
+//      업로드 된 파일들을 삭제 해야하는가 정책적으로 살펴보자
     }
 
     @Override
@@ -102,5 +103,23 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     public void deleteMeetingLike(long userId, long meetingId) throws Exception {
         meetingMapper.deleteMeetingLike(userId,meetingId);
+    }
+    
+    @Override
+    public void registerUserApplied(long userId, long meetingId) throws Exception {
+    	int cnt = meetingMapper.registerUserApplied(userId, meetingId);
+    	if(cnt != 1) {
+    		log.error("registerUserApplied count ERROR");
+    		throw new Exception();
+    	}
+    }
+    
+    @Override
+    public void deleteUserApplied(long userId, long meetingId) throws Exception {
+    	int cnt = meetingMapper.deleteUserApplied(userId, meetingId);
+    	if(cnt != 1) {
+    		log.error("deleteUserApplied count ERROR");
+    		throw new Exception();
+    	}
     }
 }
