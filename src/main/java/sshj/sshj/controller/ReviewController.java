@@ -67,7 +67,7 @@ public class ReviewController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/update", method= RequestMethod.POST)
+    @RequestMapping(value = "/update", method= RequestMethod.PATCH)
     public ResponseEntity<Void> updateReview(
     		@ApiIgnore @RequestAttribute("userId") Long userId, 
     		@ApiParam(value = "후기 번호") @RequestParam("reviewId")long reviewId,
@@ -86,7 +86,7 @@ public class ReviewController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/delete", method= RequestMethod.POST)
+    @RequestMapping(value = "/delete", method= RequestMethod.DELETE)
     public ResponseEntity<Void> deleteReview(
     		@ApiIgnore @RequestAttribute("userId") Long userId, 
     		@ApiParam(value = "후기 번호") @RequestParam("reviewId")long reviewId) throws Exception{

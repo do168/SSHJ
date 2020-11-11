@@ -123,7 +123,7 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/updateDescription", method= RequestMethod.POST)
+    @RequestMapping(value = "/updateDescription", method= RequestMethod.PATCH)
     public ResponseEntity<Void> updateClubDescription(@ApiParam(value = "클럽 description", required = true) @RequestParam(name = "description", required = true) String description,
                              @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
         ClubDescriptionDto clubDescriptionDto = new ClubDescriptionDto(userHeaderModel.getUserId(), description);
@@ -140,7 +140,7 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/deleteDescription", method= RequestMethod.POST)
+    @RequestMapping(value = "/deleteDescription", method= RequestMethod.DELETE)
     public ResponseEntity<Void> deleteClubDescription(
             @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel
     ) throws Exception{
@@ -203,7 +203,7 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/updateNotice", method= RequestMethod.POST)
+    @RequestMapping(value = "/updateNotice", method= RequestMethod.PUT)
     public ResponseEntity<Void> updateClubNotice(@ModelAttribute ClubNoticeDto dto) throws Exception{
         clubService.updateClubNotice(dto);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -218,7 +218,7 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/deleteNotice", method= RequestMethod.POST)
+    @RequestMapping(value = "/deleteNotice", method= RequestMethod.DELETE)
     public ResponseEntity<Void> deleteClubNotice(long noticeId) throws Exception{
         clubService.deleteClubNotice(noticeId);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -247,7 +247,7 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/deleteNoticeLike", method= RequestMethod.POST)
+    @RequestMapping(value = "/deleteNoticeLike", method= RequestMethod.DELETE)
     public ResponseEntity<Void> deleteClubNoticeLike(@ApiParam(value = "공지사항 id", required = true) @RequestParam(name = "notice_id", required = true) long noticeId,
                                                      @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
         clubService.deleteClubNoticeLike(userHeaderModel.getUserId(),noticeId);
@@ -262,7 +262,7 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/countNoticeLike", method= RequestMethod.POST)
+    @RequestMapping(value = "/countNoticeLike", method= RequestMethod.GET)
     public ResponseEntity<Integer> countClubNoticeLike(long noticeId) throws Exception{
         int cnt=clubService.selectClubNoticeCnt(noticeId);
         return new ResponseEntity<>(cnt,HttpStatus.OK);
@@ -291,7 +291,7 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/deleteSubs", method= RequestMethod.POST)
+    @RequestMapping(value = "/deleteSubs", method= RequestMethod.DELETE)
     public ResponseEntity<Void> deleteClubSubs(@ApiParam(value = "클럽 id", required = true) @RequestParam(name = "club_id", required = true) long clubId,
                                                @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
         clubService.deleteClubSubs(userHeaderModel.getUserId(),clubId);

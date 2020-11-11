@@ -28,7 +28,7 @@ public class MyPageController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/changenickname", method = RequestMethod.POST)
+    @RequestMapping(value = "/changenickname", method = RequestMethod.PATCH)
     public ResponseEntity<Boolean> changeNickname(
             @ApiParam(value = "입력 닉네임", required = true) @RequestParam(name = "chNickname", required = true) String chnickname
     ,@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception {

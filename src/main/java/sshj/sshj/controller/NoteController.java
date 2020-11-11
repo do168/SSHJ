@@ -31,7 +31,7 @@ public class NoteController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/sendMessage", method = RequestMethod.GET)
+    @RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
     public ResponseEntity<Boolean> sendNote(
             @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
             @ApiParam(value = "receiver", required = true) @RequestParam(name = "receiver", required = true) String receiver,

@@ -443,7 +443,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/sendEmail_searchId", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
+    @RequestMapping(value = "/sendEmail_searchId", method = RequestMethod.PATCH, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> sendEmail_searchId(
             @ApiParam(value = "email", required = true) @RequestParam(name = "email", required = true) String email
     ) throws Exception {
@@ -515,7 +515,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/searchPw", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
+    @RequestMapping(value = "/searchPw", method = RequestMethod.PATCH, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> searchPw(
             @ApiParam(value = "email", required = true) @RequestParam(name = "email", required = true) String email,
             @ApiParam(value = "loginId", required = true) @RequestParam(name = "loginId", required = true) String loginId,

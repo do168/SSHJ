@@ -84,7 +84,7 @@ public class MeetingController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/club/update", method= RequestMethod.POST)
+    @RequestMapping(value = "/club/update", method= RequestMethod.PUT)
     public ResponseEntity<Void> updateMeeting(@ModelAttribute MeetingDto meetingDto) throws Exception{
         meetingService.updateMeeting(meetingDto);
         return new ResponseEntity<Void>(HttpStatus.OK);
@@ -99,7 +99,7 @@ public class MeetingController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/club/delete", method= RequestMethod.POST)
+    @RequestMapping(value = "/club/delete", method= RequestMethod.DELETE)
     public ResponseEntity<Void> deleteMeeting(int meetingId) throws Exception{
         meetingService.deleteMeeting(meetingId);
         return new ResponseEntity<Void>(HttpStatus.OK);
@@ -183,7 +183,7 @@ public class MeetingController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/like/delete", method= RequestMethod.POST)
+    @RequestMapping(value = "/like/delete", method= RequestMethod.DELETE)
     public ResponseEntity<Void> deleteMeetingLike(int userId,int meetingId) throws Exception{
         meetingService.deleteMeetingLike(userId, meetingId);
         return new ResponseEntity<Void>(HttpStatus.OK);
@@ -215,7 +215,7 @@ public class MeetingController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/user/cancel", method= RequestMethod.POST)
+    @RequestMapping(value = "/user/cancel", method= RequestMethod.DELETE)
     public ResponseEntity<Void> cancelUserMeeting(
     		@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
     		@ApiParam(value = "모임 번호") @RequestParam("meetingId")long meetingId) throws Exception{
