@@ -85,7 +85,7 @@ public class MeetingController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/club/update", method= RequestMethod.PUT)
-    public ResponseEntity<Void> updateMeeting(@ModelAttribute MeetingDto meetingDto) throws Exception{
+    public ResponseEntity<Void> updateMeeting(@ApiParam(value = "모임 모델", required = true) @RequestParam(name = "MeetingDto", required = true) @ModelAttribute MeetingDto meetingDto) throws Exception{
         meetingService.updateMeeting(meetingDto);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }

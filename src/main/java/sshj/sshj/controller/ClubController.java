@@ -123,7 +123,7 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/updateDescription", method= RequestMethod.PATCH)
+    @RequestMapping(value = "/updateDescription", method= RequestMethod.PUT)
     public ResponseEntity<Void> updateClubDescription(@ApiParam(value = "클럽 description", required = true) @RequestParam(name = "description", required = true) String description,
                              @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
         ClubDescriptionDto clubDescriptionDto = new ClubDescriptionDto(userHeaderModel.getUserId(), description);
@@ -204,7 +204,7 @@ public class ClubController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/updateNotice", method= RequestMethod.PUT)
-    public ResponseEntity<Void> updateClubNotice(@ModelAttribute ClubNoticeDto dto) throws Exception{
+    public ResponseEntity<Void> updateClubNotice(@ApiParam(value = "동아리 공지 모델", required = true) @RequestParam(name = "clubNoticeDto", required = true) @ModelAttribute ClubNoticeDto dto) throws Exception{
         clubService.updateClubNotice(dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
