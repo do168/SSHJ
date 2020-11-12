@@ -85,7 +85,7 @@ public class MeetingController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/club/update", method= RequestMethod.PUT)
-    public ResponseEntity<Void> updateMeeting(@ApiParam(value = "모임 모델", required = true) @RequestParam(name = "MeetingDto", required = true) @ModelAttribute MeetingDto meetingDto) throws Exception{
+    public ResponseEntity<Void> updateMeeting(@ModelAttribute MeetingDto meetingDto) throws Exception{
         meetingService.updateMeeting(meetingDto);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
@@ -100,7 +100,7 @@ public class MeetingController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/club/delete", method= RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteMeeting(int meetingId) throws Exception{
+    public ResponseEntity<Void> deleteMeeting(@ApiParam("meetingId") @RequestParam("meetingId")int meetingId) throws Exception{
         meetingService.deleteMeeting(meetingId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
@@ -147,6 +147,7 @@ public class MeetingController {
         return new ResponseEntity<List>(list,HttpStatus.OK);
     }
 
+    // TODO: userId 바꿔야함
     @ApiOperation(
             value = "유저별 모임 읽기 Api"
             , notes = "유저별 모임 읽기 Api"
@@ -160,7 +161,9 @@ public class MeetingController {
         List<MeetingDto> list=meetingService.selectUserByMeetingList(userId);
         return new ResponseEntity<List>(list, HttpStatus.OK);
     }
-
+    
+    
+    // TODO: userId 바꿔야함
     @ApiOperation(
             value = "모임별 좋아요 삽입 Api"
             , notes = "모임별 좋아요 삽입 Api"
@@ -175,6 +178,7 @@ public class MeetingController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
+    // 	TODO: userId 바꿔야함
     @ApiOperation(
             value = "모임별 좋아요 삭제 Api"
             , notes = "모임별 좋아요 삭제 Api"
@@ -184,7 +188,7 @@ public class MeetingController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/like/delete", method= RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteMeetingLike(int userId,int meetingId) throws Exception{
+    public ResponseEntity<Void> deleteMeetingLike(int userId,@ApiParam(value = "모임 번호") @RequestParam("meetingId") int meetingId) throws Exception{
         meetingService.deleteMeetingLike(userId, meetingId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }

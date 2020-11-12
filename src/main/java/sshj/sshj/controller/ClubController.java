@@ -1,6 +1,8 @@
 package sshj.sshj.controller;
 
 import io.swagger.annotations.*;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Api(value="ClubController")
 @RequestMapping("/club")
 @RestController
@@ -205,7 +208,10 @@ public class ClubController {
     })
     @RequestMapping(value = "/updateNotice", method= RequestMethod.PUT)
     public ResponseEntity<Void> updateClubNotice(@ModelAttribute ClubNoticeDto dto) throws Exception{
-        clubService.updateClubNotice(dto);
+        
+    	log.info("[{}]",dto);
+    	
+    	clubService.updateClubNotice(dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
