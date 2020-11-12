@@ -204,7 +204,7 @@ public class ClubController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/updateNotice", method= RequestMethod.PUT)
-    public ResponseEntity<Void> updateClubNotice(@ApiParam(value = "동아리 공지 모델", required = true) @RequestParam(name = "clubNoticeDto", required = true) @ModelAttribute ClubNoticeDto dto) throws Exception{
+    public ResponseEntity<Void> updateClubNotice(@ModelAttribute ClubNoticeDto dto) throws Exception{
         clubService.updateClubNotice(dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
