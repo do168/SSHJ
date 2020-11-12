@@ -27,11 +27,12 @@ public class NoteController {
     @ApiOperation(
             value = "쪽지 보내기"
             , notes = "쪽지 보내기"
+            ,authorizations = {@Authorization(value = "JWT")}
     )
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/sendMessage", method = RequestMethod.GET)
+    @RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
     public ResponseEntity<Boolean> sendNote(
             @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
             @ApiParam(value = "receiver", required = true) @RequestParam(name = "receiver", required = true) String receiver,
@@ -51,6 +52,7 @@ public class NoteController {
     @ApiOperation(
             value = "쪽지함 보기"
             , notes = "쪽지함 보기"
+            ,authorizations = {@Authorization(value = "JWT")}
     )
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
@@ -74,6 +76,7 @@ public class NoteController {
     @ApiOperation(
             value = "특정인과의 쪽지 내용 보기"
             , notes = "특정인과의 쪽지 내용 보기"
+            ,authorizations = {@Authorization(value = "JWT")}
     )
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
