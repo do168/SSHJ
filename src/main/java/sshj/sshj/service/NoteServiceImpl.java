@@ -16,7 +16,7 @@ public class NoteServiceImpl implements NoteService {
     private NoteMapper noteMapper;
 
     @Override
-    public void sendMessage(String sender, String receiver, String msg) {
+    public void executeSendMessage(String sender, String receiver, String msg) {
         String time = time_now();
 
         NoteDto noteDto = NoteDto.builder()
@@ -30,7 +30,7 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<String> selectPersonList(String loginId) {
+    public List<NoteDto> selectPersonList(String loginId) {
         return noteMapper.selectPerson(loginId);
     }
 

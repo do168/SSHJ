@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface NoteService {
 
-    void sendMessage(String sender, String receiver, String msg);
+    void executeSendMessage(String sender, String receiver, String msg);
 
-    List<String> selectPersonList(String loginId);
+    List<NoteDto> selectPersonList(String loginId);
 
     List<NoteDto> selectMessages(String loginId, String other);
 

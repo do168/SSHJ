@@ -35,7 +35,7 @@ dependencies {
 	//aws
 	compile('org.springframework.cloud:spring-cloud-starter-aws')
 	
-	//aop
+	//aop // aspectJ로 움직인다
 	compile 'org.springframework.boot:spring-boot-starter-aop'
 	
 	//google lang

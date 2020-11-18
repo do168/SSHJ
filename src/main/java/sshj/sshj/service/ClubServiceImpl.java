@@ -92,4 +92,9 @@ public class ClubServiceImpl implements ClubService{
     public List<Long> selectSubClubList(long userId) throws Exception {
         return clubMapper.selectSubClubList(userId);
     }
+
+    @Override
+    public int selectClubSubscribeCnt(long clubId) throws Exception {
+        return clubMapper.selectClubSubscribeCnt(clubId);
+    }
 }

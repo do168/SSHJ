@@ -169,7 +169,13 @@
             ]]>
     </select>
 
-
+    <select id="selectClubSubscribeCnt" parameterType="long" resultType="int">
+        <![CDATA[
+            SELECT count(user_id)
+            FROM tb_club_subscription
+            where club_id = #{clubId}
+        ]]>
+    </select>
 
 
 

@@ -30,4 +30,5 @@ public interface ClubMapper {
 
     int selectIsSubClub(long userId, long clubId) throws Exception;
     List<Long> selectSubClubList(long userId) throws Exception;
+    int selectClubSubscribeCnt(long clubId) throws Exception;
 }

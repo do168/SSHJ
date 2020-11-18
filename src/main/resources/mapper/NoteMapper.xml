@@ -8,20 +8,20 @@
         <![CDATA[
 		/*	NoteMapper.insertMessage	*/
 		insert into tb_note (
-			sender, receiver, time, message
+			sender, receiver, send_time, message
 		) values (
-			#{sender}, #{receiver}, #{sendTime}, #{msg}
+			#{sender}, #{receiver}, #{sendTime}, #{message}
 		)
 	]]>
     </insert>
 
     <!-- 나와 쪽지를 주고 받은 유저 리스트	-->
-    <select id="selectPerson" parameterType="string" resultType="string">
+    <select id="selectPerson" parameterType="string" resultType="sshj.sshj.dto.NoteDto">
         <![CDATA[
 		/*	NoteMapper.selectPerson	*/
 		    SELECT
-		        sender
-		        receiver
+		        sender as sender,
+		        receiver as receiver
 		    FROM
 		        tb_note
 		    WHERE

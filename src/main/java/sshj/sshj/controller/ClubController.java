@@ -353,6 +353,7 @@ public class ClubController {
         clubPackage.put("club_description", clubService.selectClubDescription(clubId));
         clubPackage.put("club_profile_image", fileMapper.selectProfileImage(clubId, bucket));
         clubPackage.put("Is_user_subscribing_club", clubService.selectIsSubClub(userHeaderModel.getUserId(), clubId));
+        clubPackage.put("NumSubscribe", clubService.selectClubSubscribeCnt(clubId));
         return new ResponseEntity<>(clubPackage, HttpStatus.OK);
     }
 

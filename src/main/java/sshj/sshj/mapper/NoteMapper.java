@@ -12,7 +12,7 @@ public interface NoteMapper {
 
     void insertMessage(NoteDto noteDto);
 
-    List<String> selectPerson(String loginId);
+    List<NoteDto> selectPerson(String loginId);
 
     List<NoteDto> selectMessage(String loginId, String other);
 

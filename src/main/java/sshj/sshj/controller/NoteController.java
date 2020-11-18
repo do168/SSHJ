@@ -39,11 +39,11 @@ public class NoteController {
             @ApiParam(value = "msg", required = true) @RequestParam(name = "msg", required = true) String msg) throws Exception {
 
         try{
-            noteService.sendMessage(userHeaderModel.getLoginId(), receiver, msg);
+            noteService.executeSendMessage(userHeaderModel.getLoginId(), receiver, msg);
             log.info("발신 성공");
             return new ResponseEntity<>(true, HttpStatus.OK);
         } catch(Exception e) {
-            log.error("발신 실패 : \n e.toString()");
+            log.error("발신 실패 : \n"+ e.toString());
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
 
         }
@@ -58,17 +58,17 @@ public class NoteController {
             @ApiResponse(code = 200, message = "complete")
     })
     @RequestMapping(value = "/listMessages", method = RequestMethod.GET)
-    public ResponseEntity<List> listPerson(
+    public ResponseEntity<List<NoteDto>> listPerson(
             @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception {
 
-        List<String> relatedId = new ArrayList<>();
+        List<NoteDto> relatedId;
 
         try{
             relatedId = noteService.selectPersonList(userHeaderModel.getLoginId());
             log.info("쪽지함 성공");
             return new ResponseEntity<>(relatedId, HttpStatus.OK);
         } catch (Exception e){
-            log.error("쪽지함 불러오기 실패 \n e.toString()");
+            log.error("쪽지함 불러오기 실패 \n"+ e.toString());
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
@@ -93,7 +93,7 @@ public class NoteController {
             log.info("쪽지 내용 보기 성공");
             return new ResponseEntity<>(messageList, HttpStatus.OK);
         } catch (Exception e){
-            log.error("쪽지함 불러오기 실패 \n e.toString()");
+            log.error("쪽지함 불러오기 실패 \n"+ e.toString());
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
