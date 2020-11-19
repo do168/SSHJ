@@ -10,6 +10,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 import sshj.sshj.dto.ClubDescriptionDto;
+import sshj.sshj.dto.ClubInfoDto;
 import sshj.sshj.dto.ClubNoticeDto;
 import sshj.sshj.dto.UserHeaderModel;
 import sshj.sshj.mapper.S3FileMapper;
@@ -17,6 +18,7 @@ import sshj.sshj.service.ClubService;
 import sshj.sshj.service.ExpoPushService;
 import sshj.sshj.service.UserService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -331,6 +333,27 @@ public class ClubController {
     public ResponseEntity<List<Long>> SubClubList(@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
         List<Long> clubList = clubService.selectSubClubList(userHeaderModel.getUserId());
         return new ResponseEntity<>(clubList, HttpStatus.OK);
+    }
+
+    @ApiOperation(
+            value = "클럽 ID, 클럽 NAME 리스트"
+            , notes = "클럽 ID, 클럽 NAME 리스트"
+            ,authorizations = {@Authorization (value = "JWT")}
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/ShowClubNameAndId", method= RequestMethod.GET)
+    public ResponseEntity<List<Map<String, String>>> ShowClubNameAndId() throws Exception{
+
+        List<Map<String, String>> clubNameList = new ArrayList<>();
+        for(ClubInfoDto cid : clubService.selectClubIdAndClubName()) {
+            Map<String, String> mapInfo = new HashMap<>();
+            mapInfo.put("club_name", cid.getClubName());
+            mapInfo.put("club_id", Long.toString(cid.getClubId()));
+            clubNameList.add(mapInfo);
+        }
+        return new ResponseEntity<>(clubNameList, HttpStatus.OK);
     }
 
     @ApiOperation(

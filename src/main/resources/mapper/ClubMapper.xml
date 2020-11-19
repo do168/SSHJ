@@ -177,7 +177,13 @@
         ]]>
     </select>
 
-
+    <select id="selectClubIdAndClubName" resultType="sshj.sshj.dto.ClubInfoDto">
+        <![CDATA[
+            SELECT user_id as clubId, login_id as clubName
+            FROM tb_user
+            WHERE role = "ROLE_CLUB"
+        ]]>
+    </select>
 
 
 

@@ -1,6 +1,7 @@
 package sshj.sshj.service;
 
 import sshj.sshj.dto.ClubDescriptionDto;
+import sshj.sshj.dto.ClubInfoDto;
 import sshj.sshj.dto.ClubNoticeDto;
 
 import java.util.List;
@@ -25,4 +26,6 @@ public interface ClubService {
     boolean selectIsSubClub(long userId, long clubId) throws Exception;
     List<Long> selectSubClubList(long userId) throws Exception;
     int selectClubSubscribeCnt(long clubId) throws Exception;
+
+    List<ClubInfoDto> selectClubIdAndClubName() throws Exception;
 }

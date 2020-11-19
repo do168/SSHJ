@@ -3,6 +3,7 @@ package sshj.sshj.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sshj.sshj.dto.ClubDescriptionDto;
+import sshj.sshj.dto.ClubInfoDto;
 import sshj.sshj.dto.ClubNoticeDto;
 import sshj.sshj.mapper.ClubMapper;
 
@@ -96,5 +97,10 @@ public class ClubServiceImpl implements ClubService{
     @Override
     public int selectClubSubscribeCnt(long clubId) throws Exception {
         return clubMapper.selectClubSubscribeCnt(clubId);
+    }
+
+    @Override
+    public List<ClubInfoDto> selectClubIdAndClubName() throws Exception {
+        return clubMapper.selectClubIdAndClubName();
     }
 }

@@ -3,6 +3,7 @@ package sshj.sshj.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 import sshj.sshj.dto.ClubDescriptionDto;
+import sshj.sshj.dto.ClubInfoDto;
 import sshj.sshj.dto.ClubNoticeDto;
 
 import java.util.List;
@@ -31,4 +32,6 @@ public interface ClubMapper {
     int selectIsSubClub(long userId, long clubId) throws Exception;
     List<Long> selectSubClubList(long userId) throws Exception;
     int selectClubSubscribeCnt(long clubId) throws Exception;
+
+    List<ClubInfoDto> selectClubIdAndClubName() throws Exception;
 }
