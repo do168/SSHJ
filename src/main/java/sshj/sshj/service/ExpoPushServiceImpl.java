@@ -1,6 +1,8 @@
 package sshj.sshj.service;
 
 import io.github.jav.exposerversdk.*;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sshj.sshj.mapper.ClubMapper;
@@ -13,6 +15,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class ExpoPushServiceImpl implements ExpoPushService {
     @Autowired
     private ClubMapper clubMapper;
@@ -46,13 +49,22 @@ public class ExpoPushServiceImpl implements ExpoPushService {
             String deviceToken = userMapper.selectUserDeviceToken(userId);
             String title = "공지 등록!";
             String message = clubName+"의 새 공지가 등록되었습니다!";
+            try {
+            	if(deviceToken == null) {
+            		log.error("deviceToken is null [{}]", userId);
+            		return;
+            	}
+				else
+					expoPush(deviceToken, title, message);
 
-            expoPush(deviceToken, title, message);
+            } catch(Exception e){
+            	log.error("",e);
+            }
         }
     }
 
 
-    public void expoPush(String deviceToken, String title, String message) throws PushClientException, InterruptedException {
+    private void expoPush(String deviceToken, String title, String message) throws PushClientException, InterruptedException {
         if (!PushClient.isExponentPushToken(deviceToken))
             throw new Error("Token:" + deviceToken + " is not a valid token");
 
