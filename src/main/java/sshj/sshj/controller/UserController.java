@@ -243,7 +243,7 @@ public class UserController {
             @ApiResponse(code = 200, message = "complete")
     })
     @RequestMapping(value = "/signin", method = RequestMethod.POST, produces= MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, String>> singIn(
+    public ResponseEntity<Map<String, String>> signIn(
             @ApiParam(value = "아이디", required = true) @RequestParam(name = "loginId", required = true) String loginId,
             @ApiParam(value = "패스워드", required = true) @RequestParam(name = "password", required = true) String password) throws Exception {
 
