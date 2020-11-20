@@ -203,6 +203,8 @@ public class UserController {
     public ResponseEntity<String> signUp(
             @ModelAttribute final UserInfoModel userInfoModel) throws Exception {
         
+    	log.info("userInfoModel [{}]",userInfoModel);
+    	
     	String loginId = userInfoModel.getLoginId();
     	userInfoModel.setEmail(loginId + "@uos.ac.kr");
     	
