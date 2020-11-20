@@ -107,10 +107,10 @@
         <![CDATA[
 		/*	UserMapper.insertCodeEmail	*/
 		insert into tb_codeemail (
-			code, email, created_time
+			email, code, created_time
 		) values (
-			#{code}, #{email}, #{time}
-		)
+			#{email}, #{code}, #{time}
+		) on duplicate key update email=#{email}, code=#{code}, created_time=#{time}
 	]]>
     </insert>
 
