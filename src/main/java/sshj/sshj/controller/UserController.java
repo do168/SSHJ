@@ -248,6 +248,13 @@ public class UserController {
             @ApiParam(value = "아이디", required = true) @RequestParam(name = "loginId", required = true) String loginId,
             @ApiParam(value = "패스워드", required = true) @RequestParam(name = "password", required = true) String password) throws Exception {
 
+    	if(!loginId.matches("^[a-zA-Z0-9]*$")) {
+            log.info("아이디는 영문 혹은 숫자로만 가능합니다.");
+            String msg = "아이디는 영문 혹은 숫자로만 가능합니다.";
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    	
+    	loginId = loginId.split("@")[0];
         UserDto userDto = userService.selectUser(loginId);
         log.info("test");
         if (userDto == null || !passwordEncoder.matches(password, userDto.getPassword())) {
@@ -526,29 +533,19 @@ public class UserController {
     })
     @RequestMapping(value = "/searchPw", method = RequestMethod.PATCH, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> searchPw(
-            @ApiParam(value = "email", required = true) @RequestParam(name = "email", required = true) String email,
             @ApiParam(value = "loginId", required = true) @RequestParam(name = "loginId", required = true) String loginId,
             @ApiParam(value = "newpw", required = true) @RequestParam(name = "newqw", required = true) String newPw
     ) throws Exception {
 
         UserDto userDto = userService.selectUser(loginId);
-        if (userDto == null || !userDto.getEmail().equals(email)) {
+        
+        if (userDto == null) {
             return new ResponseEntity("user does not exist", HttpStatus.BAD_REQUEST);
         } else {
+			userService.updateUserPassword(loginId, passwordEncoder.encode(newPw));
 
-            if (userDto.getEmail().equals(email)) {
-                try {
-                    userService.updateUserPassword(loginId, passwordEncoder.encode(newPw));
-                }
-                catch (Exception e){
-                    log.error(e.getMessage());
-                }
-                String msg = "비밀번호가 변경되었습니다.";
-                return new ResponseEntity(msg, HttpStatus.OK);
-            } else {
-                String msg = "아이디와 이메일이 일치하지 않습니다";
-                return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
-            }
+			String msg = "비밀번호가 변경되었습니다.";
+			return new ResponseEntity(msg, HttpStatus.OK);
         }
     }
 }
