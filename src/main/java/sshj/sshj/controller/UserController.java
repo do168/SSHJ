@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -248,15 +247,9 @@ public class UserController {
             @ApiParam(value = "아이디", required = true) @RequestParam(name = "loginId", required = true) String loginId,
             @ApiParam(value = "패스워드", required = true) @RequestParam(name = "password", required = true) String password) throws Exception {
 
-    	if(!loginId.matches("^[a-zA-Z0-9]*$")) {
-            log.info("아이디는 영문 혹은 숫자로만 가능합니다.");
-            String msg = "아이디는 영문 혹은 숫자로만 가능합니다.";
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    	
     	loginId = loginId.split("@")[0];
         UserDto userDto = userService.selectUser(loginId);
-        log.info("test");
+        
         if (userDto == null || !passwordEncoder.matches(password, userDto.getPassword())) {
             Map<String, String> error = new HashMap<>();
             error.put("error", "id or password is not valid");
