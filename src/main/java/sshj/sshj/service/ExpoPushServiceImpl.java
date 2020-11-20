@@ -133,12 +133,7 @@ public class ExpoPushServiceImpl implements ExpoPushService {
                         errorTicketMessagesString
         );
 
-        // Countdown 30s
-        int wait = 30;
-        for (int i = wait; i >= 0; i--) {
-            System.out.print("Waiting for " + wait + " seconds. " + i + "s\r");
-            Thread.sleep(1000);
-        }
+        Thread.sleep(1000);
         System.out.println("Fetching reciepts...");
 
         List<String> ticketIds = (client.getTicketIdsFromPairs(okTicketMessages));

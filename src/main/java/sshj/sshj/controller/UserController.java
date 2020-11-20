@@ -202,16 +202,21 @@ public class UserController {
     @RequestMapping(value = "/signup", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> signUp(
             @ModelAttribute final UserInfoModel userInfoModel) throws Exception {
-        String loginId = userInfoModel.getLoginId();
+        
+    	String loginId = userInfoModel.getLoginId();
+    	userInfoModel.setEmail(loginId + "@uos.ac.kr");
+    	
         if(userService.selectUser(loginId)!=null) {
             String msg = "이미 존재하는 아이디입니다";
             return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
+        
         if (!userService.selectCode(userInfoModel.getEmail()).equals(userInfoModel.getCode())) {
             log.info(userService.selectCode(userInfoModel.getEmail())+" "+userInfoModel.getCode());
             String msg = "인증코드가 일치하지 않습니다.";
             return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
+        
         userService.insertUser(userInfoModel);
         String msg = "회원가입 성공";
         return new ResponseEntity<>(msg, HttpStatus.OK);
