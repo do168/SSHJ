@@ -165,7 +165,8 @@ public class ClubController {
     @RequestMapping(value = "/createNotice", method= RequestMethod.POST)
     public ResponseEntity<Void> createClubNotice(@ModelAttribute ClubNoticeDto clubNoticeDto,
                                                  @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
-        clubService.insertClubNotice(clubNoticeDto);
+    	clubNoticeDto.setClubId(userHeaderModel.getUserId());
+    	clubService.insertClubNotice(clubNoticeDto);
         // 동아리 공지 생성 시 구독한 유저들에게 푸시알림
         expoPushService.sendingPushClubNoticeCreated(userHeaderModel.getUserId());
         return new ResponseEntity<>(HttpStatus.OK);
