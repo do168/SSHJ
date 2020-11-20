@@ -24,8 +24,10 @@ import java.util.Locale;
 @RequiredArgsConstructor
 @PropertySource("classpath:aws.yml")
 public class UserService implements UserDetailsService {
-    @Value("${cloud.aws.sender")
+    
+	@Value("${cloud.aws.sender")
     private String sender;
+    
     @Autowired
     private PasswordEncoder passwordEncoder;
 
