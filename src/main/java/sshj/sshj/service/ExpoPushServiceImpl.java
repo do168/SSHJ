@@ -38,6 +38,17 @@ public class ExpoPushServiceImpl implements ExpoPushService {
             String message = clubName+"의 새 모임이 등록되었습니다!";
 
             expoPush(deviceToken, title, message);
+            try {
+            	if(deviceToken == null) {
+            		log.error("deviceToken is null [{}]", userId);
+            		return;
+            	}
+				else
+					expoPush(deviceToken, title, message);
+
+            } catch(Exception e){
+            	log.error("",e);
+            }
         }
     }
 
