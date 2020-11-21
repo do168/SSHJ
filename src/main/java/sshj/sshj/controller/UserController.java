@@ -3,7 +3,6 @@ package sshj.sshj.controller;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -17,13 +16,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.jsonwebtoken.ExpiredJwtException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
+import sshj.sshj.component.SSHZUtil;
 import sshj.sshj.configuration.JwtTokenProvider;
 import sshj.sshj.dto.CodeInfoModel;
 import sshj.sshj.dto.UserDto;
@@ -48,6 +47,9 @@ public class UserController {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
+    @Autowired
+    private SSHZUtil sshzUtil;
+
     /**
      * 생성할 아이디 정규식 체크 & 중복 체크
      * @param loginId
@@ -55,40 +57,39 @@ public class UserController {
      *         else HttpStatus.BAD_REQUEST
      * @throws Exception
      */
-    @ApiOperation(
-            value = "아이디 중복 확인"
-            , notes = "아이디 중복 확인"
-    )
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "complete")
-    })
-    @RequestMapping(value = "/signup/idcheck", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
-    public ResponseEntity<String> idCheck(
-            @ApiParam(value = "입력 아이디", required = true) @RequestParam(name = "loginId", required = true) String loginId) throws Exception {
-
-        if(!loginId.matches("^[a-zA-Z0-9]*$")) {
-            log.info("아이디는 영문 혹은 숫자로만 가능합니다.");
-            String msg = "아이디는 영문 혹은 숫자로만 가능합니다.";
-            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
-        }
-
-        if (userService.selectUserLoginId(loginId) == 0) {
-            log.info("사용 가능한 아이디입니다.");
-            String msg = "사용 가능한 아이디입니다.";
-            return new ResponseEntity<>(msg, HttpStatus.OK);
-        }
-
-
-        else {
-            log.info("중복된 아이디입니다");
-            String msg = "중복된 아이디입니다";
-            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
-        }
-    }
+//    @ApiOperation(
+//            value = "아이디 중복 확인"
+//            , notes = "아이디 중복 확인"
+//    )
+//    @ApiResponses(value = {
+//            @ApiResponse(code = 200, message = "complete")
+//    })
+//    @RequestMapping(value = "/signup/idcheck", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
+//    public ResponseEntity<String> idCheck(
+//            @ApiParam(value = "입력 아이디", required = true) @RequestParam(name = "loginId", required = true) String loginId) throws Exception {
+//
+//        if(!sshzUtil.isLoginReg(loginId)) {
+//            String msg = "아이디는 영문 혹은 숫자로만 가능합니다.";
+//            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+//        }
+//
+//        if (userService.selectUserLoginId(loginId) == 0) {
+//            log.info("사용 가능한 아이디입니다.");
+//            String msg = "사용 가능한 아이디입니다.";
+//            return new ResponseEntity<>(msg, HttpStatus.OK);
+//        }
+//
+//
+//        else {
+//            log.info("중복된 아이디입니다");
+//            String msg = "중복된 아이디입니다";
+//            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
     /**
      * 생성할 닉네임 중복 체크
-     * @param nickname
+     * @param nickname 닉네임
      * @return HttpStatus.Ok if 사용 가능
      *         else HttpStatus.BAD_REQUEST
      * @throws Exception
@@ -102,7 +103,7 @@ public class UserController {
     })
     @RequestMapping(value = "/signup/nicknamecheck", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> nicknameCheck(
-            @ApiParam(value = "입력 닉네임", required = true) @RequestParam(name = "nickname", required = true) String nickname) throws Exception {
+            @ApiParam(value = "입력 닉네임", required = true) @RequestParam(name = "nickname") String nickname) throws Exception {
 
         if (userService.selectUserNicknameIsOk(nickname) == 0) {
             log.info("사용 가능한 닉네임입니다.");
@@ -117,7 +118,7 @@ public class UserController {
 
     /**
      * 입력한 이메일 중복 검사 후 인증코드 발신
-     * @param email
+     * @param email 이메일
      * @return true if 이메일 발신 성공
      *         else false
      * @throws Exception
@@ -131,21 +132,28 @@ public class UserController {
     })
     @RequestMapping(value = "/signup/sendEmail", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> sendEmail(
-            @ApiParam(value = "입력 이메일", required = true) @RequestParam(name = "email", required = true) String email) throws Exception {
-//        if (email.matches())
+            @ApiParam(value = "입력 이메일", required = true) @RequestParam(name = "email") String email) throws Exception {
+
+        // 이메일 도메인 확인
+        if (!sshzUtil.isEmailReg(email)) {
+            String msg = "해당 대학교의 이메일이 아닙니다";
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+        }
+
+        // 이미 가입된 이메일 처리
         if (userService.selectUserEmail(email) != null) {
             log.info(email+":  it is used email, please use other email");
             String msg = "이미 인증에 사용된 이메일입니다. 다른 이메일을 사용해주세요";
 
             return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
-        try {
-            userService.sendEmail(email);
-            log.info("success");
+
+        // 인증 이메일 발신
+        if(userService.sendEmail(email)){
             String msg = email+": 인증 이메일 발신 성공";
             return new ResponseEntity<>(msg, HttpStatus.OK);
-        } catch (Exception e) {
-            log.info(e.toString());
+        }
+        else{
             String msg = email+": 인증 이메일 발신 실패";
             return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
@@ -153,11 +161,10 @@ public class UserController {
 
     /**
      * 인증코드와 이메일을 비교하여 DB와 일치하는지 확인
-     * @param code
-     * @param email
+     * @param code 인증코드
+     * @param email 이메일
      * @return true if 인증코드 일치
      *         else false
-     * @throws Exception
      */
     @ApiOperation(
             value = "인증 확인"
@@ -168,13 +175,18 @@ public class UserController {
     })
     @RequestMapping(value = "/signup/certificate", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> certificate(
-            @ApiParam(value = "입력 코드", required = true) @RequestParam(name = "insert_code", required = true) String code,
-            @ApiParam(value = "입력 이메일", required = true) @RequestParam(name = "insert_email", required = true) String email) throws Exception {
+            @ApiParam(value = "입력 코드", required = true) @RequestParam(name = "insert_code") String code,
+            @ApiParam(value = "입력 이메일", required = true) @RequestParam(name = "insert_email") String email) {
+
+        // 지금 시간
         long now_time = Long.parseLong(userService.time_now());
+
+        // 인증코드 보낸 시간
         CodeInfoModel codeInfoModel = userService.selectCodeInfo(code);
         long created_time = Long.parseLong(codeInfoModel.getCreatedTime());
 
-        if (codeInfoModel.getEmail().equals(email) && now_time - created_time <= 3000) {
+        // request로 넘어온 이메일과 저장된 이메일이 같으며, 정해진 시간 내에 코드를 인증했다면
+        if (codeInfoModel.getEmail().equals(email) && sshzUtil.isValidCode(now_time, created_time)) {
             log.info("인증 성공");
             String msg = "인증 성공";
             return new ResponseEntity<>(msg, HttpStatus.OK);
@@ -187,8 +199,8 @@ public class UserController {
 
     /**
      * 입력받은 정보들 DB에 저장, 이미 아아디가 존재하는지 한번 더 체크
-     * @param userInfoModel
-     * @return
+     * @param userInfoModel 토큰으로 받아온 유저정보
+     * @return OK if 회원가입 성공, else BAD_REQUEST
      * @throws Exception
      */
     @ApiOperation(
@@ -202,18 +214,18 @@ public class UserController {
     public ResponseEntity<String> signUp(
             @ModelAttribute final UserInfoModel userInfoModel) throws Exception {
         
-    	log.info("userInfoModel [{}]",userInfoModel);
-
     	String loginId = userInfoModel.getLoginId().split("@")[0];
 
     	// login id 에 @ split 한 아이디만 삽입
     	userInfoModel.setLoginId(loginId);
-    	
+
+    	// 이미 가입한 경우
         if(userService.selectUser(loginId)!=null) {
             String msg = "이미 존재하는 아이디입니다";
             return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
-        
+
+        // 인증코드가 일치하지 않는 경우
         if (!userService.selectCode(userInfoModel.getEmail()).equals(userInfoModel.getCode())) {
             log.info(userService.selectCode(userInfoModel.getEmail())+" "+userInfoModel.getCode());
             String msg = "인증코드가 일치하지 않습니다.";
@@ -227,8 +239,8 @@ public class UserController {
 
     /**
      * 입력받은 아이디와 비밀번호로 로그인, 성공 시 Map형태로 Access Token과 Refresh Token 리턴
-     * @param loginId
-     * @param password
+     * @param email 이메일
+     * @param password 비밀번호
      * @return Map {
      *              "accessToken" : access_token ,
      *              "refreshToken" : refresh_token
@@ -244,23 +256,26 @@ public class UserController {
     })
     @RequestMapping(value = "/signin", method = RequestMethod.POST, produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, String>> signIn(
-            @ApiParam(value = "아이디", required = true) @RequestParam(name = "loginId", required = true) String loginId,
-            @ApiParam(value = "패스워드", required = true) @RequestParam(name = "password", required = true) String password) throws Exception {
+            @ApiParam(value = "아이디", required = true) @RequestParam(name = "email") String email,
+            @ApiParam(value = "패스워드", required = true) @RequestParam(name = "password") String password) throws Exception {
 
-    	loginId = loginId.split("@")[0];
+    	String loginId = email.split("@")[0];
         UserDto userDto = userService.selectUser(loginId);
-        
+
+        // 회원가입되지 않은 이메일이거나, 패스워드가 다른 경우
         if (userDto == null || !passwordEncoder.matches(password, userDto.getPassword())) {
             Map<String, String> error = new HashMap<>();
             error.put("error", "id or password is not valid");
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
+
+        // 정상적인 경우 토큰을 발급한다
         Map<String, String> token = new HashMap<>();
         String access_token = jwtTokenProvider.createAccessToken(userDto.getUsername(), userDto.getUserId(), userDto.getNickname(), userDto.getRole());
-//        String refresh_token = jwtTokenProvider.createRefreshToken();
         token.put("accessToken", access_token);
-//        token.put("refreshToken", refresh_token);
         log.info(userDto.getUsername());
+//        String refresh_token = jwtTokenProvider.createRefreshToken();
+//        token.put("refreshToken", refresh_token);
 //        redisTemplate.opsForValue().set(userDto.getUsername(), refresh_token); // refresh_token은 따로 redis에 저장
 
         return new ResponseEntity<>(token, HttpStatus.OK);
@@ -269,8 +284,8 @@ public class UserController {
     /**
      * 동아리사이트 전용 로그인 API
      * 입력받은 아이디와 비밀번호로 로그인, 성공 시 Map형태로 Access Token과 Refresh Token 리턴
-     * @param loginId
-     * @param password
+     * @param email 이메일
+     * @param password 비밀번호
      * @return Map {
      *              "accessToken" : access_token ,
      *              "refreshToken" : refresh_token
@@ -286,16 +301,20 @@ public class UserController {
     })
     @RequestMapping(value = "/signInforClub", method = RequestMethod.POST, produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, String>> singInForClub(
-            @ApiParam(value = "아이디", required = true) @RequestParam(name = "loginId", required = true) String loginId,
-            @ApiParam(value = "패스워드", required = true) @RequestParam(name = "password", required = true) String password) throws Exception {
+            @ApiParam(value = "아이디", required = true) @RequestParam(name = "email") String email,
+            @ApiParam(value = "패스워드", required = true) @RequestParam(name = "password") String password) throws Exception {
 
+        String loginId = email.split("@")[0];
         UserDto userDto = userService.selectUser(loginId);
-        log.info("test");
+
+        // 회원가입되지 않은 이메일이거나, 패스워드가 다른 경우
         if (userDto == null || !passwordEncoder.matches(password, userDto.getPassword())) {
             Map<String, String> error = new HashMap<>();
             error.put("error", "id or password is not valid");
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
+
+        // 동아리나 관리자 계정이 아닌 경우 접근 불허
         if (userDto.getRole().equals("ROLE_USER")) {
             Map<String, String> error = new HashMap<>();
             error.put("error", "ROLE_USER can't login this page");
@@ -303,8 +322,8 @@ public class UserController {
         }
         Map<String, String> token = new HashMap<>();
         String access_token = jwtTokenProvider.createAccessToken(userDto.getUsername(), userDto.getUserId(), userDto.getNickname(), userDto.getRole());
-//        String refresh_token = jwtTokenProvider.createRefreshToken();
         token.put("accessToken", access_token);
+//        String refresh_token = jwtTokenProvider.createRefreshToken();
 //        token.put("refreshToken", refresh_token);
 //        redisTemplate.opsForValue().set(userDto.getUsername(), refresh_token); // refresh_token은 따로 redis에 저장
 
@@ -342,28 +361,25 @@ public class UserController {
     })
     @RequestMapping(value = "/retoken", method = RequestMethod.POST, produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> reToken(
-            @ApiParam(value = "accessToken", required = true) @RequestParam(name = "accessToken", required = true) String accessToken
+            @ApiParam(value = "accessToken", required = true) @RequestParam(name = "accessToken") String accessToken
 //            ,@ApiParam(value = "refreshToken", required = true) @RequestParam(name = "refreshToken", required = true) String refreshToken
-    ) throws Exception {
+    ) {
 
-        String newAccessToken = null;
+        String newAccessToken;
+        String loginId;
 //        String newRefreshToken = null;
 //        String refreshTokenFromDb = null;
-        String loginId = null;
 
         Map<String, Object> map = new HashMap<>();
-        try {
-            newAccessToken = accessToken;
+        newAccessToken = accessToken;
 //            newRefreshToken = refreshToken;
-            log.info("access token in param: " + newAccessToken);
-            try {
-                loginId = jwtTokenProvider.getUserPk(newAccessToken);
-            } catch (IllegalArgumentException e) {
+        log.info("access token in param: " + newAccessToken);
 
-            } catch (ExpiredJwtException e) { //expire됐을 때
-                loginId = e.getClaims().getSubject();
-                log.info("loginId from expired access token: " + loginId);
-            }
+        loginId = jwtTokenProvider.getUserPk(newAccessToken);
+        if (loginId == null) {
+            map.put("msg", "token is not valid");
+            return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
+        }
 
 //            if (refreshToken != null) { //refresh를 같이 보냈으면.
 //                try {
@@ -375,10 +391,10 @@ public class UserController {
 //                }
 //                //둘이 일치하고 만료도 안됐으면 재발급 해주기.
 //                if (newRefreshToken.equals(refreshTokenFromDb) && jwtTokenProvider.validateToken(newRefreshToken)) {
-            UserDto userDto = jwtTokenProvider.getUserDto(newAccessToken);
-            String newtok = jwtTokenProvider.createAccessToken(userDto.getUsername(), userDto.getUserId(), userDto.getNickname(), userDto.getRole());
-            map.put("success", true);
-            map.put("accessToken", newtok);
+        UserDto userDto = jwtTokenProvider.getUserDto(newAccessToken);
+        String newtok = jwtTokenProvider.createAccessToken(userDto.getUsername(), userDto.getUserId(), userDto.getNickname(), userDto.getRole());
+        map.put("success", true);
+        map.put("accessToken", newtok);
 //                } else {
 //                    map.put("success", false);
 //                    map.put("msg", "refresh token is expired.");
@@ -388,10 +404,6 @@ public class UserController {
 //                map.put("msg", "your refresh token does not exist.");
 //            }
 
-        } catch (Exception e) {
-            throw e;
-        }
-//        log.info("m: " + m);
 
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
@@ -410,17 +422,15 @@ public class UserController {
     })
     @RequestMapping(value = "/logout", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> logout(
-            @ApiParam(value = "access_token", required = true) @RequestParam(name = "access_token", required = true) String accessToken
-    ) throws Exception {
+            @ApiParam(value = "access_token", required = true) @RequestParam(name = "access_token") String accessToken
+    ) {
 
-        String loginId = null;
-        String at = accessToken;
-        try {
-            loginId = jwtTokenProvider.getUserPk(accessToken);
-        } catch (IllegalArgumentException e) {
-        } catch (ExpiredJwtException e) { //expire됐을 때
-            loginId = e.getClaims().getSubject();
-            log.info("loginId from expired access token: " + loginId);
+        String loginId;
+        loginId = jwtTokenProvider.getUserPk(accessToken);
+        // 토큰 유효성 판단
+        if (loginId == null) {
+            String msg = "token is not valid";
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
 
 //        try {
@@ -431,18 +441,17 @@ public class UserController {
 //        } catch (IllegalArgumentException e) {
 //            log.warn("user does not exist");
 //        }
+        log.info(" logout ing : [{}]", accessToken);
         //accessToken은 30분 후에 블랙리스트에서 파기
-        log.info(" logout ing : " + accessToken);
-        redisTemplate.opsForValue().set(at, true);
-        redisTemplate.expire(at, 30 * 60 * 1000L, TimeUnit.MILLISECONDS);
+        sshzUtil.afterLogoutToken(accessToken);
 
-        return new ResponseEntity("로그아웃 성공", HttpStatus.OK);
+        return new ResponseEntity<>("로그아웃 성공", HttpStatus.OK);
     }
 
     /**
      * 아이디를 찾기 위해 다시 이메일 인증. 가입 시 입력한 이메일로 다시 인증코드 보내기.
-     * @param email
-     * @return
+     * @param email 이메일
+     * @return OK if success, else BAD_REQUEST
      * @throws Exception
      */
     @ApiOperation(
@@ -454,21 +463,21 @@ public class UserController {
     })
     @RequestMapping(value = "/sendEmail_searchId", method = RequestMethod.PATCH, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> sendEmail_searchId(
-            @ApiParam(value = "email", required = true) @RequestParam(name = "email", required = true) String email
+            @ApiParam(value = "email", required = true) @RequestParam(name = "email") String email
     ) throws Exception {
 
         UserDto userDto = userService.selectUserEmail(email);
         if (userDto == null) {
-            return new ResponseEntity(email+": user does not exist", HttpStatus.BAD_REQUEST);
+            String msg = "user does not exist";
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         } else {
 
-            try {
-                userService.sendEmail_findId(email);
-                log.info(email+ " : success");
-                String msg = email+": 인증 이메일 발신 성공";
+            if(userService.sendEmail_findId(email)) {
+                String msg = email + ": 인증 이메일 발신 성공";
                 return new ResponseEntity<>(msg, HttpStatus.OK);
-            } catch (Exception e) {
-                log.info(e.toString());
+            }
+
+            else{
                 String msg = email+": 인증 이메일 발신 실패";
                 return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
             }
@@ -477,43 +486,42 @@ public class UserController {
 
     /**
      * 인증코드 입력으로 아이디 찾기. 인증코드가 일치할 시 loginId 리턴
-     * @param code
-     * @param email
-     * @return
+     * @param code 인증코드
+     * @param email 이메일
+     * @return OK if Success, else BAD_REQUEST
      * @throws Exception
      */
-    @ApiOperation(
-            value = "아이디 찾기"
-            , notes = "아이디 찾기"
-    )
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "complete")
-    })
-    @RequestMapping(value = "/getId", method = RequestMethod.GET, produces="text/plain;charset=UTF-8")
-    public ResponseEntity<String> getId(
-            @ApiParam(value = "입력 코드", required = true) @RequestParam(name = "insert_code", required = true) String code,
-            @ApiParam(value = "입력 이메일", required = true) @RequestParam(name = "insert_email", required = true) String email
-    ) throws Exception {
-
-        long now_time = Long.parseLong(userService.time_now());
-        CodeInfoModel codeInfoModel = userService.selectCodeInfo(code);
-        long created_time = Long.parseLong(codeInfoModel.getCreatedTime());
-
-        if (codeInfoModel.getEmail().equals(email) && now_time - created_time <= 3000) {
-            log.info("인증 성공");
-            return new ResponseEntity<>(userService.selectUserEmail(email).getLoginId(), HttpStatus.OK);
-        } else {
-            log.info("인증 실패");
-            String msg = "인증 실패";
-            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
-        }
-    }
+//    @ApiOperation(
+//            value = "아이디 찾기"
+//            , notes = "아이디 찾기"
+//    )
+//    @ApiResponses(value = {
+//            @ApiResponse(code = 200, message = "complete")
+//    })
+//    @RequestMapping(value = "/getId", method = RequestMethod.GET, produces="text/plain;charset=UTF-8")
+//    public ResponseEntity<String> getId(
+//            @ApiParam(value = "입력 코드", required = true) @RequestParam(name = "insert_code") String code,
+//            @ApiParam(value = "입력 이메일", required = true) @RequestParam(name = "insert_email") String email
+//    ) throws Exception {
+//
+//        long now_time = Long.parseLong(userService.time_now());
+//        CodeInfoModel codeInfoModel = userService.selectCodeInfo(code);
+//        long created_time = Long.parseLong(codeInfoModel.getCreatedTime());
+//
+//        if (codeInfoModel.getEmail().equals(email) && sshzUtil.isValidCode(now_time, created_time)) {
+//            log.info("인증 성공");
+//            return new ResponseEntity<>(userService.selectUserEmail(email).getLoginId(), HttpStatus.OK);
+//        } else {
+//            log.info("인증 실패");
+//            String msg = "인증 실패";
+//            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
     /**
      * 비밀번호 분실 시 기존 비밀번호를 알 수 없고 비밀번호 변경만 가능. 이메일과 loginId를 입력하여 변경 가능
-     * @param email
-     * @param loginId
-     * @param newPw
+     * @param email 이메일
+     * @param newPw 새 비밀번호
      * @return
      * @throws Exception
      */
@@ -526,19 +534,21 @@ public class UserController {
     })
     @RequestMapping(value = "/searchPw", method = RequestMethod.PATCH, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> searchPw(
-            @ApiParam(value = "loginId", required = true) @RequestParam(name = "loginId", required = true) String loginId,
-            @ApiParam(value = "newpw", required = true) @RequestParam(name = "newqw", required = true) String newPw
+            @ApiParam(value = "loginId", required = true) @RequestParam(name = "email") String email,
+            @ApiParam(value = "newpw", required = true) @RequestParam(name = "newqw") String newPw
     ) throws Exception {
 
+        String loginId = email.split("@")[0];
         UserDto userDto = userService.selectUser(loginId);
-        
-        if (userDto == null) {
-            return new ResponseEntity("user does not exist", HttpStatus.BAD_REQUEST);
-        } else {
-			userService.updateUserPassword(loginId, passwordEncoder.encode(newPw));
 
+        // 유저가 존재하지 않는 경우
+        if (userDto == null) {
+            return new ResponseEntity<>("user does not exist", HttpStatus.BAD_REQUEST);
+        } else {
+
+			userService.updateUserPassword(loginId, passwordEncoder.encode(newPw));
 			String msg = "비밀번호가 변경되었습니다.";
-			return new ResponseEntity(msg, HttpStatus.OK);
+			return new ResponseEntity<>(msg, HttpStatus.OK);
         }
     }
 }

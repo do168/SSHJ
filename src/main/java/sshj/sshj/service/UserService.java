@@ -1,6 +1,7 @@
 package sshj.sshj.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -20,6 +21,7 @@ import sshj.sshj.mapper.UserMapper;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @PropertySource("classpath:aws.yml")
@@ -65,7 +67,7 @@ public class UserService implements UserDetailsService {
         return userMapper.selectUserInfo(loginId);
     }
 
-    public String sendEmail(String email) {
+    public boolean sendEmail(String email) {
         String code = codeCompo.excuteGenerate();
         String time = time_now();
 
@@ -75,14 +77,18 @@ public class UserService implements UserDetailsService {
                 .subject("sshj 인증 이메일입니다.")
                 .content(code)
                 .build();
-
-        senderCompo.send(senderDto);
-        insertCodeEmail(code, email, time);
-
-        return code;
+        try{
+            senderCompo.send(senderDto);
+            insertCodeEmail(code, email, time);
+            log.info("success");
+            return true;
+        } catch(Exception e) {
+            log.info(e.toString());
+            return false;
+        }
     }
 
-    public String sendEmail_findId(String email) {
+    public boolean sendEmail_findId(String email) {
         String code = codeCompo.excuteGenerate();
         String time = time_now();
 
@@ -93,10 +99,16 @@ public class UserService implements UserDetailsService {
                 .content(code)
                 .build();
 
-        senderCompo.send(senderDto);
-        updateCodeEmail(code, email, time);
+        try{
+            senderCompo.send(senderDto);
+            insertCodeEmail(code, email, time);
+            log.info("success");
+            return true;
+        } catch(Exception e) {
+            log.info(e.toString());
+            return false;
+        }
 
-        return code;
     }
 
     public void insertCodeEmail(String code, String email, String time) {
