@@ -42,7 +42,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             UserDto userDto = (UserDto) authentication.getPrincipal();
             log.info("in filter, userDto userId : "+userDto.getUserId());
             UserHeaderModel userHeaderModel = new UserHeaderModel();
-            userHeaderModel.setLoginId(userDto.getLoginId());
+            userHeaderModel.setEmail(userDto.getEmail());
             userHeaderModel.setRole(userDto.getRole());
             userHeaderModel.setUserId(userDto.getUserId());
             // HttpServletRequest에 생성한 UserHeaderModel 객체를 담아 보낸다.

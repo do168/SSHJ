@@ -15,10 +15,11 @@ public class WebSocketHandler extends TextWebSocketHandler {
     @Autowired
     private NoteService noteService;
 
-    @Override
-    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception{
-        log.info(message.getPayload());
-        session.sendMessage(new TextMessage(Integer.toString(noteService.selectCountOfReceiveMessage(message.getPayload()))));
-    }
+//	TODO: 소켓 안쓸거라 도우찬이 수정할 예정
+//    @Override
+//    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception{
+//        log.info(message.getPayload());
+//        session.sendMessage(new TextMessage(Integer.toString(noteService.selectCountOfReceiveMessage(message.getPayload()))));
+//    }
 
 }

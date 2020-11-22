@@ -31,7 +31,7 @@ public class ExpoPushServiceImpl implements ExpoPushService {
     @Override
     public void sendingPushMeetingCreated(long clubId) throws Exception {
         List<Long> clubSubscribeUsers = clubMapper.selectClubSubsUserList(clubId);
-        String clubName = userMapper.selectLoginId(clubId);
+        String clubName = userMapper.selectEmail(clubId);
         for (long userId : clubSubscribeUsers) {
             String deviceToken = userMapper.selectUserDeviceToken(userId);
             String title = "모임 등록!";
@@ -55,7 +55,7 @@ public class ExpoPushServiceImpl implements ExpoPushService {
     @Override
     public void sendingPushClubNoticeCreated(long clubId) throws Exception {
         List<Long> clubSubscribeUsers = clubMapper.selectClubSubsUserList(clubId);
-        String clubName = userMapper.selectLoginId(clubId);
+        String clubName = userMapper.selectEmail(clubId);
         for (long userId : clubSubscribeUsers) {
             String deviceToken = userMapper.selectUserDeviceToken(userId);
             String title = "공지 등록!";

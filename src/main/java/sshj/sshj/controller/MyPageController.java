@@ -32,11 +32,13 @@ public class MyPageController {
     public ResponseEntity<Boolean> changeNickname(
             @ApiParam(value = "입력 닉네임", required = true) @RequestParam(name = "chNickname", required = true) String chnickname
     ,@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception {
-        String loginId = userHeaderModel.getLoginId();
+        
+    	long userId = userHeaderModel.getUserId();
+        
         if (userService.selectUserNicknameIsOk(chnickname) == 0) {
             log.info("사용 가능한 닉네임입니다.");
             try {
-                userService.updateUserNickname(loginId, chnickname);
+                userService.updateUserNickname(userId, chnickname);
             }
             catch (Exception e) {
                 log.error(String.valueOf(e));
