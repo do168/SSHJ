@@ -8,9 +8,9 @@
         <![CDATA[
 		/*	UserMapper.insertUser	*/
 		insert into tb_user (
-			login_id, password, email, nickname, created_time, role
+			password, email, nickname, created_time, role
 		) values (
-			#{loginId}, #{password}, #{email}, #{nickname}, #{createdTime}, #{role}
+			#{password}, #{email}, #{nickname}, #{createdTime}, #{role}
 		)
 	]]>
     </insert>
@@ -21,7 +21,6 @@
 		/*	UserMapper.selectUserInfo	*/
 		    SELECT
 		        user_id as userId,
-		        login_id as loginID,
 		        password as password,
 		        email as email,
 		        nickname as nickname,
@@ -30,22 +29,22 @@
 		    FROM
 		        tb_user
 		    WHERE
-		        login_id = #{loginId}
+		        email = #{email}
 	    ]]>
     </select>
 
-    <select id="selectUserLoginId" parameterType="string" resultType="int">
+    <select id="selectUserEmail" parameterType="string" resultType="int">
         <![CDATA[
-		/*	UserMapper.selectUserLoginId	*/
-		select count(login_id)
+		/*	UserMapper.selectUserEmail	*/
+		select count(email)
 		from tb_user
-		where login_id = #{loginId}
+		where email = #{email}
 	]]>
     </select>
 
-    <select id="selectLoginId" parameterType="long" resultType="string">
+    <select id="selectEmail" parameterType="long" resultType="string">
         <![CDATA[
-            select login_id
+            select email
             from tb_user
             where user_id = #{userId}
         ]]>
@@ -56,7 +55,6 @@
         <![CDATA[
 		/*	UserMapper.selectUserEmail	*/
 		select user_id as userId,
-		        login_id as loginID,
 		        password as password,
 		        email as email,
 		        nickname as nickname,
@@ -118,7 +116,7 @@
         <![CDATA[
         UPDATE tb_user
         SET device_token = #{deviceToken}
-        WHERE login_id = #{loginId}
+        WHERE email = #{email}
 
         ]]>
     </update>
@@ -136,7 +134,7 @@
         <![CDATA[
 			UPDATE tb_user
 			SET nickname=#{nickname}
-			WHERE login_id=#{loginId}
+			WHERE email=#{email}
 		]]>
     </update>
 
@@ -144,7 +142,7 @@
         <![CDATA[
 			UPDATE tb_user
 			SET password=#{password}
-			WHERE login_id=#{loginId}
+			WHERE email=#{email}
 		]]>
     </update>
 

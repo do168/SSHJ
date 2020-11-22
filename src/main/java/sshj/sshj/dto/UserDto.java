@@ -18,9 +18,7 @@ import java.util.stream.Collectors;
 @ToString
 public class UserDto implements UserDetails {
     private long userId;
-
-    private String loginId;
-
+    
     private String password;
 
     private String nickname;
@@ -37,11 +35,6 @@ public class UserDto implements UserDetails {
         return roles.stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public String getUsername() {
-        return loginId;
     }
 
     @Override
@@ -63,6 +56,12 @@ public class UserDto implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+	@Override
+	public String getUsername() {
+		// Implement 채우려고 만든 빈 메소드
+		return null;
+	}
 
 
 }

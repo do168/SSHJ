@@ -5,11 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
 import sshj.sshj.component.CodeCompo;
 import sshj.sshj.component.SenderCompo;
 import sshj.sshj.dto.CodeInfoModel;
@@ -43,12 +44,12 @@ public class UserService implements UserDetailsService {
     private CodeCompo codeCompo;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDto loadUserByUsername(String username) throws UsernameNotFoundException {
         return userMapper.selectUserInfo(username);
     }
 
-    public int selectUserLoginId(String loginId) throws Exception {
-        return userMapper.selectUserLoginId(loginId);
+    public int selectUserLoginId(long userId) throws Exception {
+        return userMapper.selectUserLoginId(userId);
     }
 
     public UserDto selectUserEmail(String email) throws Exception {
@@ -138,16 +139,16 @@ public class UserService implements UserDetailsService {
 
     public String selectCode(String email) { return userMapper.selectCode(email); }
 
-    public void updateUserNickname(String loginId, String nickname) {
-        userMapper.updateUserNickname(loginId, nickname);
+    public void updateUserNickname(long userId, String nickname) {
+        userMapper.updateUserNickname(userId, nickname);
     }
 
-    public void updateUserPassword(String loginId, String password) {
-        userMapper.updateUserPassword(loginId, password);
+    public void updateUserPassword(long userId, String password) {
+        userMapper.updateUserPassword(userId, password);
     }
 
-    public void updateDeviceToken(String loginId, String deviceToken) {
-        userMapper.updateDeviceToken(loginId, deviceToken);
+    public void updateDeviceToken(long userId, String deviceToken) {
+        userMapper.updateDeviceToken(userId, deviceToken);
     }
 
     public String time_now() {

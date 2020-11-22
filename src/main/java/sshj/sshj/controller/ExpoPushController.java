@@ -35,13 +35,13 @@ public class ExpoPushController {
             @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
             @ApiParam(value = "expoPush 토큰", required = true) @RequestParam(name = "expoPushToken", required = true) String expoPushToken) throws Exception {
 
-        if (userService.selectUser(userHeaderModel.getLoginId()) == null) {
+        if (userService.selectUser(userHeaderModel.getUserId()) == null) {
             String error = "user doesn't exit";
             return new ResponseEntity<String>(error, HttpStatus.BAD_REQUEST);
         }
 
         try{
-            userService.updateDeviceToken(userHeaderModel.getLoginId(), expoPushToken);
+            userService.updateDeviceToken(userHeaderModel.getUserId(), expoPushToken);
         } catch (Exception e) {
             log.error(e.toString());
             return new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);

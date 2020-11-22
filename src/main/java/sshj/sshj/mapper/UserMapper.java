@@ -9,8 +9,8 @@ import sshj.sshj.dto.UserDto;
 @Mapper
 public interface UserMapper {
 
-    UserDto selectUserInfo(String loginId);
-    int selectUserLoginId(String loginId);
+    UserDto selectUserInfo(String email);
+    int selectUserEmail(long userId);
     UserDto selectUserEmail(String email);
     void insertUser(UserDto userDto);
     String selectCode(String email);
@@ -18,10 +18,10 @@ public interface UserMapper {
     void insertCodeEmail(String code, String email, String time);
     void updateCodeEmail(String code, String email, String time);
     int selectUserNicknameIsOk(String nickname);
-    void updateUserNickname(String loginId, String nickname);
-    void updateUserPassword(String loginId, String password);
-    void updateDeviceToken(String loginId, String deviceToken);
+    void updateUserNickname(long userId, String nickname);
+    void updateUserPassword(long userId, String password);
+    void updateDeviceToken(long userId, String deviceToken);
     String selectUserDeviceToken(long userId);
-    String selectLoginId(long userId);
+    String selectEmail(long userId);
     String selectUserNickname(long userId);
 }

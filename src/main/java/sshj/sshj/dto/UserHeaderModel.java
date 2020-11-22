@@ -6,7 +6,7 @@ import lombok.Data;
 public class UserHeaderModel {
     private long userId;
 
-    private String loginId;
+    private String email;
 
     private String role;
 
