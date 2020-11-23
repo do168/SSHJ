@@ -267,9 +267,9 @@ public class UserController {
 
         // 정상적인 경우 토큰을 발급한다
         Map<String, String> token = new HashMap<>();
-        String access_token = jwtTokenProvider.createAccessToken(userDto.getUsername(), userDto.getUserId(), userDto.getNickname(), userDto.getRole());
+        String access_token = jwtTokenProvider.createAccessToken(userDto.getEmail(), userDto.getUserId(), userDto.getNickname(), userDto.getRole());
         token.put("accessToken", access_token);
-        log.info(userDto.getUsername());
+        log.info(userDto.getEmail());
 //        String refresh_token = jwtTokenProvider.createRefreshToken();
 //        token.put("refreshToken", refresh_token);
 //        redisTemplate.opsForValue().set(userDto.getUsername(), refresh_token); // refresh_token은 따로 redis에 저장
@@ -316,7 +316,7 @@ public class UserController {
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
         Map<String, String> token = new HashMap<>();
-        String access_token = jwtTokenProvider.createAccessToken(userDto.getUsername(), userDto.getUserId(), userDto.getNickname(), userDto.getRole());
+        String access_token = jwtTokenProvider.createAccessToken(userDto.getEmail(), userDto.getUserId(), userDto.getNickname(), userDto.getRole());
         token.put("accessToken", access_token);
 //        String refresh_token = jwtTokenProvider.createRefreshToken();
 //        token.put("refreshToken", refresh_token);
