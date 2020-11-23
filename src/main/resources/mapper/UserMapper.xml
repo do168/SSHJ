@@ -52,14 +52,14 @@
     </select>
     
 
-    <select id="selectUserEmail" parameterType="long" resultType="int">
-        <![CDATA[
-		/*	UserMapper.selectUserEmail	*/
-		select count(email)
-		from tb_user
-		where user_id = #{userId}
-	]]>
-    </select>
+<!--    <select id="selectUserEmail" parameterType="long" resultType="int">-->
+<!--        <![CDATA[-->
+<!--		/*	UserMapper.selectUserEmail	*/-->
+<!--		select count(email)-->
+<!--		from tb_user-->
+<!--		where user_id = #{userId}-->
+<!--	]]>-->
+<!--    </select>-->
 
     <select id="selectEmail" parameterType="long" resultType="string">
         <![CDATA[

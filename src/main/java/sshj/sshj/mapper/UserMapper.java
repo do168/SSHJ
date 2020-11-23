@@ -20,7 +20,7 @@ public interface UserMapper {
      */
     UserDto selectUserInfoById(long userId);
     
-    int selectUserEmail(long userId);
+//    int selectUserEmail(long userId);
     UserDto selectUserEmail(String email);
     void insertUser(UserDto userDto);
     String selectCode(String email);

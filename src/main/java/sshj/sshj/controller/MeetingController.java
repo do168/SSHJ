@@ -37,7 +37,7 @@ public class MeetingController {
     @Autowired
     private ExpoPushService expoPushService;
 
-    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
+//    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "모임 생성 Api"
             , notes = "모임 생성 Api"
@@ -46,7 +46,7 @@ public class MeetingController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/create", method= RequestMethod.POST)
+    @RequestMapping(value = "/byClub/create", method= RequestMethod.POST)
     public ResponseEntity<MeetingDto> createMeeting(
             @ModelAttribute MeetingDto meetingDto) throws Exception{
         
@@ -75,7 +75,7 @@ public class MeetingController {
         return new ResponseEntity<>(meetingDto,HttpStatus.OK);
     }
 
-    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
+//    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "모임 업데이트 Api"
             , notes = "모임 업데이트 Api"
@@ -84,13 +84,13 @@ public class MeetingController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/club/update", method= RequestMethod.PUT)
+    @RequestMapping(value = "/byClub/update", method= RequestMethod.PUT)
     public ResponseEntity<Void> updateMeeting(@ModelAttribute MeetingDto meetingDto) throws Exception{
         meetingService.updateMeeting(meetingDto);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
+//    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "모임 삭제 Api"
             , notes = "모임 삭제 Api"
@@ -99,7 +99,7 @@ public class MeetingController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/club/delete", method= RequestMethod.DELETE)
+    @RequestMapping(value = "/byClub/delete", method= RequestMethod.DELETE)
     public ResponseEntity<Void> deleteMeeting(@ApiParam("meetingId") @RequestParam("meetingId")int meetingId) throws Exception{
         meetingService.deleteMeeting(meetingId);
         return new ResponseEntity<Void>(HttpStatus.OK);

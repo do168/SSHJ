@@ -86,7 +86,7 @@ public class ClubController {
         return new ResponseEntity<>(fileMapper.selectContentsUrl(clubId), HttpStatus.OK);
     }
 
-    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
+//    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "동아리 설명 생성 Api"
             , notes = "동아리 설명 생성 Api"
@@ -95,7 +95,7 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/createDescription", method= RequestMethod.POST)
+    @RequestMapping(value = "/byClub/createDescription", method= RequestMethod.POST)
     public ResponseEntity<Void> createClubDescription
             (@ApiParam(value = "생성할 클럽 description", required = true) @RequestParam(name = "description", required = true) String description,
              @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
@@ -119,7 +119,7 @@ public class ClubController {
         return new ResponseEntity<>(clubService.selectClubDescription(clubId), HttpStatus.OK);
     }
 
-    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
+//    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "동아리 설명 수정 Api"
             , notes = "동아리 설명 수정 Api"
@@ -128,7 +128,7 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/updateDescription", method= RequestMethod.PUT)
+    @RequestMapping(value = "/byClub/updateDescription", method= RequestMethod.PUT)
     public ResponseEntity<Void> updateClubDescription(@ApiParam(value = "클럽 description", required = true) @RequestParam(name = "description", required = true) String description,
                              @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
         ClubDescriptionDto clubDescriptionDto = new ClubDescriptionDto(userHeaderModel.getUserId(), description);
@@ -136,7 +136,7 @@ public class ClubController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
+//    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "동아리 설명 삭제 Api"
             , notes = "동아리 설명 삭제 Api"
@@ -145,7 +145,7 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/deleteDescription", method= RequestMethod.DELETE)
+    @RequestMapping(value = "/byClub/deleteDescription", method= RequestMethod.DELETE)
     public ResponseEntity<Void> deleteClubDescription(
             @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel
     ) throws Exception{
@@ -153,7 +153,7 @@ public class ClubController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
+//    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "동아리 공지 생성 Api"
             , notes = "동아리 공지 생성 Api"
@@ -162,7 +162,7 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/createNotice", method= RequestMethod.POST)
+    @RequestMapping(value = "/byClub/createNotice", method= RequestMethod.POST)
     public ResponseEntity<Void> createClubNotice(@ModelAttribute ClubNoticeDto clubNoticeDto,
                                                  @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
     	clubNoticeDto.setClubId(userHeaderModel.getUserId());
@@ -200,7 +200,7 @@ public class ClubController {
         return new ResponseEntity<>(list,HttpStatus.OK);
     }
 
-    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
+//    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "동아리 공지 업데이트 Api"
             , notes = "동아리 공지 업데이트 Api"
@@ -209,7 +209,7 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/updateNotice", method= RequestMethod.PUT)
+    @RequestMapping(value = "/byClub/updateNotice", method= RequestMethod.PUT)
     public ResponseEntity<Void> updateClubNotice(@ModelAttribute ClubNoticeDto dto) throws Exception{
         
     	log.info("[{}]",dto);
@@ -218,7 +218,7 @@ public class ClubController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
+//    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "동아리 공지 삭제 Api"
             , notes = "동아리 공지 삭제 Api"
@@ -227,7 +227,7 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/deleteNotice", method= RequestMethod.DELETE)
+    @RequestMapping(value = "/byClub/deleteNotice", method= RequestMethod.DELETE)
     public ResponseEntity<Void> deleteClubNotice(long noticeId) throws Exception{
         clubService.deleteClubNotice(noticeId);
         return new ResponseEntity<>(HttpStatus.OK);

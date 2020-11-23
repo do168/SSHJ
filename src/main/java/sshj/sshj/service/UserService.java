@@ -47,9 +47,9 @@ public class UserService implements UserDetailsService {
         return userMapper.selectUserInfo(email);
     }
 
-    public int selectUserEmail(long userId) throws Exception {
-        return userMapper.selectUserEmail(userId);
-    }
+//    public int selectUserEmail(long userId) throws Exception {
+//        return userMapper.selectUserEmail(userId);
+//    }
 
     public UserDto selectUserEmail(String email) throws Exception {
         return userMapper.selectUserEmail(email);
