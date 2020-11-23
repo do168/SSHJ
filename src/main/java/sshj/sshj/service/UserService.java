@@ -1,7 +1,8 @@
 package sshj.sshj.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import sshj.sshj.component.CodeCompo;
 import sshj.sshj.component.SenderCompo;
 import sshj.sshj.dto.CodeInfoModel;
@@ -18,9 +20,6 @@ import sshj.sshj.dto.SenderDto;
 import sshj.sshj.dto.UserDto;
 import sshj.sshj.dto.UserInfoModel;
 import sshj.sshj.mapper.UserMapper;
-
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 
 @Slf4j
 @Service
@@ -44,13 +43,13 @@ public class UserService implements UserDetailsService {
     private CodeCompo codeCompo;
 
     @Override
-    public UserDto loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userMapper.selectUserInfo(username);
+    public UserDto loadUserByUsername(String email) throws UsernameNotFoundException {
+        return userMapper.selectUserInfo(email);
     }
 
-    public int selectUserLoginId(long userId) throws Exception {
-        return userMapper.selectUserLoginId(userId);
-    }
+//    public int selectUserEmail(long userId) throws Exception {
+//        return userMapper.selectUserEmail(userId);
+//    }
 
     public UserDto selectUserEmail(String email) throws Exception {
         return userMapper.selectUserEmail(email);
@@ -64,8 +63,8 @@ public class UserService implements UserDetailsService {
         return userMapper.selectUserNicknameIsOk(nickname);
     }
 
-    public UserDto selectUser(String loginId) throws Exception {
-        return userMapper.selectUserInfo(loginId);
+    public UserDto selectUser(long userId) throws Exception {
+        return userMapper.selectUserInfoById(userId);
     }
 
     public boolean sendEmail(String email) {
@@ -123,7 +122,7 @@ public class UserService implements UserDetailsService {
     public void insertUser(UserInfoModel userInfoModel) {
         String time = time_now();
         this.userMapper.insertUser(UserDto.builder()
-                .loginId(userInfoModel.getLoginId())
+                .email(userInfoModel.getEmail())
                 .password(passwordEncoder.encode(userInfoModel.getPassword()))
                 .email(userInfoModel.getEmail())
                 .role("ROLE_USER")
@@ -143,8 +142,8 @@ public class UserService implements UserDetailsService {
         userMapper.updateUserNickname(userId, nickname);
     }
 
-    public void updateUserPassword(long userId, String password) {
-        userMapper.updateUserPassword(userId, password);
+    public void updateUserPassword(String email, String password) {
+        userMapper.updateUserPassword(email, password);
     }
 
     public void updateDeviceToken(long userId, String deviceToken) {

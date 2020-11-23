@@ -214,13 +214,10 @@ public class UserController {
     public ResponseEntity<String> signUp(
             @ModelAttribute final UserInfoModel userInfoModel) throws Exception {
         
-    	String loginId = userInfoModel.getLoginId().split("@")[0];
-
-    	// login id 에 @ split 한 아이디만 삽입
-    	userInfoModel.setLoginId(loginId);
+    	String email = userInfoModel.getEmail();
 
     	// 이미 가입한 경우
-        if(userService.selectUser(loginId)!=null) {
+        if(userService.loadUserByUsername(email)!=null) {
             String msg = "이미 존재하는 아이디입니다";
             return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
@@ -256,16 +253,15 @@ public class UserController {
     })
     @RequestMapping(value = "/signin", method = RequestMethod.POST, produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, String>> signIn(
-            @ApiParam(value = "아이디", required = true) @RequestParam(name = "email") String email,
+            @ApiParam(value = "이메일", required = true) @RequestParam(name = "email") String email,
             @ApiParam(value = "패스워드", required = true) @RequestParam(name = "password") String password) throws Exception {
 
-    	String loginId = email.split("@")[0];
-        UserDto userDto = userService.selectUser(loginId);
+        UserDto userDto = userService.loadUserByUsername(email);
 
         // 회원가입되지 않은 이메일이거나, 패스워드가 다른 경우
         if (userDto == null || !passwordEncoder.matches(password, userDto.getPassword())) {
             Map<String, String> error = new HashMap<>();
-            error.put("error", "id or password is not valid");
+            error.put("error", "email or password is not valid");
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
 
@@ -301,11 +297,10 @@ public class UserController {
     })
     @RequestMapping(value = "/signInforClub", method = RequestMethod.POST, produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, String>> singInForClub(
-            @ApiParam(value = "아이디", required = true) @RequestParam(name = "email") String email,
+            @ApiParam(value = "이메일", required = true) @RequestParam(name = "email") String email,
             @ApiParam(value = "패스워드", required = true) @RequestParam(name = "password") String password) throws Exception {
 
-        String loginId = email.split("@")[0];
-        UserDto userDto = userService.selectUser(loginId);
+        UserDto userDto = userService.loadUserByUsername(email);
 
         // 회원가입되지 않은 이메일이거나, 패스워드가 다른 경우
         if (userDto == null || !passwordEncoder.matches(password, userDto.getPassword())) {
@@ -534,19 +529,18 @@ public class UserController {
     })
     @RequestMapping(value = "/searchPw", method = RequestMethod.PATCH, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> searchPw(
-            @ApiParam(value = "loginId", required = true) @RequestParam(name = "email") String email,
+            @ApiParam(value = "email", required = true) @RequestParam(name = "email") String email,
             @ApiParam(value = "newpw", required = true) @RequestParam(name = "newqw") String newPw
     ) throws Exception {
 
-        String loginId = email.split("@")[0];
-        UserDto userDto = userService.selectUser(loginId);
+        UserDto userDto = userService.loadUserByUsername(email);
 
         // 유저가 존재하지 않는 경우
         if (userDto == null) {
             return new ResponseEntity<>("user does not exist", HttpStatus.BAD_REQUEST);
         } else {
 
-			userService.updateUserPassword(loginId, passwordEncoder.encode(newPw));
+			userService.updateUserPassword(email, passwordEncoder.encode(newPw));
 			String msg = "비밀번호가 변경되었습니다.";
 			return new ResponseEntity<>(msg, HttpStatus.OK);
         }

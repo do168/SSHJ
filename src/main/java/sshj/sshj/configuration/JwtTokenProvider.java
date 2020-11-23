@@ -77,7 +77,7 @@ public class JwtTokenProvider {
 //        UserDetails userDetails = userService.loadUserByUsername(this.getUserPk(token)); // 계속 DB 검사 -> 토큰 쓰는 이유가 없다 -> 고쳐야 한다.
         UserDto userDto = new UserDto();
         Claims parseInfo = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
-        userDto.setLoginId(parseInfo.getSubject());
+        userDto.setEmail(parseInfo.getSubject());
         userDto.setRole(parseInfo.get("roles", List.class).toString().substring(1,parseInfo.get("roles", List.class).toString().length()-1));
         userDto.setUserId(parseInfo.get("userId", Integer.class));
         userDto.setNickname(parseInfo.get("nickname", String.class));
@@ -93,15 +93,15 @@ public class JwtTokenProvider {
             log.info("token cannot parser by this secretKey");
             return null;
         } catch (ExpiredJwtException e) { //expire됐을 때
-            String loginId = e.getClaims().getSubject();
-            log.info("loginId from expired access token: " + loginId);
+            String email = e.getClaims().getSubject();
+            log.info("Email from expired access token: " + email);
             return null;
         }
     }
     public UserDto getUserDto(String token) {
         Claims parseInfo = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
         UserDto userDto = new UserDto();
-        userDto.setLoginId(parseInfo.getSubject());
+        userDto.setEmail(parseInfo.getSubject());
         userDto.setUserId(parseInfo.get("userId", Integer.class));
         userDto.setRole(parseInfo.get("roles", List.class).toString().substring(1,parseInfo.get("roles", List.class).toString().length()-1));
         return userDto;

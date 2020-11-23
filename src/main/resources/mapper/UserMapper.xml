@@ -32,15 +32,34 @@
 		        email = #{email}
 	    ]]>
     </select>
-
-    <select id="selectUserEmail" parameterType="string" resultType="int">
+    
+    <!-- UID로 유저 검색	-->
+    <select id="selectUserInfoById" parameterType="long" resultType="sshj.sshj.dto.UserDto">
         <![CDATA[
-		/*	UserMapper.selectUserEmail	*/
-		select count(email)
-		from tb_user
-		where email = #{email}
-	]]>
+		/*	UserMapper.selectUserInfo	*/
+		    SELECT
+		        user_id as userId,
+		        password as password,
+		        email as email,
+		        nickname as nickname,
+		        created_time as createdTime,
+		        role as role
+		    FROM
+		        tb_user
+		    WHERE
+		        user_id = #{userId}
+	    ]]>
     </select>
+    
+
+<!--    <select id="selectUserEmail" parameterType="long" resultType="int">-->
+<!--        <![CDATA[-->
+<!--		/*	UserMapper.selectUserEmail	*/-->
+<!--		select count(email)-->
+<!--		from tb_user-->
+<!--		where user_id = #{userId}-->
+<!--	]]>-->
+<!--    </select>-->
 
     <select id="selectEmail" parameterType="long" resultType="string">
         <![CDATA[
@@ -130,11 +149,11 @@
 		]]>
     </update>
 
-    <update id="updateUserNickname" parameterType="string">
+    <update id="updateUserNickname" parameterType="long">
         <![CDATA[
 			UPDATE tb_user
 			SET nickname=#{nickname}
-			WHERE email=#{email}
+			WHERE user_id=#{userId}
 		]]>
     </update>
 
