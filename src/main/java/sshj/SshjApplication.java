@@ -2,8 +2,10 @@ package sshj;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 @SpringBootApplication
+@EnableAspectJAutoProxy
 public class SshjApplication {
 
 	public static final String APPLICATION_LOCATIONS = "spring.config.location="
