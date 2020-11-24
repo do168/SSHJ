@@ -214,23 +214,8 @@ public class UserController {
     public ResponseEntity<String> signUp(
             @ModelAttribute final UserInfoModel userInfoModel) throws Exception {
         
-    	String email = userInfoModel.getEmail();
-
-    	// 이미 가입한 경우
-        if(userService.loadUserByUsername(email)!=null) {
-            String msg = "이미 존재하는 아이디입니다";
-            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
-        }
-
-        // 인증코드가 일치하지 않는 경우
-        if (!userService.selectCode(userInfoModel.getEmail()).equals(userInfoModel.getCode())) {
-            log.info(userService.selectCode(userInfoModel.getEmail())+" "+userInfoModel.getCode());
-            String msg = "인증코드가 일치하지 않습니다.";
-            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
-        }
+        String msg = userService.executeSignUp(userInfoModel);
         
-        userService.insertUser(userInfoModel);
-        String msg = "회원가입 성공";
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 

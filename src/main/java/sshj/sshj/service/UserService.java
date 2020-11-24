@@ -6,6 +6,8 @@ import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import sshj.sshj.component.CodeCompo;
+import sshj.sshj.component.SSHZUtil;
 import sshj.sshj.component.SenderCompo;
 import sshj.sshj.dto.CodeInfoModel;
 import sshj.sshj.dto.SenderDto;
@@ -37,6 +40,9 @@ public class UserService implements UserDetailsService {
     private UserMapper userMapper;
 
     @Autowired
+    private SSHZUtil sshzUtil;
+    
+    @Autowired
     private SenderCompo senderCompo;
 
     @Autowired
@@ -50,6 +56,31 @@ public class UserService implements UserDetailsService {
 //    public int selectUserEmail(long userId) throws Exception {
 //        return userMapper.selectUserEmail(userId);
 //    }
+    
+    
+    public String executeSignUp(UserInfoModel userInfoModel) {
+    	String email = userInfoModel.getEmail();
+    	String msg = "회원가입 성공";
+    	
+    	// 이메일 도메인 확인
+        if (!sshzUtil.isEmailReg(email)) {
+            msg = "해당 대학교의 이메일이 아닙니다";
+        }
+    	
+    	// 이미 가입한 경우
+        if(userMapper.selectUserInfo(email)!=null) {
+            msg = "이미 존재하는 아이디입니다";
+        }
+
+        // 인증코드가 일치하지 않는 경우
+        if (!userMapper.selectCode(userInfoModel.getEmail()).equals(userInfoModel.getCode())) {
+            log.info("[{}] [{}]", userMapper.selectCode(userInfoModel.getEmail()), userInfoModel.getCode());
+            msg = "인증코드가 일치하지 않습니다.";
+        }
+        
+        this.insertUser(userInfoModel);
+    	return msg;
+    }
 
     public UserDto selectUserEmail(String email) throws Exception {
         return userMapper.selectUserEmail(email);
@@ -119,16 +150,19 @@ public class UserService implements UserDetailsService {
         userMapper.updateCodeEmail(code, email, time);
     }
 
-    public void insertUser(UserInfoModel userInfoModel) {
+    // TODO: 현재 사용되는 컨트롤러가 없음 과연 이함수가 따로 있을 필요가 있을까? (맞다면 public으로 전환)
+    private void insertUser(UserInfoModel userInfoModel) {
         String time = time_now();
-        this.userMapper.insertUser(UserDto.builder()
-                .email(userInfoModel.getEmail())
-                .password(passwordEncoder.encode(userInfoModel.getPassword()))
-                .email(userInfoModel.getEmail())
-                .role("ROLE_USER")
-                .nickname(userInfoModel.getNickname())
-                .createdTime(time)
-                .build()); //getId() 없앴는데 뭐가 달라지나?
+        UserDto userDto = UserDto.builder()
+		        .email(userInfoModel.getEmail())
+		        .password(passwordEncoder.encode(userInfoModel.getPassword()))
+		        .email(userInfoModel.getEmail())
+		        .role("ROLE_USER")
+		        .nickname(userInfoModel.getNickname())
+		        .createdTime(time)
+		        .build();
+        
+        userMapper.insertUser(userDto); //getId() 없앴는데 뭐가 달라지나?
         return;
     }
 
