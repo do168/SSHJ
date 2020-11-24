@@ -46,11 +46,10 @@ public class UploadController {
 	})
 	@RequestMapping(value = "/profile", method=RequestMethod.POST)
 	public ResponseEntity<String> profileUpload(
-			@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
-			@RequestParam("file") MultipartFile multipartFile) throws IOException {
+		@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
+		@RequestParam("file")MultipartFile multipartFile) throws IOException {
+		String imgUrl = uploadService.executeUploadProfile(multipartFile, userHeaderModel.getUserId());	
 		
-		String imgUrl = uploadService.executeUploadProfile(multipartFile, userHeaderModel.getUserId());
-		// TODO: 1=admin userInfoModel 생성시 교체
 		log.info("profile files uploaded[{}]", imgUrl);		
 		
 		return new ResponseEntity<String>(imgUrl, HttpStatus.OK);
@@ -68,8 +67,8 @@ public class UploadController {
 		
 		if (ObjectUtils.isEmpty(multipartHttpServletRequest))
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		List<String> imgUrls = uploadService.executeUploadClubContents(multipartHttpServletRequest, userHeaderModel.getUserId(), meetingId); 
-		
+		List<String> imgUrls = uploadService.executeUploadClubContents(multipartHttpServletRequest, 1, meetingId); 
+		// TODO: 1=admin userInfoModel 생성시 교체
 		log.info("club contents uploaded [{}]", imgUrls);
 
 		return new ResponseEntity<List<String>>(imgUrls, HttpStatus.OK);
