@@ -1,5 +1,6 @@
 package sshj.sshj.component;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -50,6 +51,25 @@ public class AopCompo {
             long end = System.currentTimeMillis();
             logger.info("Request: {} {}{} < {} ({}ms)", request.getMethod(), request.getRequestURI(),
                     params, request.getRemoteHost(), end - start);
+        }
+    }
+
+    @Pointcut("within(sshj.sshj.service.*)") // 3
+    public void onRequestService() {}
+
+    @Around("sshj.sshj.component.AopCompo.onRequestService()") // 4
+    public Object doLoggingService(ProceedingJoinPoint pjp) throws Throwable {
+
+        String parameters = Arrays.toString(pjp.getArgs());
+        String methodName = pjp.getSignature().getName();
+        String serviceName = pjp.getTarget().toString();
+        long start = System.currentTimeMillis();
+        try {
+            return pjp.proceed(pjp.getArgs()); // 6
+        } finally {
+            long end = System.currentTimeMillis();
+            logger.info("{}, method : {}  parameters : {} ({}ms)", serviceName, methodName,
+                    parameters, end - start);
         }
     }
 }

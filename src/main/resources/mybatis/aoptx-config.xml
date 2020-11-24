@@ -23,6 +23,7 @@
 		</tx:attributes>
 	</tx:advice>
 
+	<!-- TODO : UserService도 트래잭션화 해야함 -->
 	<aop:config proxy-target-class="true">
 		<aop:pointcut id="serviceOperation" expression="execution(* sshj.*..*ServiceImpl.*(..))"/>
 		<aop:advisor pointcut-ref="serviceOperation" advice-ref="txAdvice"/>

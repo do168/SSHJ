@@ -1,7 +1,9 @@
 package sshj.sshj.service;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,10 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import sshj.sshj.component.CodeCompo;
 import sshj.sshj.component.SSHZUtil;
 import sshj.sshj.component.SenderCompo;
-import sshj.sshj.dto.CodeInfoModel;
-import sshj.sshj.dto.SenderDto;
-import sshj.sshj.dto.UserDto;
-import sshj.sshj.dto.UserInfoModel;
+import sshj.sshj.dto.*;
 import sshj.sshj.mapper.UserMapper;
 
 @Slf4j
@@ -29,10 +28,10 @@ import sshj.sshj.mapper.UserMapper;
 @RequiredArgsConstructor
 @PropertySource("classpath:aws.yml")
 public class UserService implements UserDetailsService {
-    
+
 	@Value("${cloud.aws.sender")
     private String sender;
-    
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -41,7 +40,7 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private SSHZUtil sshzUtil;
-    
+
     @Autowired
     private SenderCompo senderCompo;
 
@@ -56,45 +55,60 @@ public class UserService implements UserDetailsService {
 //    public int selectUserEmail(long userId) throws Exception {
 //        return userMapper.selectUserEmail(userId);
 //    }
-    
-    
-    public String executeSignUp(UserInfoModel userInfoModel) {
+
+
+    public ServiceResultModel executeSignUp(UserInfoModel userInfoModel) {
     	String email = userInfoModel.getEmail();
     	String msg = "회원가입 성공";
-    	
+
     	// 이메일 도메인 확인
         if (!sshzUtil.isEmailReg(email)) {
             msg = "해당 대학교의 이메일이 아닙니다";
+            return ServiceResultModel.builder()
+                    .flag(false)
+                    .msg(msg)
+                    .build();
         }
-    	
+
     	// 이미 가입한 경우
         if(userMapper.selectUserInfo(email)!=null) {
             msg = "이미 존재하는 아이디입니다";
+            return ServiceResultModel.builder()
+                    .flag(false)
+                    .msg(msg)
+                    .build();
         }
 
         // 인증코드가 일치하지 않는 경우
         if (!userMapper.selectCode(userInfoModel.getEmail()).equals(userInfoModel.getCode())) {
             log.info("[{}] [{}]", userMapper.selectCode(userInfoModel.getEmail()), userInfoModel.getCode());
             msg = "인증코드가 일치하지 않습니다.";
+            return ServiceResultModel.builder()
+                    .flag(false)
+                    .msg(msg)
+                    .build();
         }
-        
+
         this.insertUser(userInfoModel);
-    	return msg;
+        return ServiceResultModel.builder()
+                .flag(true)
+                .msg(msg)
+                .build();
     }
 
-    public UserDto selectUserEmail(String email) throws Exception {
+    public UserDto selectUserEmail(String email) {
         return userMapper.selectUserEmail(email);
     }
 
-    public String selectUserNickname(long userId) throws Exception {
+    public String selectUserNickname(long userId) {
         return userMapper.selectUserNickname(userId);
     }
 
-    public int selectUserNicknameIsOk(String nickname) throws Exception {
+    public int selectUserNicknameIsOk(String nickname) {
         return userMapper.selectUserNicknameIsOk(nickname);
     }
 
-    public UserDto selectUser(long userId) throws Exception {
+    public UserDto selectUser(long userId) {
         return userMapper.selectUserInfoById(userId);
     }
 
@@ -161,7 +175,7 @@ public class UserService implements UserDetailsService {
 		        .nickname(userInfoModel.getNickname())
 		        .createdTime(time)
 		        .build();
-        
+
         userMapper.insertUser(userDto); //getId() 없앴는데 뭐가 달라지나?
         return;
     }
@@ -187,8 +201,7 @@ public class UserService implements UserDetailsService {
     public String time_now() {
         long systemTime = System.currentTimeMillis();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA);
-        String dtime = formatter.format(systemTime);
-        return dtime;
+        return formatter.format(systemTime);
     }
 
 

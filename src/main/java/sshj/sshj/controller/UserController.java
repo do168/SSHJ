@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import sshj.sshj.component.SSHZUtil;
 import sshj.sshj.configuration.JwtTokenProvider;
 import sshj.sshj.dto.CodeInfoModel;
+import sshj.sshj.dto.ServiceResultModel;
 import sshj.sshj.dto.UserDto;
 import sshj.sshj.dto.UserInfoModel;
 import sshj.sshj.service.UserService;
@@ -201,7 +202,6 @@ public class UserController {
      * 입력받은 정보들 DB에 저장, 이미 아아디가 존재하는지 한번 더 체크
      * @param userInfoModel 토큰으로 받아온 유저정보
      * @return OK if 회원가입 성공, else BAD_REQUEST
-     * @throws Exception
      */
     @ApiOperation(
             value = "회원가입"
@@ -212,11 +212,18 @@ public class UserController {
     })
     @RequestMapping(value = "/signup", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> signUp(
-            @ModelAttribute final UserInfoModel userInfoModel) throws Exception {
+            @ModelAttribute final UserInfoModel userInfoModel) {
         
-        String msg = userService.executeSignUp(userInfoModel);
-        
-        return new ResponseEntity<>(msg, HttpStatus.OK);
+        ServiceResultModel result = userService.executeSignUp(userInfoModel);
+
+        // 정상적으로 회원가입 된 경우
+        if (result.getFlag()) {
+            return new ResponseEntity<>(result.getMsg(), HttpStatus.OK);
+        }
+        // 회원가입 로직에서 오류가 생긴 부분
+        else {
+            return new ResponseEntity<>(result.getMsg(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     /**
@@ -254,7 +261,7 @@ public class UserController {
         Map<String, String> token = new HashMap<>();
         String access_token = jwtTokenProvider.createAccessToken(userDto.getEmail(), userDto.getUserId(), userDto.getNickname(), userDto.getRole());
         token.put("accessToken", access_token);
-        log.info(userDto.getEmail());
+//        log.info(userDto.getEmail());
 //        String refresh_token = jwtTokenProvider.createRefreshToken();
 //        token.put("refreshToken", refresh_token);
 //        redisTemplate.opsForValue().set(userDto.getUsername(), refresh_token); // refresh_token은 따로 redis에 저장
