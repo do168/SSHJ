@@ -46,9 +46,10 @@ public class UploadController {
 	})
 	@RequestMapping(value = "/profile", method=RequestMethod.POST)
 	public ResponseEntity<String> profileUpload(
-		@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
-		@RequestParam("file")MultipartFile multipartFile) throws IOException {
-		String imgUrl = uploadService.executeUploadProfile(multipartFile, userHeaderModel.getUserId());	
+			@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
+			@RequestParam("file") MultipartFile multipartFile) throws IOException {
+		
+		String imgUrl = uploadService.executeUploadProfile(multipartFile, userHeaderModel.getUserId());
 		// TODO: 1=admin userInfoModel 생성시 교체
 		log.info("profile files uploaded[{}]", imgUrl);		
 		
@@ -61,12 +62,13 @@ public class UploadController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "") })
 	@RequestMapping(value = "/club", method = RequestMethod.POST)
 	public ResponseEntity<List<String>> contentUpload(
-//			@ApiIgnore @RequestAttribute("userInfoModel") UserInfoModel userInfoModel,
+			@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
 			MultipartHttpServletRequest multipartHttpServletRequest,
 			@ApiParam("meetingId") long meetingId) throws IOException {
+		
 		if (ObjectUtils.isEmpty(multipartHttpServletRequest))
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		List<String> imgUrls = uploadService.executeUploadClubContents(multipartHttpServletRequest, 1, meetingId); 
+		List<String> imgUrls = uploadService.executeUploadClubContents(multipartHttpServletRequest, userHeaderModel.getUserId(), meetingId); 
 		// TODO: 1=admin userInfoModel 생성시 교체
 		log.info("club contents uploaded [{}]", imgUrls);
 
