@@ -68,8 +68,9 @@ public class AopCompo {
             return pjp.proceed(pjp.getArgs()); // 6
         } finally {
             long end = System.currentTimeMillis();
-            logger.info("{}, method : {}  parameters : {} ({}ms)", serviceName, methodName,
+            logger.info("{} | method : {} | parameters : {} ({}ms)", serviceName, methodName,
                     parameters, end - start);
         }
+
     }
 }
