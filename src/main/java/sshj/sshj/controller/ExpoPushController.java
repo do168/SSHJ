@@ -43,7 +43,7 @@ public class ExpoPushController {
         try{
             userService.updateDeviceToken(userHeaderModel.getUserId(), expoPushToken);
         } catch (Exception e) {
-            log.error(e.toString());
+            log.error("",e);
             return new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);
         }
         String msg = "expoPush token saved success";

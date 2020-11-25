@@ -135,7 +135,7 @@
         <![CDATA[
         UPDATE tb_user
         SET device_token = #{deviceToken}
-        WHERE email = #{email}
+        WHERE user_id = #{userId}
 
         ]]>
     </update>
