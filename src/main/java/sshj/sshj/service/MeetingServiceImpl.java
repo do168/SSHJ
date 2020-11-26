@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 import sshj.sshj.dto.MeetingDto;
+import sshj.sshj.dto.MeetingSearchDto;
 import sshj.sshj.mapper.MeetingMapper;
 import sshj.sshj.mapper.S3FileMapper;
 
@@ -54,9 +55,9 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public List<MeetingDto> selectMeetingList() throws Exception {
+    public List<MeetingDto> selectMeetingList(MeetingSearchDto meetingSearchDto) throws Exception {
     	
-    	List<MeetingDto> meetingList = meetingMapper.selectMeetingList();
+    	List<MeetingDto> meetingList = meetingMapper.selectMeetingList(meetingSearchDto);
     	
     	for(MeetingDto md : meetingList) {
     		List<String> imgUrlList =  s3FileMapper.getMeetingFiles(md.getMeetingId());

@@ -22,6 +22,7 @@ import io.swagger.annotations.Authorization;
 import lombok.extern.slf4j.Slf4j;
 import springfox.documentation.annotations.ApiIgnore;
 import sshj.sshj.dto.MeetingDto;
+import sshj.sshj.dto.MeetingSearchDto;
 import sshj.sshj.dto.UserHeaderModel;
 import sshj.sshj.service.ExpoPushService;
 import sshj.sshj.service.MeetingService;
@@ -120,13 +121,13 @@ public class MeetingController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/readAll", method= RequestMethod.GET)
+    @RequestMapping(value = "/read/list", method= RequestMethod.GET)
     public ResponseEntity<List> readAllMeeting(
-            @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel
-    ) throws Exception{
-    	log.info("실행 readAll");
-        log.info("userId : "+userHeaderModel.getUserId());
-        List<MeetingDto> list=meetingService.selectMeetingList();
+            @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
+            @ModelAttribute MeetingSearchDto meetingSearchDto) throws Exception{
+    	
+    	meetingSearchDto.setUserId(userHeaderModel.getUserId());
+    	List<MeetingDto> list=meetingService.selectMeetingList(meetingSearchDto);
         
         log.info("list [{}]", list);
         

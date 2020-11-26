@@ -65,7 +65,7 @@
 		]]>
 	</select>
 
-	<select id="selectMeetingList"
+	<select id="selectMeetingList" parameterType="sshj.sshj.dto.MeetingSearchDto"
 		resultType="sshj.sshj.dto.MeetingDto">
         <![CDATA[
 			SELECT
@@ -88,7 +88,45 @@
 			JOIN
 				tb_user as tbu
 			ON
-				tbm.club_id = tbu.user_id;
+				tbm.club_id = tbu.user_id
+		]]>		
+		<if test='"Y".equals(isSubscribed.name)'>
+			INNER JOIN
+				tb_club_subscription as tcs
+			ON
+				tcs.club_id = tbm.club_id
+		</if>
+		<if test='"Y".equals(isApplied.name)'>
+			INNER JOIN
+				tb_user_by_meeting as tubm
+			ON
+				tubm.meeting_id = tbm.meeting_id
+		</if>
+		<![CDATA[
+			WHERE 1=1
+		]]>
+		<if test="clubId > 0">
+			and tbm.club_id = #{clubId}
+		</if>
+		<if test="@org.apache.commons.lang3.StringUtils@isNotEmpty( startDate )">
+			and tbm.start_date >= #{startDate}
+		</if>
+		<if test="@org.apache.commons.lang3.StringUtils@isNotEmpty( endDate )">
+		<![CDATA[
+			and tbm.end_date <= #{endDate}
+		]]>
+		</if>
+		<if test="@org.apache.commons.lang3.StringUtils@isNotEmpty( category )">
+			and tbm.category = #{category}
+		</if>
+		<if test='"Y".equals(isSubscribed.name)'>
+			tcs.user_id = #{userId}
+		</if>
+		<if test='"Y".equals(isApplied.name)'>
+			tubm.user_id = #{userId}
+		</if>
+		<![CDATA[
+			limit #{offset}, #{pageScale}
 		]]>
 	</select>
 
