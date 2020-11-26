@@ -24,6 +24,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import sshj.sshj.dto.MeetingDto;
 import sshj.sshj.dto.MeetingSearchDto;
 import sshj.sshj.dto.UserHeaderModel;
+import sshj.sshj.dto.enums.FlagEnum;
 import sshj.sshj.service.ExpoPushService;
 import sshj.sshj.service.MeetingService;
 
@@ -106,13 +107,37 @@ public class MeetingController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
+    /**
+    *	TODO: Deprecated 임 순형이와 얘기해봐야함
+    * @param userHeaderModel requestParam 전용 모델 -> 토큰에 담겨있는 정보
+    * @return
+    */
+	@Deprecated
+	@ApiOperation(value = "전체 모임 읽기 Api", notes = "전체 모임 읽기 Api", authorizations = { @Authorization(value = "JWT") })
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "") })
+	@RequestMapping(value = "/readAll", method = RequestMethod.GET)
+	public ResponseEntity<List> readAllMeeting(
+			@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception {
+
+		MeetingSearchDto meetingSearchDto = new MeetingSearchDto();
+		meetingSearchDto.setClubId(0);
+		meetingSearchDto.setStatus(null);
+		meetingSearchDto.setIsApplied(FlagEnum.N);
+		meetingSearchDto.setIsSubscribed(FlagEnum.N);
+		meetingSearchDto.setUserId(userHeaderModel.getUserId());
+		meetingSearchDto.setPageScale(15);
+		meetingSearchDto.setOffset(0);
+		List<MeetingDto> list = meetingService.selectMeetingList(meetingSearchDto);
+
+		log.info("list [{}]", list);
+
+		return new ResponseEntity<List>(list, HttpStatus.OK);
+	}
 
     /**
-     *
      * @param userHeaderModel requestParam 전용 모델 -> 토큰에 담겨있는 정보
      * @return
      */
-
     @ApiOperation(
             value = "전체 모임 읽기 Api"
             , notes = "전체 모임 읽기 Api"
@@ -122,10 +147,12 @@ public class MeetingController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/read/list", method= RequestMethod.GET)
-    public ResponseEntity<List> readAllMeeting(
+    public ResponseEntity<List> readMeetingList(
             @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
             @ModelAttribute MeetingSearchDto meetingSearchDto) throws Exception{
     	
+    	if(meetingSearchDto == null)
+    		meetingSearchDto = new MeetingSearchDto();
     	meetingSearchDto.setUserId(userHeaderModel.getUserId());
     	List<MeetingDto> list=meetingService.selectMeetingList(meetingSearchDto);
         

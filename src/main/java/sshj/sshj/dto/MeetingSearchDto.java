@@ -12,7 +12,7 @@ public class MeetingSearchDto {
 	private long userId;
 	
 	@ApiModelProperty(value = "동아리 번호")
-	private Long clubId;
+	private long clubId;
 	
 	// TODO: 카테고리를 enum 처리 할지 말지
 	@ApiModelProperty(value = "시작 날짜")
