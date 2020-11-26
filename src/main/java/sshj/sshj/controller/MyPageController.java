@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
+import sshj.sshj.dto.ServiceResultModel;
 import sshj.sshj.dto.UserHeaderModel;
 import sshj.sshj.service.UserService;
 
@@ -30,22 +31,16 @@ public class MyPageController {
     })
     @RequestMapping(value = "/changenickname", method = RequestMethod.PATCH)
     public ResponseEntity<Boolean> changeNickname(
-            @ApiParam(value = "입력 닉네임", required = true) @RequestParam(name = "chNickname", required = true) String chnickname
+            @ApiParam(value = "입력 닉네임", required = true) @RequestParam(name = "chNickname", required = true) String chNickname
     ,@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception {
-        
+
+        ServiceResultModel result = userService.selectUserNicknameIsOk(chNickname);
     	long userId = userHeaderModel.getUserId();
         
-        if (userService.selectUserNicknameIsOk(chnickname) == 0) {
-            log.info("사용 가능한 닉네임입니다.");
-            try {
-                userService.updateUserNickname(userId, chnickname);
-            }
-            catch (Exception e) {
-                log.error(String.valueOf(e));
-            }
+        if (result.getFlag()) {
+            userService.updateUserNickname(userId, chNickname);
             return new ResponseEntity<>(true, HttpStatus.OK);
         } else {
-            log.info("중복된 닉네임입니다");
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
     }

@@ -173,4 +173,19 @@
         ]]>
     </select>
 
+    <delete id="deleteUserId" parameterType="long">
+        <![CDATA[
+            DELETE FROM tb_user
+            WHERE user_id = #{userId}
+        ]]>
+    </delete>
+
+    <select id="selectUserId" parameterType="long">
+        <![CDATA[
+            SELECT count(user_id)
+            FROM tb_user
+            WEHRE user_id = #{userId}
+        ]]>
+    </select>
+
 </mapper>

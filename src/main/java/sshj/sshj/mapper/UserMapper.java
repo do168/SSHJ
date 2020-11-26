@@ -21,6 +21,7 @@ public interface UserMapper {
     UserDto selectUserInfoById(long userId);
     
 //    int selectUserEmail(long userId);
+    int selectUserId(long userId);
     UserDto selectUserEmail(String email);
     void insertUser(UserDto userDto);
     String selectCode(String email);
@@ -34,4 +35,7 @@ public interface UserMapper {
     String selectUserDeviceToken(long userId);
     String selectEmail(long userId);
     String selectUserNickname(long userId);
+
+    void deleteUserId(long userId);
+
 }
