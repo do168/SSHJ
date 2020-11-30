@@ -134,23 +134,23 @@
 		resultType="sshj.sshj.dto.MeetingDto">
         <![CDATA[
 			SELECT
-				meeting_id as meetingId,
-				meeting_name as meetingName,
-				deadline as deadline,
-				start_date as startDate,
-				end_date as endDate,
-				category as category,
-				explanation_title as explanationTitle,
-				explanation_content as explanationContent,
-				meeting_place as meetingPlace,
-				created_time as createdTime,
-				max_participant as maxParticipant,
+				tbm.meeting_id as meetingId,
+				tbm.meeting_name as meetingName,
+				tbm.deadline as deadline,
+				tbm.start_date as startDate,
+				tbm.end_date as endDate,
+				tbm.category as category,
+				tbm.explanation_title as explanationTitle,
+				tbm.explanation_content as explanationContent,
+				tbm.meeting_place as meetingPlace,
+				tbm.created_time as createdTime,
+				tbm.max_participant as maxParticipant,
 				(SELECT COUNT(*) FROM tb_user_by_meeting tubm WHERE tbm.meeting_id = tubm.meeting_id) as curParticipant,
-				club_id as clubId
+				tbm.club_id as clubId
 			FROM
-				tb_meeting
+				tb_meeting as tbm
 			WHERE
-			    club_id=#{clubId}
+			    tbm.club_id=#{clubId}
 		]]>
 	</select>
 
