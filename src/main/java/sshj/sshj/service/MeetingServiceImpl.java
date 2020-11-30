@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import sshj.sshj.dto.MeetingDto;
 import sshj.sshj.dto.MeetingSearchDto;
+import sshj.sshj.dto.enums.FlagEnum;
 import sshj.sshj.mapper.MeetingMapper;
 import sshj.sshj.mapper.S3FileMapper;
 
@@ -56,6 +57,17 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public List<MeetingDto> selectMeetingList(MeetingSearchDto meetingSearchDto) throws Exception {
+    	
+    	/*
+    	 * enum 데이터 null 체크
+    	 */
+    	if(meetingSearchDto.getIsApplied() == null)
+    		meetingSearchDto.setIsApplied(FlagEnum.N);
+    	if(meetingSearchDto.getIsSubscribed() == null)
+    		meetingSearchDto.setIsSubscribed(FlagEnum.N);
+    	
+    	// 페이징 계산
+    	meetingSearchDto.setOffset(meetingSearchDto.getOffset() * meetingSearchDto.getPageScale());
     	
     	List<MeetingDto> meetingList = meetingMapper.selectMeetingList(meetingSearchDto);
     	
@@ -108,6 +120,10 @@ public class MeetingServiceImpl implements MeetingService {
     
     @Override
     public void registerUserApplied(long userId, long meetingId) throws Exception {
+    	/*
+    	 * TODO: 이미 참여한 모임인지체크
+    	 * TODO: 신청 최대인원 넘겼는지 체크 
+    	 */
     	int cnt = meetingMapper.registerUserApplied(userId, meetingId);
     	if(cnt != 1) {
     		log.error("registerUserApplied count ERROR");

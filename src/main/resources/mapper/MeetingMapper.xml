@@ -145,6 +145,7 @@
 				meeting_place as meetingPlace,
 				created_time as createdTime,
 				max_participant as maxParticipant,
+				(SELECT COUNT(*) FROM tb_user_by_meeting tubm WHERE tbm.meeting_id = tubm.meeting_id) as curParticipant,
 				club_id as clubId
 			FROM
 				tb_meeting

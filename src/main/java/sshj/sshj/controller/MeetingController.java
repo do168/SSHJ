@@ -151,8 +151,6 @@ public class MeetingController {
             @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
             @ModelAttribute MeetingSearchDto meetingSearchDto) throws Exception{
     	
-    	if(meetingSearchDto == null)
-    		meetingSearchDto = new MeetingSearchDto();
     	meetingSearchDto.setUserId(userHeaderModel.getUserId());
     	List<MeetingDto> list=meetingService.selectMeetingList(meetingSearchDto);
         
@@ -171,7 +169,7 @@ public class MeetingController {
     })
     @RequestMapping(value = "/club/list", method= RequestMethod.GET)
     public ResponseEntity<List> readClubByMeeting(int clubId) throws Exception{
-        List<MeetingDto> list=meetingService.selectClubByMeetingList(clubId);
+        List<MeetingDto> list = meetingService.selectClubByMeetingList(clubId);
         return new ResponseEntity<List>(list,HttpStatus.OK);
     }
 

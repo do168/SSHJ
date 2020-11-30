@@ -69,7 +69,7 @@ public class UploadController {
 		if (ObjectUtils.isEmpty(multipartHttpServletRequest))
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		List<String> imgUrls = uploadService.executeUploadClubContents(multipartHttpServletRequest, userHeaderModel.getUserId(), meetingId); 
-		// TODO: 1=admin userInfoModel 생성시 교체
+		
 		log.info("club contents uploaded [{}]", imgUrls);
 
 		return new ResponseEntity<List<String>>(imgUrls, HttpStatus.OK);
