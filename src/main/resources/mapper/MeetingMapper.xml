@@ -240,6 +240,29 @@
         ]]>
 	</delete>
 	
-
+	<select id="getMeetingUserList" resultType="sshj.sshj.dto.UserDto">
+        <![CDATA[
+			SELECT 
+				tu.user_id as userId,
+				tu.profile_url as profileUrl,
+				tu.email as email,
+				tu.`role` as `role`, 
+				tu.nickname as nickname,
+				tu.created_time as createdTime
+			FROM 
+				tb_user tu
+			JOIN 
+				tb_user_by_meeting tubm
+			ON 
+				tu.user_id = tubm.user_id
+			JOIN 
+				tb_meeting tm
+			ON 
+				tm.meeting_id = tubm.meeting_id  
+			WHERE 
+				tubm.meeting_id = #{meetingId}
+				and tm.club_id = #{clubId};
+		]]>
+	</select>
 	
 </mapper>

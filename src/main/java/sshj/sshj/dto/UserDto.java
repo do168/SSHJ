@@ -5,6 +5,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -17,17 +19,27 @@ import java.util.stream.Collectors;
 @Builder
 @ToString
 public class UserDto implements UserDetails {
-    private long userId;
     
+	@ApiModelProperty(value = "유저 번호")
+	private long userId;
+	
+	@ApiModelProperty(value = "password")
     private String password;
 
+	@ApiModelProperty(value = "닉네임")
     private String nickname;
 
+	@ApiModelProperty(value = "이메일")
     private String email;
 
+	@ApiModelProperty(value = "가입 날짜")
     private String createdTime;
 
+	@ApiModelProperty(value = "권한")
     private String role;
+
+	@ApiModelProperty(value = "프로필 url")
+    private String profileUrl;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

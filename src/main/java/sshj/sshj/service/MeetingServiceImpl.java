@@ -139,4 +139,10 @@ public class MeetingServiceImpl implements MeetingService {
     		throw new Exception();
     	}
     }
+
+	@Override
+	public void getMeetingUserList(long clubId, long meetingId) throws Exception {
+		
+		meetingMapper.getMeetingUserList(clubId, meetingId);
+	}
 }

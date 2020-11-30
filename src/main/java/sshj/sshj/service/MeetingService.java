@@ -28,4 +28,12 @@ public interface MeetingService {
     void registerUserApplied(long userId, long meetingId) throws Exception;
     
     void deleteUserApplied(long userId, long meetingId) throws Exception;
+    
+    /**
+     * 모임에 참여중인 유저 정보 리스트
+     * @param clubId
+     * @param meetingId
+     * @throws Exception
+     */
+    void getMeetingUserList(long clubId, long meetingId) throws Exception;
 }

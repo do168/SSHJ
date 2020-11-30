@@ -264,4 +264,22 @@ public class MeetingController {
     	
     	return new ResponseEntity<>(HttpStatus.OK);
     }
+    
+    @ApiOperation(
+            value = "클럽 모임 참여 유저 리스트"
+            , notes = "클럽 모임 참여 유저 리스트"
+            ,authorizations = {@Authorization (value = "JWT")}
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/club/byClub/users", method = RequestMethod.GET)
+    public ResponseEntity<Void> getMeetingUserList(
+    		@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
+    		@ApiParam(value = "모임 번호") @RequestParam("meetingId")long meetingId) throws Exception{
+    	
+    	meetingService.getMeetingUserList(userHeaderModel.getUserId(), meetingId);
+    	
+    	return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
