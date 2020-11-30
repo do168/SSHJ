@@ -146,9 +146,10 @@
 				tbm.created_time as createdTime,
 				tbm.max_participant as maxParticipant,
 				(SELECT COUNT(*) FROM tb_user_by_meeting tubm WHERE tbm.meeting_id = tubm.meeting_id) as curParticipant,
-				tbm.club_id as clubId
+				tbm.club_id as clubId,
+				tbu.nickname as clubName
 			FROM
-				tb_meeting as tbm
+				tb_meeting tbm left join tb_user tbu on tbm.club_id = tbu.user_id
 			WHERE
 			    tbm.club_id=#{clubId}
 		]]>
