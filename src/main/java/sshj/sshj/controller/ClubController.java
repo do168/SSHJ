@@ -344,7 +344,7 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/ShowClubNameAndId", method= RequestMethod.GET, produces="text/plain;charset=UTF-8")
+    @RequestMapping(value = "/ShowClubNameAndId", method= RequestMethod.GET)
     public ResponseEntity<List<Map<String, String>>> ShowClubNameAndId() throws Exception{
 
         List<Map<String, String>> clubNameList = new ArrayList<>();
