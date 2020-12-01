@@ -50,7 +50,7 @@ public class ClubServiceImpl implements ClubService{
     }
 
     @Override
-    public int selectClubNoticeCnt(long noticeId) throws Exception {
+    public long selectClubNoticeCnt(long noticeId) throws Exception {
         return clubMapper.selectClubNoticeCnt(noticeId);
     }
 

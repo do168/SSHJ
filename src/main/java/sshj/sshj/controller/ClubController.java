@@ -272,8 +272,8 @@ public class ClubController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/countNoticeLike", method= RequestMethod.GET)
-    public ResponseEntity<Integer> countClubNoticeLike(long noticeId) throws Exception{
-        int cnt=clubService.selectClubNoticeCnt(noticeId);
+    public ResponseEntity<Long> countClubNoticeLike(long noticeId) throws Exception{
+        long cnt=clubService.selectClubNoticeCnt(noticeId);
         return new ResponseEntity<>(cnt,HttpStatus.OK);
     }
 

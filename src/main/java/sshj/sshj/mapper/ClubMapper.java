@@ -18,7 +18,7 @@ public interface ClubMapper {
     void deleteClubNotice(long noticeId) throws Exception;
     void insertClubNoticeLike(long userId,long noticeId) throws Exception;
     void deleteClubNoticeLike(long userId,long noticeId) throws Exception;
-    int selectClubNoticeCnt(long noticeId) throws Exception;
+    long selectClubNoticeCnt(long noticeId) throws Exception;
     void insertClubSubs(long userId,long clubId) throws Exception;
     void deleteClubSubs(long userId,long clubId) throws Exception;
     List<Long> selectClubSubsUserList(long clubId) throws Exception;
