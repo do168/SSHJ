@@ -284,6 +284,7 @@
 				AND (
 					tbm.club_id = #{userId}
 					OR tubm.user_id = #{userId})
+			LIMIT 1;
 		]]>
 	</select>
 	
