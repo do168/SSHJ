@@ -37,4 +37,12 @@ public interface MeetingService {
      * @throws Exception
      */
     List<UserDto> getMeetingUserList(long clubId, long meetingId) throws Exception;
+    
+    /**
+     * 모임 오픈카톡 링크 조회
+     * @param clubId
+     * @param meetingId
+     * @throws Exception
+     */
+    String getMeetingChatUrl(long clubId, long meetingId) throws Exception;
 }

@@ -19,7 +19,6 @@ public class ReviewServiceImpl implements ReviewService{
 	@Override
 	public void createReview(ReviewDto reviewDto) {
 		
-		
 		int cnt = reviewMapper.createReview(reviewDto);
 		
 		if(cnt != 1) {

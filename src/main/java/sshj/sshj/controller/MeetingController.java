@@ -285,4 +285,24 @@ public class MeetingController {
     	
     	return new ResponseEntity<>(userList, HttpStatus.OK);
     }
+    
+    @ApiOperation(
+            value = "모임 오픈카톡 링크 조회"
+            , notes = "모임 오픈카톡 링크 조회"
+            ,authorizations = {@Authorization (value = "JWT")}
+    )
+    @ApiResponses(value={
+            @ApiResponse(code=200, message="")
+    })
+    @RequestMapping(value = "/get/chaturl", method = RequestMethod.GET)
+    public ResponseEntity<String> getMeetingChatUrl(
+    		@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
+    		@ApiParam(value = "모임 번호") @RequestParam("meetingId")long meetingId) throws Exception{
+    	
+    	String chatUrl = meetingService.getMeetingChatUrl(userHeaderModel.getUserId(), meetingId);
+    	
+    	log.info("[{}]",chatUrl);
+    	
+    	return new ResponseEntity<>(chatUrl, HttpStatus.OK);
+    }
 }

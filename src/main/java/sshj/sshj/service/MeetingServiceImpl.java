@@ -146,4 +146,10 @@ public class MeetingServiceImpl implements MeetingService {
 		
 		return meetingMapper.getMeetingUserList(clubId, meetingId);
 	}
+	
+	@Override
+	public String getMeetingChatUrl(long clubId, long meetingId) throws Exception {
+		
+		return meetingMapper.getMeetingChatUrl(clubId, meetingId);
+	}
 }

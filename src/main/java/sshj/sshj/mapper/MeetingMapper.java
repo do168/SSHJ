@@ -37,4 +37,6 @@ public interface MeetingMapper {
 	
 	List<UserDto> getMeetingUserList(long clubId, long meetingId) throws Exception;
     
+	String getMeetingChatUrl(long userId, long meetingId) throws Exception;
+    
 }
