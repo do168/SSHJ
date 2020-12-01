@@ -281,6 +281,8 @@ public class MeetingController {
     	
     	List<UserDto> userList = meetingService.getMeetingUserList(userHeaderModel.getUserId(), meetingId);
     	
+    	log.info("[{}]",userList);
+    	
     	return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 }
