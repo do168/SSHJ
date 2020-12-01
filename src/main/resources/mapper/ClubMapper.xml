@@ -85,7 +85,7 @@
         ]]>
     </delete>
 
-    <select id="selectClubNoticeCnt" parameterType="long" resultType="long">
+    <select id="selectClubNoticeCnt" parameterType="long" resultType="int">
         <![CDATA[
             SELECT COUNT(*)
             FROM tb_club_notice_like
