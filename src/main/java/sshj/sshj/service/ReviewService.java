@@ -15,7 +15,7 @@ public interface ReviewService {
 	 * 후기 작성
 	 * @param reviewDto
 	 */
-	public void createReview(ReviewDto reviewDto);
+	public void createReview(long meetingId, long userId, String content);
 	
 	/**
 	 * 후기 리스트 조회

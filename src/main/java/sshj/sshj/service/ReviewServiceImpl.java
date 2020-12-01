@@ -17,9 +17,9 @@ public class ReviewServiceImpl implements ReviewService{
 	private ReviewMapper reviewMapper;
 	
 	@Override
-	public void createReview(ReviewDto reviewDto) {
+	public void createReview(long meetingId, long userId, String content) {
 		
-		int cnt = reviewMapper.createReview(reviewDto);
+		int cnt = reviewMapper.createReview(meetingId, userId, content);
 		
 		if(cnt != 1) {
 			log.error("review create failed!!");
@@ -29,7 +29,8 @@ public class ReviewServiceImpl implements ReviewService{
 	
 	@Override
 	public List<ReviewDto> getReviewList(long meetingId, int page, int size){
-		return reviewMapper.getReviewList(meetingId, page, size);
+		int offset = page * size;
+		return reviewMapper.getReviewList(meetingId, offset, size);
 	}
 	
 	@Override

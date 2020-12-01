@@ -5,19 +5,21 @@
 <mapper namespace="sshj.sshj.mapper.ReviewMapper">
     <insert id="createReview" parameterType="sshj.sshj.dto.ReviewDto">
         <![CDATA[
-			INSERT INTO tb_review(
+			INSERT INTO tb_review (
 				user_id,
 				meeting_id,
 				content,
 				last_updated_time,
-				created_time 
-			) VALUES (
+				created_time
+			) SELECT
 				#{userId},
 				#{meetingId},
 				#{content},
-				now(),
-				now()
-			)
+				NOW(),
+				NOW()
+
+			FROM DUAL
+			WHERE EXISTS(SELECT * FROM tb_user_by_meeting WHERE meeting_id = #{meetingId} AND user_id = #{userId})
 		]]>
     </insert>
 
@@ -31,7 +33,7 @@
 				, created_time as created_time
 			FROM
 				tb_review
-			limit #{page-1}, #{size};
+			limit #{offset}, #{size};
 		]]>
     </select>
 

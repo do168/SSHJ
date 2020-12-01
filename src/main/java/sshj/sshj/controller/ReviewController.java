@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import springfox.documentation.annotations.ApiIgnore;
 import sshj.sshj.dto.ReviewDto;
+import sshj.sshj.dto.UserHeaderModel;
 import sshj.sshj.service.ReviewService;
 
 @Api(value="ReviewController", description="ReviewController")
@@ -34,11 +35,13 @@ public class ReviewController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/create", method= RequestMethod.POST)
-    public ResponseEntity<Void> createReview(@ModelAttribute ReviewDto reviewDto) throws Exception{
+    public ResponseEntity<Void> createReview(@ApiParam(value = "미팅 id", required = true) @RequestParam(name = "meeting_id", required = true) long meetingId,
+                                             @ApiParam(value = "후기", required = true) @RequestParam(name = "content", required = true) String content,
+                                             @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
         
-    	reviewService.createReview(reviewDto);
+    	reviewService.createReview(meetingId, userHeaderModel.getUserId(), content);
     	
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
     
     @ApiOperation(
@@ -56,7 +59,7 @@ public class ReviewController {
         
     	List<ReviewDto> reviewList = reviewService.getReviewList(meetingId, page, size); 
     	
-        return new ResponseEntity<List<ReviewDto>>(reviewList, HttpStatus.OK);
+        return new ResponseEntity<>(reviewList, HttpStatus.OK);
     }
     
     @ApiOperation(
@@ -75,7 +78,7 @@ public class ReviewController {
         
     	reviewService.updateReview(userId, reviewId, content);
     	
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
     
     @ApiOperation(
@@ -93,7 +96,7 @@ public class ReviewController {
         
     	reviewService.deleteReview(userId, reviewId);
     	
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

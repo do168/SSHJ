@@ -18,21 +18,21 @@ public interface ReviewMapper {
 	/**
 	 * 후기 등록
 	 */
-	public int createReview(ReviewDto reviewDto);
+	int createReview(long meetingId, long userId, String content);
 	
 	/**
 	 * 후기 리스트
 	 */
-	public List<ReviewDto> getReviewList(@Param("meetingId")long meetingId, @Param("page")int page, @Param("size")int size);
+	List<ReviewDto> getReviewList(@Param("meetingId") long meetingId, @Param("offset") int offset, @Param("size") int size);
 
 	/**
 	 * 후기 수정
 	 */
-	public int updateReview(long userId, long reviewId, String content);
+	int updateReview(long userId, long reviewId, String content);
 
 	/**
 	 * 후기 삭제
 	 */
-	public int deleteReview(long userId, long reviewId);
+	int deleteReview(long userId, long reviewId);
 	
 }
