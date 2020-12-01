@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import springfox.documentation.annotations.ApiIgnore;
 import sshj.sshj.dto.MeetingDto;
 import sshj.sshj.dto.MeetingSearchDto;
+import sshj.sshj.dto.UserDto;
 import sshj.sshj.dto.UserHeaderModel;
 import sshj.sshj.dto.enums.FlagEnum;
 import sshj.sshj.service.ExpoPushService;
@@ -274,12 +275,12 @@ public class MeetingController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/club/byClub/users", method = RequestMethod.GET)
-    public ResponseEntity<Void> getMeetingUserList(
+    public ResponseEntity<List<UserDto>> getMeetingUserList(
     		@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
     		@ApiParam(value = "모임 번호") @RequestParam("meetingId")long meetingId) throws Exception{
     	
-    	meetingService.getMeetingUserList(userHeaderModel.getUserId(), meetingId);
+    	List<UserDto> userList = meetingService.getMeetingUserList(userHeaderModel.getUserId(), meetingId);
     	
-    	return new ResponseEntity<>(HttpStatus.OK);
+    	return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import sshj.sshj.dto.MeetingDto;
 import sshj.sshj.dto.MeetingSearchDto;
+import sshj.sshj.dto.UserDto;
 
 public interface MeetingService {
 	
@@ -35,5 +36,5 @@ public interface MeetingService {
      * @param meetingId
      * @throws Exception
      */
-    void getMeetingUserList(long clubId, long meetingId) throws Exception;
+    List<UserDto> getMeetingUserList(long clubId, long meetingId) throws Exception;
 }

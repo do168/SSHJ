@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import sshj.sshj.dto.MeetingDto;
 import sshj.sshj.dto.MeetingSearchDto;
+import sshj.sshj.dto.UserDto;
 import sshj.sshj.dto.enums.FlagEnum;
 import sshj.sshj.mapper.MeetingMapper;
 import sshj.sshj.mapper.S3FileMapper;
@@ -136,13 +137,13 @@ public class MeetingServiceImpl implements MeetingService {
     	int cnt = meetingMapper.deleteUserApplied(userId, meetingId);
     	if(cnt != 1) {
     		log.error("deleteUserApplied count ERROR");
-    		throw new Exception();
+    		throw new Exception();	
     	}
     }
 
 	@Override
-	public void getMeetingUserList(long clubId, long meetingId) throws Exception {
+	public List<UserDto> getMeetingUserList(long clubId, long meetingId) throws Exception {
 		
-		meetingMapper.getMeetingUserList(clubId, meetingId);
+		return meetingMapper.getMeetingUserList(clubId, meetingId);
 	}
 }
