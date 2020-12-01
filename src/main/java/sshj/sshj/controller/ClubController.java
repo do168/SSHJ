@@ -365,7 +365,7 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/ClubPackage", method= RequestMethod.GET)
+    @RequestMapping(value = "/ClubPackage", method= RequestMethod.GET, produces="text/plain;charset=UTF-8")
     public ResponseEntity<Map<String, Object>> ClubPackage(@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
                                                            @ApiParam(value = "클럽 id", required = true) @RequestParam(name = "club_id", required = true) long clubId) throws Exception{
 
