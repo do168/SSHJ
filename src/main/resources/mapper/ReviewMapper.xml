@@ -15,8 +15,8 @@
 				#{userId},
 				#{meetingId},
 				#{content},
-				NOW(),
-				NOW()
+				DATE_ADD(NOW(), INTERVAL 9 HOUR),
+				DATE_ADD(NOW(), INTERVAL 9 HOUR)
 
 			FROM DUAL
 			WHERE EXISTS(SELECT * FROM tb_user_by_meeting WHERE meeting_id = #{meetingId} AND user_id = #{userId})
@@ -43,7 +43,7 @@
 				tb_review
 			SET
 				content = #{content},
-				last_updated_time = now()
+				last_updated_time = DATE_ADD(NOW(), INTERVAL 9 HOUR)
 			WHERE
 				review_id = #{reviewId}
 				and user_id = #{userId}

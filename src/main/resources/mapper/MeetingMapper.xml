@@ -27,7 +27,7 @@
 				#{category},
 				#{explanationTitle},
 				#{explanationContent},
-				now(),
+				DATE_ADD(NOW(), INTERVAL 9 HOUR),
 				#{meetingPlace},
 				#{maxParticipant},
 				#{clubId},
@@ -169,7 +169,7 @@
 				explanation_title=#{explanationTitle},
 				explanation_content=#{explanationContent},
 				meeting_place=#{meetingPlace},
-				created_time=now(),
+				created_time=DATE_ADD(NOW(), INTERVAL 9 HOUR),
 				max_participant=#{maxParticipant},
 				chat_url=#{chatUrl}
 			WHERE meeting_id=#{meetingId}
@@ -233,7 +233,7 @@
         VALUES(
         #{userId},
         #{meetingId},
-        now())
+        DATE_ADD(NOW(), INTERVAL 9 HOUR))
         ]]>
 	</insert>
 	

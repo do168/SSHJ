@@ -15,7 +15,7 @@
         #{clubId},
         #{title},
         #{content},
-        now()
+        DATE_ADD(NOW(), INTERVAL 9 HOUR)
         )
         ]]>
     </insert>
@@ -55,7 +55,7 @@
 			UPDATE tb_club_notice
 			SET title=#{title},
 				content=#{content},
-				created_time=now()
+				created_time=DATE_ADD(NOW(), INTERVAL 9 HOUR)
 			WHERE notice_id=#{noticeId}
 		]]>
     </update>

@@ -300,7 +300,7 @@ public class MeetingController {
     		@ApiParam(value = "모임 번호") @RequestParam("meetingId")long meetingId) throws Exception{
     	
     	String chatUrl = meetingService.getMeetingChatUrl(userHeaderModel.getUserId(), meetingId);
-    	
+    
     	log.info("[{}]",chatUrl);
     	
     	return new ResponseEntity<>(chatUrl, HttpStatus.OK);
