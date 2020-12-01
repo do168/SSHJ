@@ -17,7 +17,8 @@
 				created_time,
 				meeting_place,
 				max_participant,
-				club_id)
+				club_id,
+				chat_url)
 			VALUES(
 				#{meetingName},
 				#{deadline},
@@ -29,7 +30,8 @@
 				now(),
 				#{meetingPlace},
 				#{maxParticipant},
-				#{clubId})
+				#{clubId},
+				#{chatUrl})
 		]]>
 		<selectKey keyProperty="meetingId" resultType="Integer">
 			SELECT LAST_INSERT_ID()
@@ -52,6 +54,7 @@
 				tm.max_participant as maxParticipant,
 				tm.club_id as clubId,
 				tm.meeting_place as meetingPlace,
+				tm.chat_url as chatUrl,
 				(SELECT nickname FROM tb_user WHERE user_id = tm.club_id ) as clubName,
 				(SELECT count(*) FROM tb_user_by_meeting WHERE meeting_id = #{meetingId}) as curParticipant,
 				EXISTS (
@@ -82,7 +85,8 @@
 				(SELECT COUNT(*) FROM tb_user_by_meeting tubm WHERE tbm.meeting_id = tubm.meeting_id) as curParticipant,
 				tbm.meeting_place as meetingPlace,
 				tbu.nickname as clubName,
-				tbm.club_id as clubId
+				tbm.club_id as clubId,
+				tbm.chat_url as chatUrl
 			FROM
 				tb_meeting as tbm
 			JOIN
@@ -147,7 +151,8 @@
 				tbm.max_participant as maxParticipant,
 				(SELECT COUNT(*) FROM tb_user_by_meeting tubm WHERE tbm.meeting_id = tubm.meeting_id) as curParticipant,
 				tbm.club_id as clubId,
-				tbu.nickname as clubName
+				tbu.nickname as clubName,
+				tbm.chat_url as chatUrl
 			FROM
 				tb_meeting tbm left join tb_user tbu on tbm.club_id = tbu.user_id
 			WHERE
@@ -168,7 +173,8 @@
 				explanation_content=#{explanationContent},
 				meeting_place=#{meetingPlace},
 				created_time=now(),
-				max_participant=#{maxParticipant}
+				max_participant=#{maxParticipant},
+				chat_url=#{chatUrl}
 			WHERE meeting_id=#{meetingId}
 		]]>
 	</update>
@@ -195,7 +201,8 @@
 				created_time as createdTime,
 				meeting_place as meetingPlace,
 				max_participant as maxParticipant,
-				club_id as clubId
+				club_id as clubId,
+				chat_url as chatUrl
 			FROM
 				tb_meeting
 			WHERE

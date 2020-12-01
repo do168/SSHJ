@@ -47,6 +47,9 @@ public class MeetingDto {
 	@ApiModelProperty(value = "모임 장소")
     private String meetingPlace;
 	
+	@ApiModelProperty(value = "오픈 채팅 url")
+    private String chatUrl;
+	
 	@ApiModelProperty(value = "동아리 이름")
     private String clubName;
 	
