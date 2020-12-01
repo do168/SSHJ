@@ -269,13 +269,13 @@
 		]]>
 	</select>
 	
-	<select id="getMeetingChatUrl" resultType="string">
+	<select id="getMeetingChatUrl" parameterType="long" resultType="string">
         <![CDATA[
 			SELECT 
 				tbm.chat_url
 			FROM
 				tb_meeting tbm
-			JOIN
+			LEFT JOIN
 				tb_user_by_meeting tubm
 			ON
 				tbm.meeting_id = tubm.meeting_id
