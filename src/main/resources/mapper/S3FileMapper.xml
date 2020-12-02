@@ -73,7 +73,7 @@
 		WHERE EXISTS (
 			SELECT * FROM (
 			SELECT * FROM tb_file AS b
-			WHERE b.user_id = 123456812 AND b.meeting_id = 123456931
+			WHERE b.user_id = #{userId} AND b.meeting_id = #{meetingId}
 			) tmp
 			)
 
