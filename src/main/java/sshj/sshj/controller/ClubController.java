@@ -344,7 +344,7 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/ShowClubNameAndId", method= RequestMethod.GET)
+    @RequestMapping(value = "/ShowClubNameAndId", method= RequestMethod.GET, produces = "application/json; charset=utf8")
     public ResponseEntity<List<Map<String, String>>> ShowClubNameAndId() throws Exception{
 
         List<Map<String, String>> clubNameList = new ArrayList<>();
@@ -365,7 +365,7 @@ public class ClubController {
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @RequestMapping(value = "/ClubPackage", method= RequestMethod.GET)
+    @RequestMapping(value = "/ClubPackage", method= RequestMethod.GET, produces = "application/json; charset=utf8")
     public ResponseEntity<Map<String, Object>> ClubPackage(@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
                                                            @ApiParam(value = "클럽 id", required = true) @RequestParam(name = "club_id", required = true) long clubId) throws Exception{
 
