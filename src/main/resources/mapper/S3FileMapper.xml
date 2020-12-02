@@ -71,7 +71,7 @@
 		/*	S3FileMapper.deleteContent	*/
 		delete from tb_file
 		where
-			user_id = #{clubId} and meeting_id = #{meetingId}
+			user_id = #{userId} and meeting_id = #{meetingId}
 		]]>
 	</delete>
 	
