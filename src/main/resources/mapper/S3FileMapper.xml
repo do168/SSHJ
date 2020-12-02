@@ -70,7 +70,7 @@
 		<![CDATA[
 		/*	S3FileMapper.deleteContent	*/
 		delete from tb_file
-		where exits (
+		where exists (
 			select * from tb_file
 			where user_id = #{userId} and meeting_id = #{meetingId}
 			)
