@@ -65,5 +65,14 @@
 			user_id = #{clubId}
 	]]>
 	</select>
+
+	<delete id="deleteContent" parameterType="sshj.sshj.dto.FileUploadDto">
+		<![CDATA[
+		/*	S3FileMapper.deleteContent	*/
+		delete from tb_file
+		where
+			user_id = #{clubId} and meeting_id = #{meetingId}
+		]]>
+	</delete>
 	
 </mapper>

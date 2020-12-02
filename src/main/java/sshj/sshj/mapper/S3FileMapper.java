@@ -26,5 +26,7 @@ public interface S3FileMapper {
 	String selectProfileImage(@Param("userId") long userId, @Param("bucket type") String bucket);
 
 	String selectContentsUrl(@Param("userId") long userId);
-	
+
+	int deleteContent(FileUploadDto fileUploadDto);
+
 }
