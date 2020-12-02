@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -38,6 +39,8 @@ public class AopCompo {
         HttpServletRequest request = // 5
                 ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 
+        Object result = null;
+
         Map<String, String[]> paramMap = request.getParameterMap();
         String params = "";
         if (!paramMap.isEmpty()) {
@@ -46,11 +49,15 @@ public class AopCompo {
 
         long start = System.currentTimeMillis();
         try {
-            return pjp.proceed(pjp.getArgs()); // 6
+            result = pjp.proceed(pjp.getArgs());
+
+            return result; // 6
         } finally {
             long end = System.currentTimeMillis();
-            logger.info("Request: {} {}{} < {} ({}ms)", request.getMethod(), request.getRequestURI(),
-                    params, request.getRemoteHost(), end - start);
+            logger.info("Request: {} {}{} < {} ", request.getMethod(), request.getRequestURI(),
+                    params, request.getRemoteHost());
+            logger.info("Response: {}({}) = {} ({}ms)", pjp.getSignature().getDeclaringTypeName(), pjp.getSignature().getName(), result,  end - start);
+
         }
     }
 
