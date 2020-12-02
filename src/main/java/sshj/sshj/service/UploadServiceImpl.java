@@ -100,7 +100,7 @@ public class UploadServiceImpl implements UploadService{
 					fileUploadDto.setMeetingId(meetingId);
 					fileUploadDto.setSize(file.getSize());
 
-//					fileMapper.deleteContent(fileUploadDto);
+					fileMapper.deleteContent(fileUploadDto);
 
 					int cnt = fileMapper.uploadContent(fileUploadDto);
 

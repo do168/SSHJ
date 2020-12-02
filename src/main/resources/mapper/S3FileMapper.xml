@@ -69,13 +69,15 @@
 	<delete id="deleteContent" parameterType="sshj.sshj.dto.FileUploadDto">
 		<![CDATA[
 		/*	S3FileMapper.deleteContent	*/
-		DELETE FROM tb_file
-		WHERE EXISTS (
-			SELECT * FROM (
-			SELECT * FROM tb_file AS b
-			WHERE b.user_id = #{userId} AND b.meeting_id = #{meetingId}
-			) tmp
-			)
+		DELETE FROM tb_file tbf
+		WHERE tbf.user_id = #{userId}
+   		AND tbf.meeting_id = #{meetingId}
+   		AND EXISTS (
+      		SELECT * FROM (
+      		SELECT * FROM tb_file AS b
+      		WHERE b.user_id = #{userId} AND b.meeting_id = #{meetingId}
+      		) tmp
+      		)
 
 		]]>
 	</delete>
