@@ -100,11 +100,7 @@ public class UploadServiceImpl implements UploadService{
 					fileUploadDto.setMeetingId(meetingId);
 					fileUploadDto.setSize(file.getSize());
 
-					int cntDelete = fileMapper.deleteContent(fileUploadDto);
-					if (cntDelete < 1) {
-						log.error("delete content upload info failed!!");
-						throw new RuntimeException();
-					}
+					fileMapper.deleteContent(fileUploadDto);
 
 					int cnt = fileMapper.uploadContent(fileUploadDto);
 
