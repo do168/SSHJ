@@ -140,9 +140,16 @@
 
     <update id="updateClubDescription" parameterType="sshj.sshj.dto.ClubDescriptionDto">
         <![CDATA[
-            update tb_club_description
-            set description = #{description}
-            where club_id = #{clubId}
+            INSERT into tb_club_description(
+                club_id,
+                description)
+            VALUES(
+                #{clubId},
+                #{description})
+            ON DUPLICATE KEY
+            update
+                description = #{description}
+
             ]]>
     </update>
 
