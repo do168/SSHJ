@@ -36,7 +36,7 @@
 		<![CDATA[
 		/*	S3FileMapper.createRelationFileMeeting	*/
 		insert into tb_rmf (
-			file_id, meeting_id, index
+			file_id, meeting_id, _index
 		)
 		VALUES (
 				( SELECT file_id
@@ -47,7 +47,7 @@
 			  )
 		ON DUPLICATE KEY
 		update
-                index = #{index}
+                _index = #{index}
 
 	]]>
 	</insert>
@@ -62,7 +62,7 @@
 			tb_file tbf left join tb_rmf tbrmf on tbf.file_id = tbrmf.file_id
 		where
 			tbrmf.meeting_id = #{meetingId}
-		order by tbrmf.index
+		order by tbrmf._index
 	]]>
 	</select>
 
