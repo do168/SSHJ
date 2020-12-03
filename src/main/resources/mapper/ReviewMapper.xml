@@ -18,7 +18,6 @@
 				DATE_ADD(NOW(), INTERVAL 9 HOUR),
 				DATE_ADD(NOW(), INTERVAL 9 HOUR)
 
-			FROM DUAL
 			WHERE EXISTS(SELECT * FROM tb_user_by_meeting WHERE meeting_id = #{meetingId} AND user_id = #{userId})
 		]]>
     </insert>

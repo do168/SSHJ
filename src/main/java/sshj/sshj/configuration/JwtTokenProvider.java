@@ -31,7 +31,7 @@ public class JwtTokenProvider {
     private String secretKey = "DaeDoCrew";
 
     // 토큰 유효시간 30분
-    private long access_tokenValidTime = 30 * 60 * 1000L;
+    private long access_tokenValidTime = 6 * 60 * 60 * 1000L;
 
     private long refresh_tokenValidTime =14 * 24 * 60 * 60 * 1000L;
 

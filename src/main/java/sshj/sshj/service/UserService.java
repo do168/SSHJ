@@ -390,7 +390,7 @@ public class UserService implements UserDetailsService {
     public boolean sendEmail(String email) {
         String code = codeCompo.excuteGenerate();
         String time = time_now();
-
+        log.info(sender);
         SenderDto senderDto = SenderDto.builder()
                 .from("daedocrew@gmail.com")
                 .to(email)

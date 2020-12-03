@@ -38,14 +38,17 @@
 		/*	S3FileMapper.createRelationFileMeeting	*/
 		insert into tb_rmf (
 			file_id, meeting_id, index
-		) select
-			( SELECT file_id
-			  FROM tb_file
-			  WHERE file_url = #{fileUrl}),
-			  #{meetingId},
-			  #{index}
-		from dual
-		where exists(select * from tb_rmf where file_id = #{fileId} and meeting_id = #{meetingId}
+		)
+		VALUES (
+				( SELECT file_id
+			  		FROM tb_file
+			  		WHERE file_url = #{fileUrl}),
+			  	#{meetingId},
+			  	#{index}
+			  )
+		ON DUPLICATE KEY
+		update
+                index = #{index}
 
 	]]>
 	</insert>
