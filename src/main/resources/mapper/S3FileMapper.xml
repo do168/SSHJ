@@ -21,11 +21,10 @@
 		/*	S3FileMapper.uploadContent	*/
 		INSERT INTO tb_file (
 			user_id, origin_file_name, file_url, mime_type, size
-		) SELECT (
+		) SELECT
 			#{userId}, #{originFileName}, #{fileUrl}, #{mimeType}, #{size}
-		) FROM DUAL
 		WHERE NOT EXISTS
-		(SELECT *
+		(SELECT file_url
 		FROM tb_file
 		WHERE file_url = #{fileUrl}
 		)
