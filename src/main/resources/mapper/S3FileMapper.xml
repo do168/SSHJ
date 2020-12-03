@@ -24,9 +24,9 @@
 		) SELECT
 			#{userId}, #{originFileName}, #{fileUrl}, #{mimeType}, #{size}
 		WHERE NOT EXISTS
-		(SELECT file_url
+		(SELECT origin_file_name
 		FROM tb_file
-		WHERE file_url = #{fileUrl}
+		WHERE origin_file_name = #{originFileName}
 		)
 	]]>
 	</insert>
@@ -41,7 +41,7 @@
 		VALUES (
 				( SELECT file_id
 			  		FROM tb_file
-			  		WHERE file_url = #{fileUrl}),
+			  		WHERE origin_file_name = #{originFileName}),
 			  	#{meetingId},
 			  	#{index}
 			  )
