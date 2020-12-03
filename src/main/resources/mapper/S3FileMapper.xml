@@ -3,7 +3,7 @@
 
 <mapper namespace="sshj.sshj.mapper.S3FileMapper">
 
-	<!-- 업로드 파일 정보 등록	-->
+	<!-- 업로드 프로필 파일 정보 등록	-->
 	<update id="uploadProfile">
 	<![CDATA[
 		/*	S3FileMapper.uploadProfile	*/
@@ -15,7 +15,7 @@
 	]]>
 	</update>
 
-	<!-- 업로드 파일 정보 등록	-->
+	<!-- 업로드 컨텐츠 파일 정보 등록	-->
 	<insert id="uploadContent" parameterType="sshj.sshj.dto.FileUploadDto">
 	<![CDATA[
 		/*	S3FileMapper.uploadContent	*/

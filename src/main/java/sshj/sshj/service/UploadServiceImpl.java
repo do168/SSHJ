@@ -102,7 +102,7 @@ public class UploadServiceImpl implements UploadService{
 					fileUploadDto.setSize(file.getSize());
 					fileUploadDto.setIndex(index);
 
-
+					// file 아카이브에 등록
 					int cnt = fileMapper.uploadContent(fileUploadDto);
 
 					if (cnt < 1) {
@@ -110,7 +110,8 @@ public class UploadServiceImpl implements UploadService{
 						throw new RuntimeException();
 					}
 
-					cnt = fileMapper.createRelationFileMeeting(imgUrl, meetingId);
+					// 파일 - 모임 관계 데이터 생성
+					cnt = fileMapper.createRelationFileMeeting(imgUrl, meetingId, index);
 
 					if (cnt < 1) {
 						log.error("Create Relation table_upload info failed!!");
