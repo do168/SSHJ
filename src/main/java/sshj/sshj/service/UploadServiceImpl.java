@@ -83,6 +83,7 @@ public class UploadServiceImpl implements UploadService{
 			String newFilename = Long.toString(System.nanoTime());
 			String imgUrl = "";
 			List<MultipartFile> list = multipartHttpServletRequest.getFiles(fileList.next());
+			int index = 0;
 			for(MultipartFile file : list) {
 				try {
 					
@@ -97,10 +98,10 @@ public class UploadServiceImpl implements UploadService{
 					fileUploadDto.setOriginFileName(file.getOriginalFilename());
 					fileUploadDto.setFileUrl(imgUrl);
 					fileUploadDto.setMimeType(mimeType);
-					fileUploadDto.setMeetingId(meetingId);
+//					fileUploadDto.setMeetingId(meetingId);
 					fileUploadDto.setSize(file.getSize());
+					fileUploadDto.setIndex(index);
 
-					fileMapper.deleteContent(fileUploadDto);
 
 					int cnt = fileMapper.uploadContent(fileUploadDto);
 
@@ -109,7 +110,15 @@ public class UploadServiceImpl implements UploadService{
 						throw new RuntimeException();
 					}
 
+					cnt = fileMapper.createRelationFileMeeting(imgUrl, meetingId);
+
+					if (cnt < 1) {
+						log.error("Create Relation table_upload info failed!!");
+						throw new RuntimeException();
+					}
+
 					imgUrls.add(imgUrl);
+					index++;
 
 				} catch (IOException e) {
 					log.error("", e);

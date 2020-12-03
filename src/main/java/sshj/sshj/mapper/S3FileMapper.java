@@ -29,4 +29,7 @@ public interface S3FileMapper {
 
 	int deleteContent(FileUploadDto fileUploadDto);
 
+	int createRelationFileMeeting(@Param("fileUrl") String fileUrl, @Param("meetingId") long meetingId);
+
+
 }

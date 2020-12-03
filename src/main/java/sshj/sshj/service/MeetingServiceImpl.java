@@ -53,7 +53,7 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     public void deleteMeeting(long meetingId) throws Exception {
         meetingMapper.deleteMeeting(meetingId);
-//      업로드 된 파일들을 삭제 해야하는가 정책적으로 살펴보자
+//      TODO 업로드 된 파일들을 삭제 해야하는가 정책적으로 살펴보자 -> 아카이브에는 남겨두고 관계테이블에서 chain 삭제
     }
 
     @Override

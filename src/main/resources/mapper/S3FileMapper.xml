@@ -19,11 +19,34 @@
 	<insert id="uploadContent" parameterType="sshj.sshj.dto.FileUploadDto">
 	<![CDATA[
 		/*	S3FileMapper.uploadContent	*/
-		insert into tb_file (
-			user_id, origin_file_name, file_url, mime_type, size, meeting_id
-		) values (
-			#{userId}, #{originFileName}, #{fileUrl}, #{mimeType}, #{size}, #{meetingId}
+		INSERT INTO tb_file (
+			user_id, origin_file_name, file_url, mime_type, size
+		) SELECT (
+			#{userId}, #{originFileName}, #{fileUrl}, #{mimeType}, #{size}
+		) FROM DUAL
+		WHERE NOT EXISTS
+		(SELECT *
+		FROM tb_file
+		WHERE file_url = #{fileUrl}
 		)
+	]]>
+	</insert>
+
+	<!-- Meeting - File 관계 생성 -->
+	<insert id="createRelationFileMeeting">
+		<![CDATA[
+		/*	S3FileMapper.createRelationFileMeeting	*/
+		insert into tb_rmf (
+			file_id, meeting_id, index
+		) select
+			( SELECT file_id
+			  FROM tb_file
+			  WHERE file_url = #{fileUrl}),
+			  #{meetingId},
+			  #{index}
+		from dual
+		where exists(select * from tb_rmf where file_id = #{fileId} and meeting_id = #{meetingId}
+
 	]]>
 	</insert>
 	
@@ -34,9 +57,10 @@
 		select
 			file_url
 		from
-			tb_file
+			tb_file tbf left join tb_rmf tbrmf on tbf.file_id = tbrmf.file_id
 		where
-			meeting_id = #{meetingId}
+			tbrmf.meeting_id = #{meetingId}
+		order by tbrmf.index
 	]]>
 	</select>
 
@@ -54,32 +78,34 @@
 	</select>
 
 	<!--Contents Url 가져오기 -->
-	<select id="selectContentsUrl" resultType="string">
-		<![CDATA[
-		/*	S3FileMapper.selectContentsUrl	*/
-		select
-			file_url
-		from
-			tb_file
-		where
-			user_id = #{clubId}
-	]]>
-	</select>
+<!--	<select id="selectContentsUrl" resultType="string">-->
+<!--		<![CDATA[-->
+<!--		/*	S3FileMapper.selectContentsUrl	*/-->
+<!--		select-->
+<!--			file_url-->
+<!--		from-->
+<!--			tb_file-->
+<!--		where-->
+<!--			user_id = #{clubId}-->
+<!--	]]>-->
+<!--	</select>-->
 
-	<delete id="deleteContent" parameterType="sshj.sshj.dto.FileUploadDto">
-		<![CDATA[
-		/*	S3FileMapper.deleteContent	*/
-		DELETE FROM tb_file tbf
-		WHERE tbf.user_id = #{userId}
-   		AND tbf.meeting_id = #{meetingId}
-   		AND EXISTS (
-      		SELECT * FROM (
-      		SELECT * FROM tb_file AS b
-      		WHERE b.user_id = #{userId} AND b.meeting_id = #{meetingId}
-      		) tmp
-      		)
+<!--	<delete id="deleteContent" parameterType="sshj.sshj.dto.FileUploadDto">-->
+<!--		<![CDATA[-->
+<!--		/*	S3FileMapper.deleteContent	*/-->
+<!--		DELETE FROM tb_rmf tbrmf-->
+<!--		WHERE tbrmf.file_id = ( SELECT fild_id-->
+<!--			  FROM tb_file-->
+<!--			  WHERE file_url = #{fileUrl})-->
+<!--   		AND tbrmf.meeting_id = #{meetingId}-->
+<!--   		AND EXISTS (-->
+<!--      		SELECT * FROM (-->
+<!--      		SELECT * FROM tb_file AS b-->
+<!--      		WHERE b.user_id = #{userId} AND b.meeting_id = #{meetingId}-->
+<!--      		) tmp-->
+<!--      		)-->
 
-		]]>
-	</delete>
+<!--		]]>-->
+<!--	</delete>-->
 	
 </mapper>

@@ -48,10 +48,15 @@ public class FileUploadDto {
 	/**
 	 * 모임 번호
 	 */
-	private long meetingId;
+//	private long meetingId;
 	
 	/**
 	 * 업로드 시간
 	 */
 	private String uploadDatetime;
+
+	/**
+	 * 배열 순서
+	 */
+	private int index;
 }
