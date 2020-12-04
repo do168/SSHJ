@@ -111,7 +111,7 @@ public class UploadServiceImpl implements UploadService{
 					}
 
 					// 파일 - 모임 관계 데이터 생성
-					cnt = fileMapper.createRelationFileMeeting(imgUrl, meetingId, index);
+					cnt = fileMapper.createRelationFileMeeting(imgUrl, meetingId, index, file.getOriginalFilename());
 
 					if (cnt < 1) {
 						log.error("Create Relation table_upload info failed!!");

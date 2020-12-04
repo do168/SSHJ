@@ -31,7 +31,7 @@ public interface S3FileMapper {
 	// TODO delete 기능이 필요할까?
 	int deleteContent(FileUploadDto fileUploadDto);
 
-	int createRelationFileMeeting(@Param("fileUrl") String fileUrl, @Param("meetingId") long meetingId, int index);
+	int createRelationFileMeeting(@Param("fileUrl") String fileUrl, @Param("meetingId") long meetingId, int index, String originFileName);
 
 
 }
