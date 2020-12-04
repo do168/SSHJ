@@ -78,12 +78,12 @@ public class UploadServiceImpl implements UploadService{
 
 		Iterator<String> fileList = multipartHttpServletRequest.getFileNames();
 		List<String> imgUrls = new ArrayList<String>();
-		
+		int index = 0;
 		while(fileList.hasNext()) {
 			String newFilename = Long.toString(System.nanoTime());
 			String imgUrl = "";
 			List<MultipartFile> list = multipartHttpServletRequest.getFiles(fileList.next());
-			int index = 0;
+
 			for(MultipartFile file : list) {
 				try {
 					
