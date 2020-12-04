@@ -103,26 +103,24 @@ public class UploadServiceImpl implements UploadService{
 					fileUploadDto.setIndex(index);
 
 					// file 아카이브에 등록
-					int cnt = fileMapper.uploadContent(fileUploadDto);
-
-					if (cnt < 1) {
-						log.error("Save content upload info failed!!");
+					try {
+						fileMapper.uploadContent(fileUploadDto);
+					} catch(Exception e) {
+						log.error("", e);
 						throw new RuntimeException();
 					}
 
 					// 파일 - 모임 관계 데이터 생성
-					cnt = fileMapper.createRelationFileMeeting(imgUrl, meetingId, index, file.getOriginalFilename());
-
-					if (cnt < 1) {
-						log.error("Create Relation table_upload info failed!!");
+					try {
+						fileMapper.createRelationFileMeeting(imgUrl, meetingId, index, file.getOriginalFilename());
+					} catch (Exception e) {
+						log.error("", e);
 						throw new RuntimeException();
 					}
 
 					imgUrls.add(imgUrl);
 					index++;
 
-				} catch (IOException e) {
-					log.error("", e);
 				} catch (Exception e) {
 					log.error("", e);
 				}
