@@ -4,9 +4,10 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-
 import org.springframework.stereotype.Repository;
+
 import sshj.sshj.dto.FileUploadDto;
+import sshj.sshj.dto.SimpleFileDto;
 
 /**
  * 파일 업로드 mapper
@@ -21,12 +22,11 @@ public interface S3FileMapper {
 	
 	int uploadContent(FileUploadDto fileUploadDto);
 	
-	List<String> getMeetingFiles(@Param("meetingId") long meetingId);
+	List<SimpleFileDto> getMeetingFiles(@Param("meetingId") long meetingId);
 
 	String selectProfileImage(@Param("userId") long userId, @Param("bucket type") String bucket);
 
-	// TODO 코드리뷰하며 지워도 되는 API인지 검사
-	String selectContentsUrl(@Param("userId") long userId);
+	List<SimpleFileDto> selectContentsUrl(@Param("clubId") long clubId);
 
 	// TODO delete 기능이 필요할까?
 	int deleteContent(FileUploadDto fileUploadDto);

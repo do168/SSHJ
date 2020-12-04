@@ -18,6 +18,7 @@ import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Authorization;
 import lombok.extern.slf4j.Slf4j;
 import springfox.documentation.annotations.ApiIgnore;
+import sshj.sshj.dto.SimpleFileDto;
 import sshj.sshj.dto.UserHeaderModel;
 import sshj.sshj.service.ArchiveService;
 
@@ -41,12 +42,12 @@ public class ArchiveController {
 			, authorizations = { @Authorization(value = "JWT") })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "") })
 	@RequestMapping(value = "/getList", method = RequestMethod.GET)
-	public ResponseEntity<List<String>> getArchiveList(
+	public ResponseEntity<List<SimpleFileDto>> getArchiveList(
 			@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws IOException {
 		
-		List<String> imgUrls = archiveService.getArchiveList(userHeaderModel.getUserId());
+		List<SimpleFileDto> fileDtoList = archiveService.getArchiveList(userHeaderModel.getUserId());
 
-		return new ResponseEntity<List<String>>(imgUrls, HttpStatus.OK);
+		return new ResponseEntity<List<SimpleFileDto>>(fileDtoList, HttpStatus.OK);
 	}
 	
 	

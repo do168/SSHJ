@@ -53,11 +53,13 @@
 	</insert>
 	
 	<!-- 모임 파일 경로 조회 -->
-	<select id="getMeetingFiles" resultType="java.lang.String">
+	<select id="getMeetingFiles" resultType="sshj.sshj.dto.SimpleFileDto">
 	<![CDATA[
 		/*	S3FileMapper.getMeetingFiles	*/
 		select
-			file_url
+			tbf.file_id as fileId,
+			tbf.user_id as userId,
+			tbf.file_url as fileUrl
 		from
 			tb_file tbf left join tb_rmf tbrmf on tbf.file_id = tbrmf.file_id
 		where
@@ -80,17 +82,18 @@
 	</select>
 
 	<!--Contents Url 가져오기 -->
-<!--	<select id="selectContentsUrl" resultType="string">-->
-<!--		<![CDATA[-->
-<!--		/*	S3FileMapper.selectContentsUrl	*/-->
-<!--		select-->
-<!--			file_url-->
-<!--		from-->
-<!--			tb_file-->
-<!--		where-->
-<!--			user_id = #{clubId}-->
-<!--	]]>-->
-<!--	</select>-->
+	<select id="selectContentsUrl" resultType="sshj.sshj.dto.SimpleFileDto">
+		<![CDATA[
+			/*	S3FileMapper.selectContentsUrl	*/
+			select
+				file_url
+			from
+				tb_file
+			where
+				user_id = #{clubId}
+			order by _index
+		]]>
+	</select>
 
 <!--	<delete id="deleteContent" parameterType="sshj.sshj.dto.FileUploadDto">-->
 <!--		<![CDATA[-->

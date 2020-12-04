@@ -33,7 +33,7 @@ public class MeetingDto {
     private String explanationContent;
 	
 	@ApiModelProperty(value = "이미지 urls")
-    private List<String> imgUrlList;
+    private List<SimpleFileDto> imgList;
 	
 	@ApiModelProperty(value = "생성 일자")
     private String createdTime;

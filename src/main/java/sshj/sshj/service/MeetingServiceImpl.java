@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import sshj.sshj.dto.MeetingDto;
 import sshj.sshj.dto.MeetingSearchDto;
+import sshj.sshj.dto.SimpleFileDto;
 import sshj.sshj.dto.UserDto;
 import sshj.sshj.dto.enums.FlagEnum;
 import sshj.sshj.mapper.MeetingMapper;
@@ -39,9 +40,11 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     public MeetingDto selectMeeting(long userId, long meetingId) throws Exception {
         MeetingDto md = meetingMapper.selectMeeting(userId, meetingId);
-        List<String> imgUrlList =  s3FileMapper.getMeetingFiles(md.getMeetingId());
-        imgUrlList.stream().map(url -> url = S3_DOMAIN + url);
-        md.setImgUrlList(imgUrlList);
+        List<SimpleFileDto> imgList =  s3FileMapper.getMeetingFiles(md.getMeetingId());
+        for(SimpleFileDto fileDto: imgList) {
+        	fileDto.setFileUrl(S3_DOMAIN + fileDto.getFileUrl());
+        }
+        md.setImgList(imgList);
         return md;
     }
 
@@ -73,9 +76,11 @@ public class MeetingServiceImpl implements MeetingService {
     	List<MeetingDto> meetingList = meetingMapper.selectMeetingList(meetingSearchDto);
     	
     	for(MeetingDto md : meetingList) {
-    		List<String> imgUrlList =  s3FileMapper.getMeetingFiles(md.getMeetingId());
-    		imgUrlList.stream().map(url -> url = S3_DOMAIN + url);
-    		md.setImgUrlList(imgUrlList);
+    		List<SimpleFileDto> imgList =  s3FileMapper.getMeetingFiles(md.getMeetingId());
+            for(SimpleFileDto fileDto: imgList) {
+            	fileDto.setFileUrl(S3_DOMAIN + fileDto.getFileUrl());
+            }
+            md.setImgList(imgList);
     	}
     	
     	return meetingList;
@@ -87,9 +92,11 @@ public class MeetingServiceImpl implements MeetingService {
         List<MeetingDto> meetingList = meetingMapper.selectClubByMeetingList(clubId);
 
         for(MeetingDto md : meetingList) {
-            List<String> imgUrlList = s3FileMapper.getMeetingFiles(md.getMeetingId());
-            imgUrlList.stream().map(url-> url = S3_DOMAIN + url);
-            md.setImgUrlList(imgUrlList);
+        	List<SimpleFileDto> imgList =  s3FileMapper.getMeetingFiles(md.getMeetingId());
+            for(SimpleFileDto fileDto: imgList) {
+            	fileDto.setFileUrl(S3_DOMAIN + fileDto.getFileUrl());
+            }
+            md.setImgList(imgList);
         }
 
         return meetingList;
@@ -101,9 +108,11 @@ public class MeetingServiceImpl implements MeetingService {
         List<MeetingDto> meetingList = meetingMapper.selectUserByMeetingList(userId);
 
         for(MeetingDto md : meetingList) {
-            List<String> imgUrlList = s3FileMapper.getMeetingFiles(md.getMeetingId());
-            imgUrlList.stream().map(url-> url = S3_DOMAIN + url);
-            md.setImgUrlList(imgUrlList);
+        	List<SimpleFileDto> imgList =  s3FileMapper.getMeetingFiles(md.getMeetingId());
+            for(SimpleFileDto fileDto: imgList) {
+            	fileDto.setFileUrl(S3_DOMAIN + fileDto.getFileUrl());
+            }
+            md.setImgList(imgList);
         }
 
         return meetingList;
