@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.stereotype.Service;
 import sshj.sshj.dto.SimpleFileDto;
 import sshj.sshj.mapper.S3FileMapper;
 
+@Service
 public class ArchiveServiceImpl implements ArchiveService {
 
 	@Autowired

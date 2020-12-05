@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,12 +24,11 @@ import sshj.sshj.dto.UserDto;
 @RequiredArgsConstructor
 @Component
 @Slf4j
+@PropertySource("classpath:aws.yml")
 public class JwtTokenProvider {
 	
-	@Value("${spring.profiles.active}")
-	private String activeProfile;
-	
-    private String secretKey = "DaeDoCrew";
+    @Value("${spring.secretkey}")
+    private String secretKey;
 
     // 토큰 유효시간 30분
     private long access_tokenValidTime = 6 * 60 * 60 * 1000L;

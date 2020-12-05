@@ -30,7 +30,7 @@ import sshj.sshj.mapper.UserMapper;
 @PropertySource("classpath:aws.yml")
 public class UserService implements UserDetailsService {
 
-	@Value("${cloud.aws.sender")
+	@Value("${cloud.aws.sender}")
     private String sender;
 
 	@Autowired
@@ -390,9 +390,8 @@ public class UserService implements UserDetailsService {
     public boolean sendEmail(String email) {
         String code = codeCompo.excuteGenerate();
         String time = time_now();
-        log.info(sender);
         SenderDto senderDto = SenderDto.builder()
-                .from("daedocrew@gmail.com")
+                .from(sender)
                 .to(email)
                 .subject("sshj 인증 이메일입니다.")
                 .content(code)

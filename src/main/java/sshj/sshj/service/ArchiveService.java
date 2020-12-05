@@ -2,6 +2,7 @@ package sshj.sshj.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
 import sshj.sshj.dto.SimpleFileDto;
 
 /**
@@ -9,6 +10,7 @@ import sshj.sshj.dto.SimpleFileDto;
  * @author krims
  *
  */
+@Service
 public interface ArchiveService {
 
 	/**
