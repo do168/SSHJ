@@ -7,17 +7,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
+import sshj.sshj.dto.ServiceResultModel;
 import sshj.sshj.dto.UserHeaderModel;
+import sshj.sshj.service.ExpoPushService;
 import sshj.sshj.service.UserService;
 
 @RestController
 @Api(value = "Oauth-controller", description = "Oauth controller")
 @Slf4j
-@RequestMapping("/push")
+@RequestMapping("/expopush")
 public class ExpoPushController {
 
 
-
+    @Autowired
+    private ExpoPushService expoPushService;
 
     @Autowired
     private UserService userService;
@@ -30,26 +33,20 @@ public class ExpoPushController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/getExpoPushToken", method = RequestMethod.POST)
+    @RequestMapping(value = "/get/Token", method = RequestMethod.POST)
     public ResponseEntity<String> getExpoPushToken(
             @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
             @ApiParam(value = "expoPush 토큰", required = true) @RequestParam(name = "expoPushToken", required = true) String expoPushToken) throws Exception {
 
-        if (userService.selectUser(userHeaderModel.getUserId()) == null) {
-            String error = "user doesn't exit";
-            return new ResponseEntity<String>(error, HttpStatus.BAD_REQUEST);
+        ServiceResultModel result = expoPushService.createPushToken(userHeaderModel.getUserId(), expoPushToken);
+        // 토큰 저장 성공
+        if (result.getFlag()) {
+            return new ResponseEntity<>(result.getMsg(), HttpStatus.OK);
         }
-
-        try{
-            userService.updateDeviceToken(userHeaderModel.getUserId(), expoPushToken);
-        } catch (Exception e) {
-            log.error("",e);
-            return new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);
+        // 토큰 저장 실패
+        else {
+            return new ResponseEntity<>(result.getMsg(), HttpStatus.BAD_REQUEST);
         }
-        String msg = "expoPush token saved success";
-        log.info("msg");
-        return new ResponseEntity<>(msg, HttpStatus.OK);
-
 
     }
 

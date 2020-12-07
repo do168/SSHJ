@@ -4,7 +4,10 @@ import io.github.jav.exposerversdk.*;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import sshj.sshj.dto.ServiceResultModel;
 import sshj.sshj.mapper.ClubMapper;
 import sshj.sshj.mapper.UserMapper;
 
@@ -23,6 +26,44 @@ public class ExpoPushServiceImpl implements ExpoPushService {
     @Autowired
     private UserMapper userMapper;
 
+
+    /**
+     * 유저 expoPushToken 저장
+     * @param userId 유저Id
+     * @param expoPushToken 유저Token
+     * @return Bool
+     */
+    @Override
+    public ServiceResultModel createPushToken(long userId, String expoPushToken) {
+
+        // 파라미터로 넘어온 userId가 DB에 존재하지 않는 경우
+        if (userMapper.selectUserInfoById(userId) == null) {
+            return ServiceResultModel.builder()
+                    .flag(false)
+                    .msg("user doesn't exit")
+                    .build();
+        }
+
+        //
+        try{
+            int cnt = userMapper.selectUserPushToken(userId, expoPushToken);
+            if (cnt < 1) {
+                userMapper.insertPushToken(userId, expoPushToken);
+            }
+
+        } catch (Exception e) {
+            log.error("",e);
+            return ServiceResultModel.builder()
+                    .flag(false)
+                    .msg("insert error")
+                    .build();
+        }
+        return ServiceResultModel.builder()
+                .flag(true)
+                .msg("expoPush token saved success")
+                .build();
+    }
+
     /**
      * 구독 중인 동아리가 새 모임을 등록했을 때 유저에게 푸시 알림
      * @param clubId
@@ -33,21 +74,22 @@ public class ExpoPushServiceImpl implements ExpoPushService {
         List<Long> clubSubscribeUsers = clubMapper.selectClubSubsUserList(clubId);
         String clubName = userMapper.selectEmail(clubId);
         for (long userId : clubSubscribeUsers) {
-            String deviceToken = userMapper.selectUserDeviceToken(userId);
-            String title = "모임 등록!";
-            String message = clubName+"의 새 모임이 등록되었습니다!";
+            List<String> pushTokenList = userMapper.selectUserPushTokenList(userId);
+            for (String pushToken : pushTokenList) {
+                String title = "모임 등록!";
+                String message = clubName + "의 새 모임이 등록되었습니다!";
 
-            expoPush(deviceToken, title, message);
-            try {
-            	if(deviceToken == null) {
-            		log.error("deviceToken is null [{}]", userId);
-            		return;
-            	}
-				else
-					expoPush(deviceToken, title, message);
+                expoPush(pushToken, title, message);
+                try {
+                    if (pushToken == null) {
+                        log.error("deviceToken is null [{}]", userId);
+                        return;
+                    } else
+                        expoPush(pushToken, title, message);
 
-            } catch(Exception e){
-            	log.error("",e);
+                } catch (Exception e) {
+                    log.error("", e);
+                }
             }
         }
     }
@@ -57,19 +99,20 @@ public class ExpoPushServiceImpl implements ExpoPushService {
         List<Long> clubSubscribeUsers = clubMapper.selectClubSubsUserList(clubId);
         String clubName = userMapper.selectEmail(clubId);
         for (long userId : clubSubscribeUsers) {
-            String deviceToken = userMapper.selectUserDeviceToken(userId);
-            String title = "공지 등록!";
-            String message = clubName+"의 새 공지가 등록되었습니다!";
-            try {
-            	if(deviceToken == null) {
-            		log.error("deviceToken is null [{}]", userId);
-            		return;
-            	}
-				else
-					expoPush(deviceToken, title, message);
+            List<String> pushTokenList = userMapper.selectUserPushTokenList(userId);
+            for (String pushToken : pushTokenList) {
+                String title = "공지 등록!";
+                String message = clubName + "의 새 공지가 등록되었습니다!";
+                try {
+                    if (pushToken == null) {
+                        log.error("deviceToken is null [{}]", userId);
+                        return;
+                    } else
+                        expoPush(pushToken, title, message);
 
-            } catch(Exception e){
-            	log.error("",e);
+                } catch (Exception e) {
+                    log.error("", e);
+                }
             }
         }
     }

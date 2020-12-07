@@ -310,10 +310,6 @@ public class UserService implements UserDetailsService {
         userMapper.updateUserPassword(email, password);
     }
 
-    public void updateDeviceToken(long userId, String deviceToken) {
-        userMapper.updateDeviceToken(userId, deviceToken);
-    }
-
     public void updateCodeEmail(String code, String email, String time) {
         userMapper.updateCodeEmail(code, email, time);
     }
@@ -390,7 +386,6 @@ public class UserService implements UserDetailsService {
     public boolean sendEmail(String email) {
         String code = codeCompo.excuteGenerate();
         String time = time_now();
-        log.info(sender);
         SenderDto senderDto = SenderDto.builder()
                 .from("daedocrew@gmail.com")
                 .to(email)
@@ -413,37 +408,6 @@ public class UserService implements UserDetailsService {
         }
     }
 
-//    public boolean sendEmail_findId(String email) {
-//        String code = codeCompo.excuteGenerate();
-//        String time = time_now();
-//
-//        SenderDto senderDto = SenderDto.builder()
-//                .from("daedocrew@gmail.com")
-//                .to(email)
-//                .subject("sshj 아이디 찾기 인증 이메일입니다.")
-//                .content(code)
-//                .build();
-//
-//        try{
-//            senderCompo.send(senderDto);
-//            if (userMapper.selectCode(email) == null) {
-//                insertCodeEmail(code, email, time);
-//            }
-//            else{
-//                updateCodeEmail(code, email, time);
-//            }
-//            log.info("success");
-//            return true;
-//        } catch(Exception e) {
-//            log.info(e.toString());
-//            return false;
-//        }
-//
-//    }
-
-
-
-
     /////////////////////////////////////////////////////////////////////////////////// 단순 작업 메소드
 
     // TODO: 현재 사용되는 컨트롤러가 없음 과연 이함수가 따로 있을 필요가 있을까? (맞다면 public으로 전환)
@@ -457,7 +421,7 @@ public class UserService implements UserDetailsService {
                 .createdTime(time)
                 .build();
 
-        userMapper.insertUser(userDto); //getId() 없앴는데 뭐가 달라지나?
+        userMapper.insertUser(userDto);
         return;
     }
 

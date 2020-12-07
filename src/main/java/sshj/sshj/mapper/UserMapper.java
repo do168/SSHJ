@@ -5,6 +5,8 @@ import org.springframework.stereotype.Repository;
 import sshj.sshj.dto.CodeInfoModel;
 import sshj.sshj.dto.UserDto;
 
+import java.util.List;
+
 @Repository
 @Mapper
 public interface UserMapper {
@@ -31,8 +33,10 @@ public interface UserMapper {
     int selectUserNicknameIsOk(String nickname);
     void updateUserNickname(long userId, String nickname);
     void updateUserPassword(String email, String password);
-    void updateDeviceToken(long userId, String deviceToken);
-    String selectUserDeviceToken(long userId);
+    void insertPushToken(long userId, String expoPushToken);
+//    int updateDeviceToken(long userId, String expoPushToken);
+    int selectUserPushToken(long userId, String expoPushToken);
+    List<String> selectUserPushTokenList(long userId);
     String selectEmail(long userId);
     String selectUserNickname(long userId);
 

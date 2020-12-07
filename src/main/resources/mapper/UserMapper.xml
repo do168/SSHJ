@@ -131,14 +131,39 @@
 	]]>
     </insert>
 
-    <update id="updateDeviceToken" parameterType="string">
+    <insert id ="insertPushToken">
         <![CDATA[
-        UPDATE tb_user
-        SET device_token = #{deviceToken}
-        WHERE user_id = #{userId}
+		/*	UserMapper.insertPushToken	*/
+		insert into tb_user_token (
+			user_id, user_token
+		) values (
+			#{userId}, #{expoPushToken}
+		]]>
+    </insert>
 
+<!--    <update id="updateDeviceToken" parameterType="string">-->
+<!--        <![CDATA[-->
+<!--        UPDATE tb_user_token-->
+<!--        SET user_token = #{expoPushToken}-->
+<!--        WHERE user_id = #{userId} and user_token = {expoPushToken}-->
+<!--        ]]>-->
+<!--    </update>-->
+
+    <select id="selectUserDeviceToken" resultType="int">
+        <![CDATA[
+            SELECT count(*)
+            FROM tb_user_token
+            WHERE user_id = #{userId} and user_token = #{expoPushToken}
         ]]>
-    </update>
+    </select>
+
+    <select id="selectUserDeviceTokenList" parameterType="long" resultType="string">
+        <![CDATA[
+            SELECT user_token
+            FROM tb_user_token
+            WHERE user_id = #{userId}
+        ]]>
+    </select>
 
     <update id="updateCodeEmail" parameterType="string">
         <![CDATA[
@@ -164,14 +189,6 @@
 			WHERE email=#{email}
 		]]>
     </update>
-
-    <select id="selectUserDeviceToken" parameterType="long" resultType="string">
-        <![CDATA[
-            SELECT device_token
-            FROM tb_user
-            WHERE user_id = #{userId}
-        ]]>
-    </select>
 
     <delete id="deleteUserId" parameterType="long">
         <![CDATA[
