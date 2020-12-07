@@ -452,7 +452,6 @@ public class UserService implements UserDetailsService {
         UserDto userDto = UserDto.builder()
                 .email(userInfoModel.getEmail())
                 .password(passwordEncoder.encode(userInfoModel.getPassword()))
-                .email(userInfoModel.getEmail())
                 .role("ROLE_USER")
                 .nickname(userInfoModel.getNickname())
                 .createdTime(time)
