@@ -7,6 +7,6 @@ import sshj.sshj.dto.ServiceResultModel;
 public interface ExpoPushService {
     // 로그인 시 토큰 저장 함수
     ServiceResultModel createPushToken(long userId, String expoPushToken);
-    void sendingPushMeetingCreated(long clubId) throws Exception;
-    void sendingPushClubNoticeCreated(long clubId) throws Exception;
+    void excuteSendingPushMeetingCreated(long clubId) throws Exception;
+    void excuteSendingPushClubNoticeCreated(long clubId) throws Exception;
 }

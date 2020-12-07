@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 import sshj.sshj.dto.ClubDescriptionDto;
@@ -51,7 +50,7 @@ public class ClubController {
     @RequestMapping(value = "/selectClubName", method= RequestMethod.GET, produces="text/plain;charset=UTF-8")
     public ResponseEntity<String> selectClubName(
             @ApiParam(value = "club_id", required = true) @RequestParam(name = "club_id", required = true) long clubId
-    ) throws Exception{
+    ) {
         return new ResponseEntity<>(userService.selectUserNickname(clubId), HttpStatus.OK);
     }
 
@@ -86,7 +85,6 @@ public class ClubController {
 //        return new ResponseEntity<>(fileMapper.selectContentsUrl(clubId), HttpStatus.OK);
 //    }
 
-//    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "동아리 설명 생성 Api"
             , notes = "동아리 설명 생성 Api"
@@ -119,7 +117,6 @@ public class ClubController {
         return new ResponseEntity<>(clubService.selectClubDescription(clubId), HttpStatus.OK);
     }
 
-//    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "동아리 설명 수정 Api"
             , notes = "동아리 설명 수정 Api"
@@ -136,7 +133,6 @@ public class ClubController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-//    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "동아리 설명 삭제 Api"
             , notes = "동아리 설명 삭제 Api"
@@ -153,7 +149,6 @@ public class ClubController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-//    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "동아리 공지 생성 Api"
             , notes = "동아리 공지 생성 Api"
@@ -168,7 +163,7 @@ public class ClubController {
     	clubNoticeDto.setClubId(userHeaderModel.getUserId());
     	clubService.insertClubNotice(clubNoticeDto);
         // 동아리 공지 생성 시 구독한 유저들에게 푸시알림
-        expoPushService.sendingPushClubNoticeCreated(userHeaderModel.getUserId());
+        expoPushService.excuteSendingPushClubNoticeCreated(userHeaderModel.getUserId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

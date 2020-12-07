@@ -70,7 +70,7 @@ public class ExpoPushServiceImpl implements ExpoPushService {
      * @throws Exception
      */
     @Override
-    public void sendingPushMeetingCreated(long clubId) throws Exception {
+    public void excuteSendingPushMeetingCreated(long clubId) throws Exception {
         List<Long> clubSubscribeUsers = clubMapper.selectClubSubsUserList(clubId);
         String clubName = userMapper.selectEmail(clubId);
         for (long userId : clubSubscribeUsers) {
@@ -95,7 +95,7 @@ public class ExpoPushServiceImpl implements ExpoPushService {
     }
 
     @Override
-    public void sendingPushClubNoticeCreated(long clubId) throws Exception {
+    public void excuteSendingPushClubNoticeCreated(long clubId) throws Exception {
         List<Long> clubSubscribeUsers = clubMapper.selectClubSubsUserList(clubId);
         String clubName = userMapper.selectEmail(clubId);
         for (long userId : clubSubscribeUsers) {
