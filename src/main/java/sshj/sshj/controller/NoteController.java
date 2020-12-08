@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 import sshj.sshj.dto.NoteDto;
+import sshj.sshj.dto.ServiceResultModel;
 import sshj.sshj.dto.UserHeaderModel;
+import sshj.sshj.service.ExpoPushServiceImpl;
 import sshj.sshj.service.NoteService;
 import sshj.sshj.service.UserService;
 
@@ -24,6 +26,9 @@ public class NoteController {
     @Autowired
     private NoteService noteService;
 
+    @Autowired
+    private ExpoPushServiceImpl expoPushService;
+
     @ApiOperation(
             value = "쪽지 보내기"
             , notes = "쪽지 보내기"
@@ -33,19 +38,21 @@ public class NoteController {
             @ApiResponse(code = 200, message = "complete")
     })
     @RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
-    public ResponseEntity<Boolean> sendNote(
+    public ResponseEntity<String> sendNote(
             @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
-            @ApiParam(value = "receiver", required = true) @RequestParam(name = "receiver", required = true) String receiver,
+            @ApiParam(value = "receiver", required = true) @RequestParam(name = "receiver", required = true) long receiver,
             @ApiParam(value = "msg", required = true) @RequestParam(name = "msg", required = true) String msg) throws Exception {
 
-        try{
-            noteService.executeSendMessage(userHeaderModel.getEmail(), receiver, msg);
-            log.info("발신 성공");
-            return new ResponseEntity<>(true, HttpStatus.OK);
-        } catch(Exception e) {
-            log.error("발신 실패 : \n"+ e.toString());
-            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
-
+        // 쪽지 보내기
+        noteService.insertSendMessage(userHeaderModel.getUserId(), receiver, msg);
+        ServiceResultModel result = expoPushService.excuteSendingPushNoteReceived(userHeaderModel.getUserId(), receiver, msg);
+        // 보내기 성공
+            if (result.getFlag()) {
+                return new ResponseEntity<>(result.getMsg(), HttpStatus.OK);
+        }
+        // 보내기 실패
+            else {
+                return new ResponseEntity<>(result.getMsg(), HttpStatus.BAD_REQUEST);
         }
     }
 

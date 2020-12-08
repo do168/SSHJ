@@ -1,22 +1,29 @@
 package sshj.sshj.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sshj.sshj.dto.NoteDto;
+import sshj.sshj.dto.ServiceResultModel;
 import sshj.sshj.mapper.NoteMapper;
+import sshj.sshj.mapper.UserMapper;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
 @Service
+@Slf4j
 public class NoteServiceImpl implements NoteService {
 
     @Autowired
     private NoteMapper noteMapper;
 
+    @Autowired
+    private ExpoPushServiceImpl expoPushService;
+
     @Override
-    public void executeSendMessage(String sender, String receiver, String msg) {
+    public void insertSendMessage(long sender, long receiver, String msg) {
         String time = time_now();
 
         NoteDto noteDto = NoteDto.builder()
@@ -27,6 +34,7 @@ public class NoteServiceImpl implements NoteService {
                 .build();
 
         noteMapper.insertMessage(noteDto);
+
     }
     
     public String time_now() {

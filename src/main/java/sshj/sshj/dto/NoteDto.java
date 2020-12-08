@@ -8,9 +8,9 @@ import lombok.Data;
 public class NoteDto {
     private int noteId;
 
-    private String sender;
+    private long sender;
 
-    private String receiver;
+    private long receiver;
 
     private boolean isread;
 

@@ -29,7 +29,8 @@ public class ExpoPushServiceImpl implements ExpoPushService {
 
     /**
      * 유저 expoPushToken 저장
-     * @param userId 유저Id
+     *
+     * @param userId        유저Id
      * @param expoPushToken 유저Token
      * @return Bool
      */
@@ -45,14 +46,14 @@ public class ExpoPushServiceImpl implements ExpoPushService {
         }
 
         //
-        try{
+        try {
             int cnt = userMapper.selectUserPushToken(userId, expoPushToken);
             if (cnt < 1) {
                 userMapper.insertPushToken(userId, expoPushToken);
             }
 
         } catch (Exception e) {
-            log.error("",e);
+            log.error("", e);
             return ServiceResultModel.builder()
                     .flag(false)
                     .msg("insert error")
@@ -66,6 +67,7 @@ public class ExpoPushServiceImpl implements ExpoPushService {
 
     /**
      * 구독 중인 동아리가 새 모임을 등록했을 때 유저에게 푸시 알림
+     *
      * @param clubId
      * @throws Exception
      */
@@ -94,6 +96,12 @@ public class ExpoPushServiceImpl implements ExpoPushService {
         }
     }
 
+    /**
+     * 구독 중인 동아리의 새 공지가 올라왔을 경우
+     *
+     * @param clubId
+     * @throws Exception
+     */
     @Override
     public void excuteSendingPushClubNoticeCreated(long clubId) throws Exception {
         List<Long> clubSubscribeUsers = clubMapper.selectClubSubsUserList(clubId);
@@ -114,6 +122,37 @@ public class ExpoPushServiceImpl implements ExpoPushService {
                     log.error("", e);
                 }
             }
+        }
+    }
+
+    @Override
+    public ServiceResultModel excuteSendingPushNoteReceived(long sender, long receviver, String message) {
+        String senderNickname = userMapper.selectUserNickname(sender);
+        List<String> pushTokenList = userMapper.selectUserPushTokenList(receviver);
+        if (pushTokenList == null) {
+            return ServiceResultModel.builder()
+                    .flag(false)
+                    .msg("PushToken is null [" + receviver + "]")
+                    .build();
+        }
+
+        try {
+            for (String pushToken : pushTokenList) {
+                String title = senderNickname + "(으)로부터 쪽지 도착!";
+                expoPush(pushToken, title, message);
+            }
+
+        } catch(Exception e) {
+            log.error("", e);
+            return ServiceResultModel.builder()
+                    .flag(false)
+                    .msg(e.toString())
+                    .build();
+        } finally {
+            return ServiceResultModel.builder()
+                    .flag(true)
+                    .msg("발신 성공")
+                    .build();
         }
     }
 
@@ -160,7 +199,7 @@ public class ExpoPushServiceImpl implements ExpoPushService {
                 p -> "Title: " + p.message.getTitle() + ", Id:" + p.ticket.getId()
         ).collect(Collectors.joining(","));
         System.out.println(
-                "Recieved OK ticket for " +
+                "Received OK ticket for " +
                         okTicketMessages.size() +
                         " messages: " + okTicketMessagesString
         );
@@ -170,14 +209,14 @@ public class ExpoPushServiceImpl implements ExpoPushService {
                 p -> "Title: " + p.message.getTitle() + ", Error: " + p.ticket.getDetails().getError()
         ).collect(Collectors.joining(","));
         System.out.println(
-                "Recieved ERROR ticket for " +
+                "Received ERROR ticket for " +
                         errorTicketMessages.size() +
                         " messages: " +
                         errorTicketMessagesString
         );
 
         Thread.sleep(1000);
-        System.out.println("Fetching reciepts...");
+        System.out.println("Fetching receipts...");
 
         List<String> ticketIds = (client.getTicketIdsFromPairs(okTicketMessages));
         CompletableFuture<List<ExpoPushReceipt>> receiptFutures = client.getPushNotificationReceiptsAsync(ticketIds);
@@ -192,7 +231,7 @@ public class ExpoPushServiceImpl implements ExpoPushService {
         }
 
         System.out.println(
-                "Recieved " + receipts.size() + " receipts:");
+                "Received " + receipts.size() + " receipts:");
 
         for (ExpoPushReceipt reciept : receipts) {
             System.out.println(
