@@ -33,9 +33,9 @@ public interface UserMapper {
     int selectUserNicknameIsOk(String nickname);
     void updateUserNickname(long userId, String nickname);
     void updateUserPassword(String email, String password);
-    void insertPushToken(long userId, String expoPushToken);
+    void insertUserPushToken(long userId, String expoPushToken);
 //    int updateDeviceToken(long userId, String expoPushToken);
-    int selectUserPushToken(long userId, String expoPushToken);
+    int updateUserPushToken(long userId, String expoPushToken);
     List<String> selectUserPushTokenList(long userId);
     String selectEmail(long userId);
     String selectUserNickname(long userId);

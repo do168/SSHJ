@@ -131,7 +131,7 @@
 	]]>
     </insert>
 
-    <insert id ="insertPushToken">
+    <insert id ="insertUserPushToken">
         <![CDATA[
 		/*	UserMapper.insertPushToken	*/
 		insert into tb_user_token (
@@ -149,19 +149,19 @@
 <!--        ]]>-->
 <!--    </update>-->
 
-    <select id="selectUserDeviceToken" resultType="int">
+    <update id="updateUserDeviceToken">
         <![CDATA[
-            SELECT count(*)
-            FROM tb_user_token
-            WHERE user_id = #{userId} and user_token = #{expoPushToken}
+            UPDATE tb_user_token
+            SET user_id = #{userId}
+            WHERE user_token = #{expoPushToken}
         ]]>
-    </select>
+    </update>
 
-    <select id="selectUserDeviceTokenList" parameterType="long" resultType="string">
+    <select id="selectUserPushTokenList" parameterType="long" resultType="string">
         <![CDATA[
             SELECT user_token
             FROM tb_user_token
-            WHERE user_id = #{userId}
+            WHERE user_id = #{userId} and user_token = #{expoPushToken}
         ]]>
     </select>
 

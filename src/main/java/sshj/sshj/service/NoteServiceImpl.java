@@ -36,7 +36,12 @@ public class NoteServiceImpl implements NoteService {
         noteMapper.insertMessage(noteDto);
 
     }
-    
+
+    @Override
+    public List<NoteDto> selectPersonList(long userId) {
+        return noteMapper.selectPerson(userId);
+    }
+
     public String time_now() {
         long systemTime = System.currentTimeMillis();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA);
@@ -44,16 +49,16 @@ public class NoteServiceImpl implements NoteService {
         return dtime;
     }
     
-//	TODO: 도우찬 쪽지 수정시 고칠 것
-//    @Override
-//    public List<NoteDto> selectPersonList(String loginId) {
-//        return noteMapper.selectPerson(loginId);
-//    }
-//
-//    @Override
-//    public List<NoteDto> selectMessages(String loginId, String other) {
-//        return noteMapper.selectMessage(loginId, other);
-//    }
+
+    @Override
+    public List<NoteDto> selectMessages(long loginId, long other) {
+        try {
+            return noteMapper.selectMessage(loginId, other);
+        } catch (Exception e) {
+            log.error("", e);
+            return null;
+        }
+    }
 //
 //    @Override
 //    public int selectCountOfReceiveMessage(String Id) {

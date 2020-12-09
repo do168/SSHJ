@@ -12,9 +12,9 @@ public interface NoteMapper {
 
     void insertMessage(NoteDto noteDto);
 
-    List<NoteDto> selectPerson(String loginId);
+    List<NoteDto> selectPerson(long userId);
 
-    List<NoteDto> selectMessage(String loginId, String other);
+    List<NoteDto> selectMessage(long userId, long other);
 
     int selectCountOfReceiveMessage(String Id);
 }

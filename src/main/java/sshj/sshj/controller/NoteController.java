@@ -57,55 +57,53 @@ public class NoteController {
     }
 
     
-//	TODO: 도우찬 수정할것
-//    @ApiOperation(
-//            value = "쪽지함 보기"
-//            , notes = "쪽지함 보기"
-//            ,authorizations = {@Authorization(value = "JWT")}
-//    )
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 200, message = "complete")
-//    })
-//    @RequestMapping(value = "/listMessages", method = RequestMethod.GET)
-//    public ResponseEntity<List<NoteDto>> listPerson(
-//            @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception {
-//
-//        List<NoteDto> relatedId;
-//
-//        try{
-//            relatedId = noteService.selectPersonList(userHeaderModel.getLoginId());
-//            log.info("쪽지함 성공");
-//            return new ResponseEntity<>(relatedId, HttpStatus.OK);
-//        } catch (Exception e){
-//            log.error("쪽지함 불러오기 실패 \n"+ e.toString());
-//            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-//        }
-//    }
-//
-//    @ApiOperation(
-//            value = "특정인과의 쪽지 내용 보기"
-//            , notes = "특정인과의 쪽지 내용 보기"
-//            ,authorizations = {@Authorization(value = "JWT")}
-//    )
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 200, message = "complete")
-//    })
-//    @RequestMapping(value = "/room/{other}", method = RequestMethod.GET)
-//    public ResponseEntity<List> listMessages(
-//            @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
-//            @ApiParam(value = "other", required = true) @RequestParam(name = "other", required = true) String other) throws Exception {
-//
-//        List<NoteDto> messageList = new ArrayList<>();
-//
-//        try{
-//            messageList = noteService.selectMessages(userHeaderModel.getLoginId(), other);
-//            log.info("쪽지 내용 보기 성공");
-//            return new ResponseEntity<>(messageList, HttpStatus.OK);
-//        } catch (Exception e){
-//            log.error("쪽지함 불러오기 실패 \n"+ e.toString());
-//            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-//        }
-//    }
+    @ApiOperation(
+            value = "쪽지함 보기"
+            , notes = "쪽지함 보기"
+            ,authorizations = {@Authorization(value = "JWT")}
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "complete")
+    })
+    @RequestMapping(value = "/listMessages", method = RequestMethod.GET)
+    public ResponseEntity<List<NoteDto>> listPerson(
+            @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception {
+
+        List<NoteDto> relatedId = noteService.selectPersonList(userHeaderModel.getUserId());
+        // 자기 자신에게 브로드캐스팅 -> 알림 표시 없애기
+        ServiceResultModel result = expoPushService.excuteSendingPushNoteReceived(userHeaderModel.getUserId(), userHeaderModel.getUserId(), "쪽지알림 없애기");
+        if (result.getFlag()) {
+            return new ResponseEntity<>(relatedId, HttpStatus.OK);
+        }
+        // 알림 보내기 실패
+        else {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+    }
+//  TODO 읽은 것, 안 읽은 것 따로 처리해야 한다.
+    @ApiOperation(
+            value = "특정인과의 쪽지 내용 보기"
+            , notes = "특정인과의 쪽지 내용 보기"
+            ,authorizations = {@Authorization(value = "JWT")}
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "complete")
+    })
+    @RequestMapping(value = "/note/{other}", method = RequestMethod.GET)
+    public ResponseEntity<List> listMessages(
+            @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
+            @ApiParam(value = "other", required = true) @RequestParam(name = "other", required = true) @PathVariable long other) throws Exception {
+
+        List<NoteDto> messageList = noteService.selectMessages(userHeaderModel.getUserId(), other);
+        if (messageList != null) {
+            return new ResponseEntity<>(messageList, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+    }
 
 
 }

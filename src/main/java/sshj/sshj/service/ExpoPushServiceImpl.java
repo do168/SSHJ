@@ -47,9 +47,11 @@ public class ExpoPushServiceImpl implements ExpoPushService {
 
         //
         try {
-            int cnt = userMapper.selectUserPushToken(userId, expoPushToken);
+            // 같은 기기에서 다른 계정으로 로그인한 경우 토큰 업데이트
+            int cnt = userMapper.updateUserPushToken(userId, expoPushToken);
+            // 새로운 기기에서 처음 로그인한 경우
             if (cnt < 1) {
-                userMapper.insertPushToken(userId, expoPushToken);
+                userMapper.insertUserPushToken(userId, expoPushToken);
             }
 
         } catch (Exception e) {
@@ -142,18 +144,19 @@ public class ExpoPushServiceImpl implements ExpoPushService {
                 expoPush(pushToken, title, message);
             }
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             log.error("", e);
             return ServiceResultModel.builder()
                     .flag(false)
                     .msg(e.toString())
                     .build();
-        } finally {
-            return ServiceResultModel.builder()
-                    .flag(true)
-                    .msg("발신 성공")
-                    .build();
         }
+
+        return ServiceResultModel.builder()
+                .flag(true)
+                .msg("발신 성공")
+                .build();
+
     }
 
 
@@ -182,12 +185,8 @@ public class ExpoPushServiceImpl implements ExpoPushService {
         List<ExpoPushTicket> allTickets = new ArrayList<>();
         for (CompletableFuture<List<ExpoPushTicket>> messageReplyFuture : messageRepliesFutures) {
             try {
-                for (ExpoPushTicket ticket : messageReplyFuture.get()) {
-                    allTickets.add(ticket);
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
+                allTickets.addAll(messageReplyFuture.get());
+            } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
         }
@@ -224,9 +223,7 @@ public class ExpoPushServiceImpl implements ExpoPushService {
         List<ExpoPushReceipt> receipts = new ArrayList<>();
         try {
             receipts = receiptFutures.get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
 

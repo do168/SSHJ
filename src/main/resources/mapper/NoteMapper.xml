@@ -30,7 +30,7 @@
     </select>
 
     <!-- 나의 쪽지함 리스트	-->
-    <select id="selectMessages" parameterType="string" resultType="sshj.sshj.dto.NoteDto">
+    <select id="selectMessages" parameterType="long" resultType="sshj.sshj.dto.NoteDto">
         <![CDATA[
 		/*	NoteMapper.selectMessages	*/
 		    SELECT
@@ -41,7 +41,7 @@
 		    FROM
 		        tb_note
 		    WHERE
-		        (sender = #{loginId} and receiver = #{other}) or (sender = #{other} and receiver = #{loginId})
+		        (sender = #{userId} and receiver = #{other}) or (sender = #{other} and receiver = #{userId})
 	    ]]>
     </select>
 
