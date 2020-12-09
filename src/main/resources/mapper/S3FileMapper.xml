@@ -39,15 +39,13 @@
 			file_id, meeting_id, _index
 		)
 		VALUES (
-				( SELECT file_id
-			  		FROM tb_file
-			  		WHERE origin_file_name = #{originFileName}),
-			  	#{meetingId},
-			  	#{index}
-			  )
+			#{fileId},
+			#{meetingId},
+			#{index}
+		)
 		ON DUPLICATE KEY
 		update
-                _index = #{index}
+            _index = #{index}
 
 	]]>
 	</insert>

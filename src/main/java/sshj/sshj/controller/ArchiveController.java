@@ -41,7 +41,7 @@ public class ArchiveController {
 			, notes = "아카이브 파일 업로드"
 			, authorizations = { @Authorization(value = "JWT") })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "") })
-	@RequestMapping(value = "/getList", method = RequestMethod.GET)
+	@RequestMapping(value = "/get/list", method = RequestMethod.GET)
 	public ResponseEntity<List<SimpleFileDto>> getArchiveList(
 			@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws IOException {
 		

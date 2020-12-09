@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import sshj.sshj.component.S3Utils;
 import sshj.sshj.dto.FileUploadDto;
+import sshj.sshj.dto.SimpleFileDto;
 import sshj.sshj.dto.enums.FileDirEnum;
 import sshj.sshj.mapper.S3FileMapper;
 
@@ -77,7 +78,7 @@ public class UploadServiceImpl implements UploadService{
 			long meetingId) {
 
 		Iterator<String> fileList = multipartHttpServletRequest.getFileNames();
-		List<String> imgUrls = new ArrayList<String>();
+		List<SimpleFileDto> imgUrls = new ArrayList<SimpleFileDto>();
 		int index = 0;
 		while(fileList.hasNext()) {
 			String newFilename = Long.toString(System.nanoTime());
@@ -98,13 +99,13 @@ public class UploadServiceImpl implements UploadService{
 					fileUploadDto.setOriginFileName(file.getOriginalFilename());
 					fileUploadDto.setFileUrl(imgUrl);
 					fileUploadDto.setMimeType(mimeType);
-//					fileUploadDto.setMeetingId(meetingId);
 					fileUploadDto.setSize(file.getSize());
 					fileUploadDto.setIndex(index);
 
+					long fileId;
 					// file 아카이브에 등록
 					try {
-						fileMapper.uploadContent(fileUploadDto);
+						fileId = fileMapper.uploadContent(fileUploadDto);
 					} catch(Exception e) {
 						log.error("", e);
 						throw new RuntimeException();
@@ -112,13 +113,18 @@ public class UploadServiceImpl implements UploadService{
 
 					// 파일 - 모임 관계 데이터 생성
 					try {
-						fileMapper.createRelationFileMeeting(imgUrl, meetingId, index, file.getOriginalFilename());
+						fileMapper.createRelationFileMeeting(fileId, meetingId, index);
 					} catch (Exception e) {
 						log.error("", e);
 						throw new RuntimeException();
 					}
 
-					imgUrls.add(imgUrl);
+					SimpleFileDto fileDto = new SimpleFileDto();
+					fileDto.setFileId(fileId);
+					fileDto.setFileUrl(imgUrl);
+					fileDto.setUserId(userId);
+
+					imgUrls.add(fileDto);
 					index++;
 
 				} catch (Exception e) {

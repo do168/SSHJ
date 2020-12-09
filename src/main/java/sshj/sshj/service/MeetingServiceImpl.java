@@ -161,4 +161,8 @@ public class MeetingServiceImpl implements MeetingService {
 		
 		return meetingMapper.getMeetingChatUrl(clubId, meetingId);
 	}
+
+	private void insertFileList(){
+
+    }
 }
