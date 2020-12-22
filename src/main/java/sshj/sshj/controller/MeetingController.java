@@ -81,7 +81,7 @@ public class MeetingController {
     @ApiOperation(
             value = "모임 업데이트 Api"
             , notes = "모임 업데이트 Api"
-            ,authorizations = {@Authorization (value = "JWT")}
+            , authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -96,7 +96,7 @@ public class MeetingController {
     @ApiOperation(
             value = "모임 삭제 Api"
             , notes = "모임 삭제 Api"
-            ,authorizations = {@Authorization (value = "JWT")}
+            , authorizations = {@Authorization (value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")

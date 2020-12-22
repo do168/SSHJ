@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import sshj.sshj.dto.SimpleFileDto;
 
 /**
  * 파일 업로드 서비스
@@ -26,7 +27,7 @@ public interface UploadService {
 	 * @param userId
 	 * @return
 	 */
-	public List<String> executeUploadClubContents(MultipartHttpServletRequest multipartHttpServletRequest, long userId, long meetingId);
+	public List<SimpleFileDto> executeUploadClubContents(MultipartHttpServletRequest multipartHttpServletRequest, long userId, long meetingId);
 
 
 

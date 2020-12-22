@@ -176,6 +176,17 @@
 		]]>
 	</update>
 
+	<update id="updateMeetingImage" >
+		<![CDATA[
+			INSERT INTO tb_rmf (
+				file_id, meeting_id, `_index`
+			) VALUES (
+				#{fileId}, #{meetingId}, #{index}
+			) ON DUPLICATE KEY UPDATE
+				file_id = #{fileId}
+		]]>
+	</update>
+
 	<delete id="deleteMeeting" parameterType="long">
         <![CDATA[
             DELETE FROM tb_meeting

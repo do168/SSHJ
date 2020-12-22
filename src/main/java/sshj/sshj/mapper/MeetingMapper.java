@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import sshj.sshj.dto.MeetingDto;
 import sshj.sshj.dto.MeetingSearchDto;
+import sshj.sshj.dto.SimpleFileDto;
 import sshj.sshj.dto.UserDto;
 
 @Mapper
@@ -18,6 +19,8 @@ public interface MeetingMapper {
 	MeetingDto selectMeeting(long userId, long meetingId) throws Exception;
 
 	void updateMeeting(MeetingDto dto) throws Exception;
+
+	void updateMeetingImage(long fileId, long meetingId ,int index) throws Exception;
 
 	void deleteMeeting(long meetingId) throws Exception;
 

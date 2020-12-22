@@ -17,8 +17,10 @@ import sshj.sshj.mapper.S3FileMapper;
 @Slf4j
 @Service
 public class MeetingServiceImpl implements MeetingService {
-	
-	private static String S3_DOMAIN = "";
+
+    private static int MAX_INDEX = 4;
+
+    private static String S3_DOMAIN = "";
 
     @Autowired
     private MeetingMapper meetingMapper;
@@ -51,6 +53,15 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     public void updateMeeting(MeetingDto dto) throws Exception {
         meetingMapper.updateMeeting(dto);
+        List<SimpleFileDto> imgList = dto.getImgList();
+        for(int index=0; index<imgList.size(); index++) {
+            // MAX_INDEX를 넘기는 이미지가 나올경우 무시
+            if (index >= MAX_INDEX)
+                break;
+
+            long fileId = imgList.get(index).getFileId();
+            meetingMapper.updateMeetingImage(fileId, dto.getMeetingId(), index);
+        }
     }
 
     @Override

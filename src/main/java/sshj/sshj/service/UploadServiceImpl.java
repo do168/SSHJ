@@ -74,7 +74,7 @@ public class UploadServiceImpl implements UploadService{
 	 * 동아리 컨텐츠 업로드
 	 */
 	@Override
-	public List<String> executeUploadClubContents(MultipartHttpServletRequest multipartHttpServletRequest, long userId,
+	public List<SimpleFileDto> executeUploadClubContents(MultipartHttpServletRequest multipartHttpServletRequest, long userId,
 			long meetingId) {
 
 		Iterator<String> fileList = multipartHttpServletRequest.getFileNames();

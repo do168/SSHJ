@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import lombok.extern.slf4j.Slf4j;
 import springfox.documentation.annotations.ApiIgnore;
+import sshj.sshj.dto.SimpleFileDto;
 import sshj.sshj.dto.UserHeaderModel;
 import sshj.sshj.service.UploadService;
 
@@ -60,17 +61,16 @@ public class UploadController {
 			,authorizations = {@Authorization (value = "JWT")})
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "") })
 	@RequestMapping(value = "/club", method = RequestMethod.POST)
-	public ResponseEntity<List<String>> contentUpload(
+	public ResponseEntity<List<SimpleFileDto>> contentUpload(
 			@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel,
 			MultipartHttpServletRequest multipartHttpServletRequest,
 			@ApiParam("meetingId") long meetingId) throws IOException {
 		
 		if (ObjectUtils.isEmpty(multipartHttpServletRequest))
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		List<String> imgUrls = uploadService.executeUploadClubContents(multipartHttpServletRequest, 1, meetingId); 
-		// TODO: 1=admin userInfoModel 생성시 교체
+		List<SimpleFileDto> imgUrls = uploadService.executeUploadClubContents(multipartHttpServletRequest, userHeaderModel.getUserId(), meetingId);
 		log.info("club contents uploaded [{}]", imgUrls);
 
-		return new ResponseEntity<List<String>>(imgUrls, HttpStatus.OK);
+		return new ResponseEntity<List<SimpleFileDto>>(imgUrls, HttpStatus.OK);
 	}
 }
