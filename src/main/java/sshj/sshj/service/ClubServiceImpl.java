@@ -6,6 +6,7 @@ import sshj.sshj.dto.ClubDescriptionDto;
 import sshj.sshj.dto.ClubInfoDto;
 import sshj.sshj.dto.ClubNoticeDto;
 import sshj.sshj.mapper.ClubMapper;
+import sshj.sshj.model.Club;
 
 import java.util.List;
 
@@ -13,6 +14,21 @@ import java.util.List;
 public class ClubServiceImpl implements ClubService{
     @Autowired
     private ClubMapper clubMapper;
+
+    @Override
+    public Club create(Club clubParam) {
+
+    }
+
+    @Override
+    public Club update(Club clubParam) {
+
+    }
+
+    @Override
+    public void delete(long id) {
+
+    }
 
     @Override
     // 공지사항 갑입
@@ -110,5 +126,10 @@ public class ClubServiceImpl implements ClubService{
     // 클럽id, 클럽 이름 리턴
     public List<ClubInfoDto> selectClubIdAndClubName() throws Exception {
         return clubMapper.selectClubIdAndClubName();
+    }
+
+    @Override
+    public Club find(long id) {
+        return null;
     }
 }

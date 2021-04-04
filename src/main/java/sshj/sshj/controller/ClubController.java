@@ -14,7 +14,7 @@ import sshj.sshj.dto.ClubInfoDto;
 import sshj.sshj.dto.ClubNoticeDto;
 import sshj.sshj.dto.UserHeaderModel;
 import sshj.sshj.mapper.S3FileMapper;
-import sshj.sshj.model.ClubParam;
+import sshj.sshj.model.Club;
 import sshj.sshj.service.ClubService;
 import sshj.sshj.service.ExpoPushService;
 import sshj.sshj.service.UserService;
@@ -50,10 +50,10 @@ public class ClubController {
             @ApiResponse(code=200, message="")
     })
     @GetMapping(value = "/{id}", produces="text/plain;charset=UTF-8")
-    public ResponseEntity<String> getClub(
+    public ResponseEntity<Club> getClub(
             @ApiParam(value = "id", required = true) @PathVariable(name = "id", required = true) long id
     ){
-        return new ResponseEntity<>(userService.find(id), HttpStatus.OK);
+        return new ResponseEntity<Club>(clubService.find(id), HttpStatus.OK);
     }
 
 
@@ -67,8 +67,8 @@ public class ClubController {
             @ApiResponse(code=200, message="")
     })
     @PostMapping(value = "/")
-    public ResponseEntity<ClubParam> createClub
-            (@ApiParam(value = "createClubParam", required = true) @RequestBody ClubParam createClubParam,
+    public ResponseEntity<Club> createClub
+            (@ApiParam(value = "createClubParam", required = true) @RequestBody Club createClubParam,
              @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) {
         clubService.create(createClubParam);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -85,7 +85,7 @@ public class ClubController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/", method= RequestMethod.PUT)
-    public ResponseEntity<ClubParam> updateClub(@ApiParam(value = "updateClubParam", required = true) @RequestBody(name = "updateClubParam", required = true) ClubParam updateClubParam){
+    public ResponseEntity<Club> updateClub(@ApiParam(value = "updateClubParam", required = true) @RequestBody(name = "updateClubParam", required = true) Club updateClubParam){
         clubService.update(updateClubParam);
         return new ResponseEntity<>(HttpStatus.OK);
     }

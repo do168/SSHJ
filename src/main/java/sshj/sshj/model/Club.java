@@ -1,7 +1,7 @@
 package sshj.sshj.model;
 
 
-public interface ClubParam {
+public interface Club {
     long id = 0;
     String name = "";
     String description = "";
