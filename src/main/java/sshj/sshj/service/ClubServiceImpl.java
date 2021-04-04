@@ -15,9 +15,14 @@ public class ClubServiceImpl implements ClubService{
     @Autowired
     private ClubMapper clubMapper;
 
+
     @Override
     public Club create(Club clubParam) {
-
+        long clubId = clubMapper.create(clubParam);
+        Club newClub = clubMapper.find(clubId);
+        if (newClub.equals(null)) {
+            throw new
+        }
     }
 
     @Override
@@ -28,6 +33,16 @@ public class ClubServiceImpl implements ClubService{
     @Override
     public void delete(long id) {
 
+    }
+
+    @Override
+    public Club find(long id) {
+        return null;
+    }
+
+    @Override
+    public List<Club> getList(long ids) {
+        return null;
     }
 
     @Override
@@ -128,8 +143,4 @@ public class ClubServiceImpl implements ClubService{
         return clubMapper.selectClubIdAndClubName();
     }
 
-    @Override
-    public Club find(long id) {
-        return null;
-    }
 }
