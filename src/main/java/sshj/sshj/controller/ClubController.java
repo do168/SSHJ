@@ -85,7 +85,7 @@ public class ClubController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/", method= RequestMethod.PUT)
-    public ResponseEntity<Club> updateClub(@ApiParam(value = "updateClubParam", required = true) @RequestBody(name = "updateClubParam", required = true) Club updateClubParam){
+    public ResponseEntity<Club> updateClub(@ApiParam(value = "updateClubParam", required = true) @RequestBody Club updateClubParam){
         clubService.update(updateClubParam);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -116,7 +116,7 @@ public class ClubController {
     })
     @GetMapping(value = "/")
     public ResponseEntity<List> getClubList(long ids){
-        List<ClubParam> list = clubService.getList(ids);
+        List<Club> list = clubService.getList(ids);
         return new ResponseEntity<>(list,HttpStatus.OK);
     }
 

@@ -34,4 +34,6 @@ public interface ClubService {
     List<ClubInfoDto> selectClubIdAndClubName() throws Exception;
 
     Club find(long id);
+
+    List<Club> getList(long ids);
 }
