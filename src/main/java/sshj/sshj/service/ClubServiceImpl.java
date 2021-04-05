@@ -2,6 +2,7 @@ package sshj.sshj.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import sshj.sshj.common.exception.NotExistException;
 import sshj.sshj.dto.ClubDescriptionDto;
 import sshj.sshj.dto.ClubInfoDto;
@@ -28,7 +29,7 @@ public class ClubServiceImpl implements ClubService{
         long clubId = clubMapper.create(clubParam);
         // find club by created club Id
         Club createdClub = clubMapper.find(clubId);
-        if (createdClub.equals(null)) {
+        if (ObjectUtils.isEmpty(createdClub)) {
             throw new NotExistException("club didn't created");
         }
         return createdClub;
@@ -45,7 +46,7 @@ public class ClubServiceImpl implements ClubService{
         long clubId = clubMapper.update(clubParam);
         // find club by updated club Id
         Club updatedclub = clubMapper.find(clubId);
-        if (updatedclub.equals(null)) {
+        if (ObjectUtils.isEmpty(updatedclub)) {
             throw new NotExistException("club didn't updated");
         }
         return updatedclub;
@@ -71,7 +72,7 @@ public class ClubServiceImpl implements ClubService{
     public Club find(long id){
         // fiod club
         Club club = clubMapper.find(id);
-        if (club.equals(null)) {
+        if (ObjectUtils.isEmpty(club)) {
             throw new NotExistException("Club don't exist");
         }
         return club;
