@@ -2,6 +2,7 @@ package sshj.sshj.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sshj.sshj.common.exception.NotExistException;
 import sshj.sshj.dto.ClubDescriptionDto;
 import sshj.sshj.dto.ClubInfoDto;
 import sshj.sshj.dto.ClubNoticeDto;
@@ -19,30 +20,51 @@ public class ClubServiceImpl implements ClubService{
     @Override
     public Club create(Club clubParam) {
         long clubId = clubMapper.create(clubParam);
-        Club newClub = clubMapper.find(clubId);
-        if (newClub.equals(null)) {
-            throw new
+        Club createdClub = clubMapper.find(clubId);
+        if (createdClub.equals(null)) {
+            throw new NotExistException("club didn't created");
         }
+        return createdClub;
     }
 
     @Override
     public Club update(Club clubParam) {
-
+        long clubId = clubMapper.update(clubParam);
+        Club updatedclub = clubMapper.find(clubId);
+        if (updatedclub.equals(null)) {
+            throw new NotExistException("club didn't updated");
+        }
+        return updatedclub;
     }
 
     @Override
     public void delete(long id) {
 
+        boolean isClubExists = clubMapper.find(id) == null ? true : false;
+        if (!isClubExists) {
+            throw new NotExistException("Club");
+        }
+
+        boolean isDeleted = clubMapper.delete(id) == 0 ? false : true;
+        if(!isDeleted) {
+            throw new NotExistException("Club not deleted");
+        }
+
     }
 
     @Override
-    public Club find(long id) {
-        return null;
+    public Club find(long id){
+        Club club = clubMapper.find(id);
+        if (club.equals(null)) {
+            throw new NotExistException("Club don't exist");
+        }
+        return club;
     }
 
     @Override
     public List<Club> getList(long ids) {
-        return null;
+        List<Club> clubList = clubMapper.findList(ids);
+        return clubList;
     }
 
     @Override

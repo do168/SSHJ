@@ -2,8 +2,11 @@ package sshj.sshj.common.exception;
 
 public enum Codes {
     //TODO: 에러 CODE 정의 필요
+    // internal
     INTERNAL_SERVER_ERROR(500, "I001", " INTERNAL SERVER ERROR"),
-    CLUB_NOT_FOUND(400,"CLUB01", " CLUB NOT FOUND"),
+    // global
+    NOT_FOUND_ERROR(400,"G01", " CLUB NOT FOUND"),
+    // common
     INVALID_INPUT_VALUE(400, "C001", " Invalid Input Value"),
     METHOD_NOT_ALLOWED(405, "C002", " Invalid Input Value"),
     HANDLE_ACCESS_DENIED(403, "C006", "Access is Denied"),
