@@ -16,10 +16,17 @@ public class ClubServiceImpl implements ClubService{
     @Autowired
     private ClubMapper clubMapper;
 
-
+    //TODO: clubMapper에 해당 함수 구현해야함
+    /**
+     * 클럽 생성
+     * @param clubParam
+     * @return
+     */
     @Override
     public Club create(Club clubParam) {
+        // create club
         long clubId = clubMapper.create(clubParam);
+        // find club by created club Id
         Club createdClub = clubMapper.find(clubId);
         if (createdClub.equals(null)) {
             throw new NotExistException("club didn't created");
@@ -27,9 +34,16 @@ public class ClubServiceImpl implements ClubService{
         return createdClub;
     }
 
+    /**
+     * 클럽 업데이트
+     * @param clubParam
+     * @return
+     */
     @Override
     public Club update(Club clubParam) {
+        // update club
         long clubId = clubMapper.update(clubParam);
+        // find club by updated club Id
         Club updatedclub = clubMapper.find(clubId);
         if (updatedclub.equals(null)) {
             throw new NotExistException("club didn't updated");
@@ -39,12 +53,13 @@ public class ClubServiceImpl implements ClubService{
 
     @Override
     public void delete(long id) {
-
+        // check if club exists
         boolean isClubExists = clubMapper.find(id) == null ? true : false;
         if (!isClubExists) {
             throw new NotExistException("Club");
         }
 
+        // check if delete success
         boolean isDeleted = clubMapper.delete(id) == 0 ? false : true;
         if(!isDeleted) {
             throw new NotExistException("Club not deleted");
@@ -54,6 +69,7 @@ public class ClubServiceImpl implements ClubService{
 
     @Override
     public Club find(long id){
+        // fiod club
         Club club = clubMapper.find(id);
         if (club.equals(null)) {
             throw new NotExistException("Club don't exist");
