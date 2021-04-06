@@ -3,10 +3,14 @@ package sshj.sshj.service;
 import sshj.sshj.dto.ClubDescriptionDto;
 import sshj.sshj.dto.ClubInfoDto;
 import sshj.sshj.dto.ClubNoticeDto;
+import sshj.sshj.model.Club;
 
 import java.util.List;
 
 public interface ClubService {
+    Club create(Club clubParam);
+    Club update(Club clubParam);
+    void delete(long id);
     void insertClubNotice(ClubNoticeDto dto) throws Exception;
     ClubNoticeDto selectClubNotice(long noticeId) throws Exception;
     List<ClubNoticeDto> selectClubNoticeList(long clubId) throws Exception;
@@ -28,4 +32,8 @@ public interface ClubService {
     int selectClubSubscribeCnt(long clubId) throws Exception;
 
     List<ClubInfoDto> selectClubIdAndClubName() throws Exception;
+
+    Club find(long id);
+
+    List<Club> getList(long ids);
 }

@@ -2,10 +2,13 @@ package sshj.sshj.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+import sshj.sshj.common.exception.NotExistException;
 import sshj.sshj.dto.ClubDescriptionDto;
 import sshj.sshj.dto.ClubInfoDto;
 import sshj.sshj.dto.ClubNoticeDto;
 import sshj.sshj.mapper.ClubMapper;
+import sshj.sshj.model.Club;
 
 import java.util.List;
 
@@ -13,6 +16,73 @@ import java.util.List;
 public class ClubServiceImpl implements ClubService{
     @Autowired
     private ClubMapper clubMapper;
+
+    //TODO: clubMapper에 해당 함수 구현해야함
+    /**
+     * 클럽 생성
+     * @param clubParam
+     * @return
+     */
+    @Override
+    public Club create(Club clubParam) {
+        // create club
+        long clubId = clubMapper.create(clubParam);
+        // find club by created club Id
+        Club createdClub = clubMapper.find(clubId);
+        if (ObjectUtils.isEmpty(createdClub)) {
+            throw new NotExistException("club didn't created");
+        }
+        return createdClub;
+    }
+
+    /**
+     * 클럽 업데이트
+     * @param clubParam
+     * @return
+     */
+    @Override
+    public Club update(Club clubParam) {
+        // update club
+        long clubId = clubMapper.update(clubParam);
+        // find club by updated club Id
+        Club updatedclub = clubMapper.find(clubId);
+        if (ObjectUtils.isEmpty(updatedclub)) {
+            throw new NotExistException("club didn't updated");
+        }
+        return updatedclub;
+    }
+
+    @Override
+    public void delete(long id) {
+        // check if club exists
+        boolean isClubExists = clubMapper.find(id) == null ? true : false;
+        if (!isClubExists) {
+            throw new NotExistException("Club");
+        }
+
+        // check if delete success
+        boolean isDeleted = clubMapper.delete(id) == 0 ? false : true;
+        if(!isDeleted) {
+            throw new NotExistException("Club not deleted");
+        }
+
+    }
+
+    @Override
+    public Club find(long id){
+        // fiod club
+        Club club = clubMapper.find(id);
+        if (ObjectUtils.isEmpty(club)) {
+            throw new NotExistException("Club don't exist");
+        }
+        return club;
+    }
+
+    @Override
+    public List<Club> getList(long ids) {
+        List<Club> clubList = clubMapper.findList(ids);
+        return clubList;
+    }
 
     @Override
     // 공지사항 갑입
@@ -111,4 +181,5 @@ public class ClubServiceImpl implements ClubService{
     public List<ClubInfoDto> selectClubIdAndClubName() throws Exception {
         return clubMapper.selectClubIdAndClubName();
     }
+
 }
