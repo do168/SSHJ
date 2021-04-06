@@ -32,3 +32,8 @@
 ``` bash
 ./gradlew bootRun
 ```
+
+## Swagger
+
+explore swagger docs
+`http://localhost:9090/swagger-ui.html`
