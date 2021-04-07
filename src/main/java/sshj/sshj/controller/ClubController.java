@@ -70,8 +70,8 @@ public class ClubController {
     public ResponseEntity<Club> createClub
             (@ApiParam(value = "createClubParam", required = true) @RequestBody Club createClubParam,
              @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) {
-        clubService.create(createClubParam);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Club createdClub = clubService.create(createClubParam);
+        return new ResponseEntity<>(createdClub, HttpStatus.CREATED);
     }
 
 
@@ -86,8 +86,8 @@ public class ClubController {
     })
     @RequestMapping(value = "/", method= RequestMethod.PUT)
     public ResponseEntity<Club> updateClub(@ApiParam(value = "updateClubParam", required = true) @RequestBody Club updateClubParam){
-        clubService.update(updateClubParam);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Club updatedClub = clubService.update(updateClubParam);
+        return new ResponseEntity<>(updatedClub, HttpStatus.OK);
     }
 
     @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
@@ -102,7 +102,7 @@ public class ClubController {
     @RequestMapping(value = "/", method= RequestMethod.DELETE)
     public ResponseEntity<Boolean> deleteClub(@ApiParam(value = "id", required = true) @RequestParam(name = "id", required = true) long id) {
         clubService.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
 
@@ -120,66 +120,66 @@ public class ClubController {
         return new ResponseEntity<>(list,HttpStatus.OK);
     }
 
-
-    @ApiOperation(
-            value = "동아리 구독 생성 Api"
-            , notes = "동아리 구독 생성 Api"
-            ,authorizations = {@Authorization (value = "JWT")}
-    )
-    @ApiResponses(value={
-            @ApiResponse(code=200, message="")
-    })
-    @RequestMapping(value = "/{id}/subsribe", method= RequestMethod.POST)
-    public ResponseEntity<Void> createClubSubs(@ApiParam(value = "클럽 id", required = true) @RequestParam(name = "clubId", required = true) long clubId,
-     @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
-        clubService.insertClubSubs(userHeaderModel.getUserId(),clubId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @ApiOperation(
-            value = "동아리 구독 삭제 Api"
-            , notes = "동아리 구독 삭제 Api"
-            ,authorizations = {@Authorization (value = "JWT")}
-    )
-    @ApiResponses(value={
-            @ApiResponse(code=200, message="")
-    })
-    @RequestMapping(value = "/{id}/deleteSubs", method= RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteClubSubs(@ApiParam(value = "클럽 id", required = true) @RequestParam(name = "club_id", required = true) long clubId,
-                                               @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
-        clubService.deleteClubSubs(userHeaderModel.getUserId(),clubId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    // TODO: 유저 - 동아리 테이블 관계를 재정립하자
-    @ApiOperation(
-            value = "유저의 특정 동아리 구독 여부 Api"
-            , notes = "유저의 특정 동아리 구독 여부 Api"
-            ,authorizations = {@Authorization (value = "JWT")}
-    )
-    @ApiResponses(value={
-            @ApiResponse(code=200, message="")
-    })
-    @RequestMapping(value = "/isSubClub", method= RequestMethod.GET)
-    public ResponseEntity<Boolean> isSubClub(@ApiParam(value = "클럽 id", required = true) @RequestParam(name = "club_id", required = true) long clubId,
-                                               @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
-        boolean isSubClub = clubService.selectIsSubClub(userHeaderModel.getUserId(), clubId);
-        return new ResponseEntity<>(isSubClub, HttpStatus.OK);
-    }
-
-    @ApiOperation(
-            value = "유저가 구독 중인 동아리 리스트"
-            , notes = "유저가 구독 중인 동아리 리스트"
-            ,authorizations = {@Authorization (value = "JWT")}
-    )
-    @ApiResponses(value={
-            @ApiResponse(code=200, message="")
-    })
-    @RequestMapping(value = "/SubClubList", method= RequestMethod.GET)
-    public ResponseEntity<List<Long>> SubClubList(@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
-        List<Long> clubList = clubService.selectSubClubList(userHeaderModel.getUserId());
-        return new ResponseEntity<>(clubList, HttpStatus.OK);
-    }
+    // TODO: 유지할 지 없앨지 선택해야함
+//    @ApiOperation(
+//            value = "동아리 구독 생성 Api"
+//            , notes = "동아리 구독 생성 Api"
+//            ,authorizations = {@Authorization (value = "JWT")}
+//    )
+//    @ApiResponses(value={
+//            @ApiResponse(code=200, message="")
+//    })
+//    @RequestMapping(value = "/{id}/subsribe", method= RequestMethod.POST)
+//    public ResponseEntity<Void> createClubSubs(@ApiParam(value = "클럽 id", required = true) @RequestParam(name = "clubId", required = true) long clubId,
+//     @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
+//        clubService.insertClubSubs(userHeaderModel.getUserId(),clubId);
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
+//
+//    @ApiOperation(
+//            value = "동아리 구독 삭제 Api"
+//            , notes = "동아리 구독 삭제 Api"
+//            ,authorizations = {@Authorization (value = "JWT")}
+//    )
+//    @ApiResponses(value={
+//            @ApiResponse(code=200, message="")
+//    })
+//    @RequestMapping(value = "/{id}/deleteSubs", method= RequestMethod.DELETE)
+//    public ResponseEntity<Void> deleteClubSubs(@ApiParam(value = "클럽 id", required = true) @RequestParam(name = "club_id", required = true) long clubId,
+//                                               @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
+//        clubService.deleteClubSubs(userHeaderModel.getUserId(),clubId);
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
+//
+//    // TODO: 유저 - 동아리 테이블 관계를 재정립하자
+//    @ApiOperation(
+//            value = "유저의 특정 동아리 구독 여부 Api"
+//            , notes = "유저의 특정 동아리 구독 여부 Api"
+//            ,authorizations = {@Authorization (value = "JWT")}
+//    )
+//    @ApiResponses(value={
+//            @ApiResponse(code=200, message="")
+//    })
+//    @RequestMapping(value = "/isSubClub", method= RequestMethod.GET)
+//    public ResponseEntity<Boolean> isSubClub(@ApiParam(value = "클럽 id", required = true) @RequestParam(name = "club_id", required = true) long clubId,
+//                                               @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
+//        boolean isSubClub = clubService.selectIsSubClub(userHeaderModel.getUserId(), clubId);
+//        return new ResponseEntity<>(isSubClub, HttpStatus.OK);
+//    }
+//
+//    @ApiOperation(
+//            value = "유저가 구독 중인 동아리 리스트"
+//            , notes = "유저가 구독 중인 동아리 리스트"
+//            ,authorizations = {@Authorization (value = "JWT")}
+//    )
+//    @ApiResponses(value={
+//            @ApiResponse(code=200, message="")
+//    })
+//    @RequestMapping(value = "/SubClubList", method= RequestMethod.GET)
+//    public ResponseEntity<List<Long>> SubClubList(@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception{
+//        List<Long> clubList = clubService.selectSubClubList(userHeaderModel.getUserId());
+//        return new ResponseEntity<>(clubList, HttpStatus.OK);
+//    }
 
 
 
