@@ -27,7 +27,7 @@ import sshj.sshj.service.UserService;
 @RestController
 @Api(value = "Oauth-controller")
 @Slf4j
-@RequestMapping("/member")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
@@ -38,43 +38,6 @@ public class UserController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    /**
-     * 생성할 아이디 정규식 체크 & 중복 체크
-     * @param loginId
-     * @return HttpStatus.Ok if 사용 가능
-     *         else HttpStatus.BAD_REQUEST
-     * @throws Exception
-     */
-//    @ApiOperation(
-//            value = "아이디 중복 확인"
-//            , notes = "아이디 중복 확인"
-//    )
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 200, message = "complete")
-//    })
-//    @RequestMapping(value = "/signup/idcheck", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
-//    public ResponseEntity<String> idCheck(
-//            @ApiParam(value = "입력 아이디", required = true) @RequestParam(name = "loginId", required = true) String loginId) throws Exception {
-//
-//        if(!sshzUtil.isLoginReg(loginId)) {
-//            String msg = "아이디는 영문 혹은 숫자로만 가능합니다.";
-//            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
-//        }
-//
-//        if (userService.selectUserLoginId(loginId) == 0) {
-//            log.info("사용 가능한 아이디입니다.");
-//            String msg = "사용 가능한 아이디입니다.";
-//            return new ResponseEntity<>(msg, HttpStatus.OK);
-//        }
-//
-//
-//        else {
-//            log.info("중복된 아이디입니다");
-//            String msg = "중복된 아이디입니다";
-//            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
-//        }
-//    }
 
     /**
      * 생성할 닉네임 중복 체크
@@ -90,20 +53,14 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "complete")
     })
-    @RequestMapping(value = "/signup/nicknamecheck", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    @GetMapping(value = "/signup/check-nickname", produces = "text/plain;charset=UTF-8")
     public ResponseEntity<String> nicknameCheck(
             @ApiParam(value = "입력 닉네임", required = true) @RequestParam(name = "nickname") String nickname) {
 
-        ServiceResultModel result = userService.selectUserNicknameIsOk(nickname);
+        ServiceResultModel result = userService.isNicknameSatisfied(nickname);
 
         // 생성 가능한 경우
-        if (result.getFlag()) {
-            return new ResponseEntity<>(result.getMsg(), HttpStatus.OK);
-        }
-        // 생성 불가능한 경우
-        else {
-            return new ResponseEntity<>(result.getMsg(), HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(result.getMsg(), HttpStatus.OK);
     }
 
     /**

@@ -34,7 +34,7 @@ public class MyPageController {
             @ApiParam(value = "입력 닉네임", required = true) @RequestParam(name = "chNickname", required = true) String chNickname
     ,@ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) throws Exception {
 
-        ServiceResultModel result = userService.selectUserNicknameIsOk(chNickname);
+        ServiceResultModel result = userService.isNicknameSatisfied(chNickname);
     	long userId = userHeaderModel.getUserId();
         
         if (result.getFlag()) {

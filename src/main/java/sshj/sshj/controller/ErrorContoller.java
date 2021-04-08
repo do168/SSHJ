@@ -10,6 +10,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import sshj.sshj.common.exception.BusinessException;
 import sshj.sshj.common.exception.Codes;
 import sshj.sshj.model.ErrorResponse;
 
@@ -74,12 +75,23 @@ public class ErrorContoller {
 
 
     /**
-     * Custom Exception - 위에 해당하지 않는 exception은 여기로 넘어온다
+     * rest Exception - 위에 해당하지 않는 exception은 여기로 넘어온다 [ 언체크예외 ]
      */
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ErrorResponse> handleException(Exception e) {
         log.error("handleEntityNotFoundException", e);
         final ErrorResponse response = ErrorResponse.of(Codes.INTERNAL_SERVER_ERROR);
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * 비즈니스 로직 Exception
+     */
+    @ExceptionHandler(BusinessException.class)
+    protected ResponseEntity<ErrorResponse> handleBusinessException(final BusinessException e) {
+        log.error("handleEntityNotFoundException", e);
+        final Codes errorCode = e.getErrorCode();
+        final ErrorResponse response = ErrorResponse.of(errorCode);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatus()));
     }
 }

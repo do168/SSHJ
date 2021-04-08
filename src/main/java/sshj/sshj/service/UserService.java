@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import sshj.sshj.common.exception.Codes;
+import sshj.sshj.common.exception.ReduplicateException;
 import sshj.sshj.component.CodeCompo;
 import sshj.sshj.component.SSHZUtil;
 import sshj.sshj.component.SenderCompo;
@@ -272,21 +274,21 @@ public class UserService implements UserDetailsService {
         return userMapper.selectUserNickname(userId);
     }
 
-    public ServiceResultModel selectUserNicknameIsOk(String nickname) {
+    public ServiceResultModel isNicknameSatisfied(String nickname) {
 
         // 바꿀 닉네임이 DB에 존재하는지 체크
-        if (userMapper.selectUserNicknameIsOk(nickname) == 0) {
-            return ServiceResultModel.builder()
-                    .flag(true)
-                    .msg("사용 가능한 닉네임입니다.")
-                    .build();
-        }
-        else {
-            return ServiceResultModel.builder()
+        if (userMapper.selectUserNicknameIsOk(nickname) != 0) {
+            ServiceResultModel serviceResultModel = ServiceResultModel.builder()
                     .flag(false)
                     .msg("중복된 닉네임입니다")
                     .build();
+
+            throw new ReduplicateException(serviceResultModel.getMsg(), Codes.REDUPLICATE_ERROR);
         }
+        return ServiceResultModel.builder()
+                .flag(true)
+                .msg("사용 가능한 닉네임입니다.")
+                .build();
     }
 
     public UserDto selectUser(long userId) {
