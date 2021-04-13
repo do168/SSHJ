@@ -2,10 +2,7 @@ package sshj.sshj.model;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -15,8 +12,13 @@ import javax.persistence.Id;
 public class Club {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     long id;
+
+    @Column(name = "name")
     String name;
+
+    @Column(name = "description")
     String description;
 
 }
