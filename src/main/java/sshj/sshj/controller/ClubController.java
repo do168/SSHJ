@@ -91,11 +91,11 @@ public class ClubController {
         return new ResponseEntity<>(updatedClub, HttpStatus.OK);
     }
 
-    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
+//    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
-            value = "동아리 설명 삭제 Api"
-            , notes = "동아리 설명 삭제 Api"
-            ,authorizations = {@Authorization(value = "JWT")}
+            value = "동아리 삭제 Api"
+            , notes = "동아리 삭제 Api"
+//            ,authorizations = {@Authorization(value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
