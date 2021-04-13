@@ -13,8 +13,6 @@ import java.util.Optional;
 
 @Service
 public class ClubServiceImpl implements ClubService{
-    @Autowired
-    private ClubMapper clubMapper;
 
     @Autowired
     private ClubRepository clubRepository;

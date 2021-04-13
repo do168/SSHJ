@@ -26,7 +26,6 @@ import sshj.sshj.dto.MeetingSearchDto;
 import sshj.sshj.dto.UserDto;
 import sshj.sshj.dto.UserHeaderModel;
 import sshj.sshj.dto.enums.FlagEnum;
-import sshj.sshj.service.ExpoPushService;
 import sshj.sshj.service.MeetingService;
 
 @Api(value="MeetingController", description="MeetingController")
@@ -37,8 +36,6 @@ public class MeetingController {
     @Autowired
     private MeetingService meetingService;
 
-    @Autowired
-    private ExpoPushService expoPushService;
 
 //    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(

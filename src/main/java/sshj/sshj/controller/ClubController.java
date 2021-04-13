@@ -12,7 +12,6 @@ import sshj.sshj.dto.ClubDto;
 import sshj.sshj.mapper.S3FileMapper;
 import sshj.sshj.model.Club;
 import sshj.sshj.service.ClubService;
-import sshj.sshj.service.ExpoPushService;
 import sshj.sshj.service.UserService;
 
 import java.util.ArrayList;
@@ -28,9 +27,6 @@ import static sshj.dto.ApiResult.creationSucceed;
 public class ClubController {
     @Autowired
     private ClubService clubService;
-
-    @Autowired
-    private ExpoPushService expoPushService;
 
     @Autowired
     private UserService userService;
@@ -51,6 +47,8 @@ public class ClubController {
             @ApiParam(value = "id", required = true) @PathVariable(name = "id") long id
     ){
         Club club = clubService.find(id);
+        ClubDto clubDto = new ClubDto(club);
+        System.out.println(clubDto.toString());
         return succeed(
                 new ClubDto(club)
         );
