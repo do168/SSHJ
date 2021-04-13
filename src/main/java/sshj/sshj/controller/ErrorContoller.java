@@ -77,6 +77,7 @@ public class ErrorContoller {
     /**
      * rest Exception - 위에 해당하지 않는 exception은 여기로 넘어온다 [ 언체크예외 ]
      */
+
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ErrorResponse> handleException(Exception e) {
         log.error("handleEntityNotFoundException", e);

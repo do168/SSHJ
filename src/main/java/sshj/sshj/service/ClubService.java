@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ClubService {
     Club create(Club clubParam);
-    Club update(Club clubParam);
+    Club update(Club clubParam, long id);
     void delete(long id);
     void insertClubNotice(ClubNoticeDto dto) throws Exception;
     ClubNoticeDto selectClubNotice(long noticeId) throws Exception;
@@ -35,5 +35,5 @@ public interface ClubService {
 
     Club find(long id);
 
-    List<Club> getList(long ids);
+    List<Club> findAll();
 }

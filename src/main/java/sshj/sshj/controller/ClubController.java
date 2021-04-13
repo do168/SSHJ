@@ -44,49 +44,50 @@ public class ClubController {
     @ApiOperation(
             value = "동아리 정보 읽기 Api"
             , notes = "동아리 정보 읽기 Api"
-            ,authorizations = {@Authorization(value = "JWT")}
+//            ,authorizations = {@Authorization(value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
-    @GetMapping(value = "/{id}", produces="text/plain;charset=UTF-8")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<Club> getClub(
-            @ApiParam(value = "id", required = true) @PathVariable(name = "id", required = true) long id
+            @ApiParam(value = "id", required = true) @PathVariable(name = "id") long id
     ){
-        return new ResponseEntity<Club>(clubService.find(id), HttpStatus.OK);
+        Club club = clubService.find(id);
+        return new ResponseEntity<>(club, HttpStatus.OK);
     }
 
 
-    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
+//    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "동아리 생성 Api"
             , notes = "동아리 생성 Api"
-            ,authorizations = {@Authorization(value = "JWT")}
+//            ,authorizations = {@Authorization(value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
     @PostMapping(value = "/")
     public ResponseEntity<Club> createClub
-            (@ApiParam(value = "createClubParam", required = true) @RequestBody Club createClubParam,
-             @ApiIgnore @RequestAttribute("UserHeaderInfo") UserHeaderModel userHeaderModel) {
+            (@ApiParam(value = "createClubParam", required = true) @RequestBody Club createClubParam) {
         Club createdClub = clubService.create(createClubParam);
         return new ResponseEntity<>(createdClub, HttpStatus.CREATED);
     }
 
 
-    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
+//    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "동아리 수정 Api"
             , notes = "동아리 수정 Api"
-            ,authorizations = {@Authorization(value = "JWT")}
+//            ,authorizations = {@Authorization(value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/", method= RequestMethod.PUT)
-    public ResponseEntity<Club> updateClub(@ApiParam(value = "updateClubParam", required = true) @RequestBody Club updateClubParam){
-        Club updatedClub = clubService.update(updateClubParam);
+    public ResponseEntity<Club> updateClub(@ApiParam(value = "updateClubParam", required = true) @RequestBody Club updateClubParam,
+                                           @ApiParam(value = "club_id", required = true) @RequestBody long id){
+        Club updatedClub = clubService.update(updateClubParam, id);
         return new ResponseEntity<>(updatedClub, HttpStatus.OK);
     }
 
@@ -116,7 +117,7 @@ public class ClubController {
     })
     @GetMapping(value = "/")
     public ResponseEntity<List> getClubList(long ids){
-        List<Club> list = clubService.getList(ids);
+        List<Club> list = clubService.findAll();
         return new ResponseEntity<>(list,HttpStatus.OK);
     }
 

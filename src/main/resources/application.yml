@@ -1,4 +1,7 @@
 spring:
+  jpa:
+    database: mysql
+    show-sql: true
   profiles:
     active: local
    
@@ -11,6 +14,12 @@ spring:
       charset: UTF-8
       enabled: true
       force: true
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/sshj?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: 4531
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
 cloud:
   aws:

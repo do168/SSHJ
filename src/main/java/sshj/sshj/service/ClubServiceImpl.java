@@ -9,13 +9,21 @@ import sshj.sshj.dto.ClubInfoDto;
 import sshj.sshj.dto.ClubNoticeDto;
 import sshj.sshj.mapper.ClubMapper;
 import sshj.sshj.model.Club;
+import sshj.sshj.repository.ClubRepository;
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClubServiceImpl implements ClubService{
     @Autowired
     private ClubMapper clubMapper;
+
+    @Autowired
+    private ClubRepository clubRepository;
 
     //TODO: clubMapper에 해당 함수 구현해야함
     /**
@@ -26,13 +34,10 @@ public class ClubServiceImpl implements ClubService{
     @Override
     public Club create(Club clubParam) {
         // create club
-        long clubId = clubMapper.create(clubParam);
+//        long clubId = clubMapper.create(clubParam);
+        Club club = clubRepository.save(clubParam);
         // find club by created club Id
-        Club createdClub = clubMapper.find(clubId);
-        if (ObjectUtils.isEmpty(createdClub)) {
-            throw new NotExistException("club didn't created");
-        }
-        return createdClub;
+        return clubRepository.findById(club.getId()).orElseThrow(() -> new NotExistException("Club don't exist"));
     }
 
     /**
@@ -41,47 +46,43 @@ public class ClubServiceImpl implements ClubService{
      * @return
      */
     @Override
-    public Club update(Club clubParam) {
+    @Transactional
+    public Club update(Club clubParam, long id) {
+        // find club
+        Club club = clubRepository.findById(id).orElseThrow(() -> new NotExistException("Club don't exist"));
+        club.setName(clubParam.getName());
+        club.setDescription(clubParam.getDescription());
         // update club
-        long clubId = clubMapper.update(clubParam);
-        // find club by updated club Id
-        Club updatedclub = clubMapper.find(clubId);
-        if (ObjectUtils.isEmpty(updatedclub)) {
-            throw new NotExistException("club didn't updated");
-        }
-        return updatedclub;
+        return club;
     }
 
     @Override
     public void delete(long id) {
-        // check if club exists
-        boolean isClubExists = clubMapper.find(id) == null ? true : false;
-        if (!isClubExists) {
-            throw new NotExistException("Club");
-        }
 
-        // check if delete success
-        boolean isDeleted = clubMapper.delete(id) == 0 ? false : true;
-        if(!isDeleted) {
-            throw new NotExistException("Club not deleted");
-        }
+        // delete
+        clubRepository.deleteById(id);
+
 
     }
 
     @Override
     public Club find(long id){
-        // fiod club
-        Club club = clubMapper.find(id);
-        if (ObjectUtils.isEmpty(club)) {
+        // find club
+        Optional<Club> club = clubRepository.findById(id);
+        System.out.println("test");
+        if (!club.isPresent()) {
             throw new NotExistException("Club don't exist");
         }
-        return club;
+        Club foundClub = club.get();
+        System.out.println(foundClub.toString());
+        return foundClub;
     }
 
     @Override
-    public List<Club> getList(long ids) {
-        List<Club> clubList = clubMapper.findList(ids);
-        return clubList;
+    public List<Club> findAll() {
+        List<Club> clubs = new ArrayList<>();
+        clubRepository.findAll().forEach(club -> clubs.add(club));
+        return clubs;
     }
 
     @Override
