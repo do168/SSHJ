@@ -10,22 +10,29 @@ public class ApiResult<T> {
 
     private final String error;
 
-    ApiResult(T data, String error) {
+    private final Integer code;
+
+    ApiResult(T data, String error, Integer code) {
         this.data = data;
         this.error = error;
+        this.code = code;
     }
 
     public static <T> ApiResult<T> succeed(T data) {
-        return new ApiResult<>(data, null);
+        return new ApiResult<>(data, null, 200);
+    }
+
+    public static <T> ApiResult<T> creationSucceed(T data) {
+        return new ApiResult<>(data, null, 201);
     }
 
 
-    public static ApiResult<?> failed(Throwable throwable) {
-        return failed(throwable.getMessage());
+    public static ApiResult<?> failed(Throwable throwable, Integer code) {
+        return failed(throwable.getMessage(), code);
     }
 
-    public static ApiResult<?> failed(String message) {
-        return new ApiResult<>(null, message);
+    public static ApiResult<?> failed(String message, Integer code) {
+        return new ApiResult<>(null, message, code);
     }
 
     public T getData() {

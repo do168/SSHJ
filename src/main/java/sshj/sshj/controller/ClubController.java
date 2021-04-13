@@ -7,13 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sshj.dto.ApiResult;
+import sshj.sshj.dto.ClubDto;
 import sshj.sshj.mapper.S3FileMapper;
 import sshj.sshj.model.Club;
 import sshj.sshj.service.ClubService;
 import sshj.sshj.service.ExpoPushService;
 import sshj.sshj.service.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static sshj.dto.ApiResult.succeed;
+import static sshj.dto.ApiResult.creationSucceed;
 
 @Slf4j
 @Api(value="ClubController")
@@ -41,11 +47,13 @@ public class ClubController {
             @ApiResponse(code=200, message="")
     })
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Club> getClub(
+    public ApiResult<ClubDto> getClub(
             @ApiParam(value = "id", required = true) @PathVariable(name = "id") long id
     ){
         Club club = clubService.find(id);
-        return new ResponseEntity<>(club, HttpStatus.OK);
+        return succeed(
+                new ClubDto(club)
+        );
     }
 
 
@@ -56,13 +64,15 @@ public class ClubController {
 //            ,authorizations = {@Authorization(value = "JWT")}
     )
     @ApiResponses(value={
-            @ApiResponse(code=200, message="")
+            @ApiResponse(code=201, message="")
     })
     @PostMapping(value = "/")
-    public ResponseEntity<Club> createClub
+    public ApiResult<ClubDto> createClub
             (@ApiParam(value = "createClubParam", required = true) @RequestBody Club createClubParam) {
         Club createdClub = clubService.create(createClubParam);
-        return new ResponseEntity<>(createdClub, HttpStatus.CREATED);
+        return creationSucceed(
+                new ClubDto(createdClub)
+        );
     }
 
 
@@ -76,10 +86,12 @@ public class ClubController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/", method= RequestMethod.PUT)
-    public ResponseEntity<Club> updateClub(@ApiParam(value = "updateClubParam", required = true) @RequestBody Club updateClubParam,
+    public ApiResult<ClubDto> updateClub(@ApiParam(value = "updateClubParam", required = true) @RequestBody Club updateClubParam,
                                            @ApiParam(value = "club_id", required = true) @RequestBody long id){
         Club updatedClub = clubService.update(updateClubParam, id);
-        return new ResponseEntity<>(updatedClub, HttpStatus.OK);
+        return succeed(
+                new ClubDto(updatedClub)
+        );
     }
 
 //    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
@@ -92,9 +104,9 @@ public class ClubController {
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/", method= RequestMethod.DELETE)
-    public ResponseEntity<Boolean> deleteClub(@ApiParam(value = "id", required = true) @RequestParam(name = "id", required = true) long id) {
+    public ApiResult<Boolean> deleteClub(@ApiParam(value = "id", required = true) @RequestParam(name = "id", required = true) long id) {
         clubService.delete(id);
-        return new ResponseEntity<>(true, HttpStatus.OK);
+        return succeed(true);
     }
 
 
@@ -107,9 +119,10 @@ public class ClubController {
             @ApiResponse(code=200, message="")
     })
     @GetMapping(value = "/")
-    public ResponseEntity<List> getClubList(long ids){
-        List<Club> list = clubService.findAll();
-        return new ResponseEntity<>(list,HttpStatus.OK);
+    public ApiResult<List<ClubDto>> getClubList(){
+        List<ClubDto> clubs = new ArrayList<>();
+        clubService.findAll().forEach(club -> clubs.add(new ClubDto(club)));
+        return succeed(clubs);
     }
 
 
