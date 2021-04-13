@@ -3,7 +3,6 @@ package sshj.sshj.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sshj.sshj.common.exception.NotExistException;
-import sshj.sshj.mapper.ClubMapper;
 import sshj.sshj.model.Club;
 import sshj.sshj.repository.ClubRepository;
 
