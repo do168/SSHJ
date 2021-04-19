@@ -3,7 +3,6 @@ package sshj.sshj.service;
 import java.util.List;
 
 import sshj.sshj.dto.MeetingDto;
-import sshj.sshj.dto.MeetingSearchDto;
 import sshj.sshj.dto.UserDto;
 
 public interface MeetingService {

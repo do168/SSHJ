@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 import sshj.sshj.dto.MeetingDto;
-import sshj.sshj.dto.MeetingSearchDto;
 import sshj.sshj.dto.UserDto;
 import sshj.sshj.dto.enums.FlagEnum;
 import sshj.sshj.mapper.MeetingMapper;

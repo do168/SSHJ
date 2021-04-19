@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import sshj.sshj.dto.MeetingDto;
-import sshj.sshj.dto.MeetingSearchDto;
 import sshj.sshj.dto.UserDto;
 
 @Mapper

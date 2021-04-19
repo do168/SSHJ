@@ -37,7 +37,6 @@ public class ClubController {
     @ApiOperation(
             value = "동아리 정보 읽기 Api"
             , notes = "동아리 정보 읽기 Api"
-//            ,authorizations = {@Authorization(value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
@@ -48,18 +47,15 @@ public class ClubController {
     ){
         Club club = clubService.find(id);
         ClubDto clubDto = new ClubDto(club);
-        System.out.println(clubDto.toString());
         return succeed(
                 new ClubDto(club)
         );
     }
 
 
-//    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "동아리 생성 Api"
             , notes = "동아리 생성 Api"
-//            ,authorizations = {@Authorization(value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=201, message="")
@@ -74,18 +70,16 @@ public class ClubController {
     }
 
 
-//    @Secured({"ROLE_CLUB", "ROLE_ADMIN"})
     @ApiOperation(
             value = "동아리 수정 Api"
             , notes = "동아리 수정 Api"
-//            ,authorizations = {@Authorization(value = "JWT")}
     )
     @ApiResponses(value={
             @ApiResponse(code=200, message="")
     })
     @RequestMapping(value = "/", method= RequestMethod.PUT)
     public ApiResult<ClubDto> updateClub(@ApiParam(value = "updateClubParam", required = true) @RequestBody Club updateClubParam,
-                                           @ApiParam(value = "club_id", required = true) @RequestBody long id){
+                                           @ApiParam(value = "club_id", required = true) @RequestParam(name = "id") long id){
         Club updatedClub = clubService.update(updateClubParam, id);
         return succeed(
                 new ClubDto(updatedClub)
